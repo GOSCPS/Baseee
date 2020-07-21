@@ -4,7 +4,7 @@
  *print_XXXXX and out_log
  *MIT License
  *coder:chhd 
- *time:2020-7-21
+ *update ime:2020-7-21
  *
  *history:carry out
  *

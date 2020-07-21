@@ -4,10 +4,10 @@
  *log moudle
  *MIT License
  *coder:chhd 
- *time:2020-7-21
+ *update time:2020-7-21
  *
  *history:carry out
- *
+ *add protected
  * 
  */
 #include <string>
@@ -32,7 +32,7 @@ namespace baseee{
             void print_error(std::string log);
             void print_fatal(std::string log);
 
-            //protected:
+            protected:
             std::string name;
             std::string log_format;
             std::string out_format;
