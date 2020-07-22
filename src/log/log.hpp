@@ -1,6 +1,6 @@
 #ifndef _BASEEE_LOH_HPP_
 #define _BASEEE_LOH_HPP_
-/*Baseee::log
+/*baseee::log
  *log moudle
  *MIT License
  *coder:chhd 
@@ -31,6 +31,10 @@ namespace baseee{
             void print_important(std::string log);
             void print_error(std::string log);
             void print_fatal(std::string log);
+
+            //operator
+
+
 
             protected:
             std::string name;

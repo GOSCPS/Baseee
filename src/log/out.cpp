@@ -1,6 +1,6 @@
 #ifndef _BASEEE_OUT_CPP_
 #define _BASEEE_OUT_CPP_
-/*Baseee::log
+/*baseee::log
  *print_XXXXX and out_log
  *MIT License
  *coder:chhd 

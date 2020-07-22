@@ -1,6 +1,6 @@
 #ifndef _BASEEE_LOG_CPP_
 #define _BASEEE_LOG_CPP_
-/*Baseee::log
+/*baseee::log
  *set_log and get_format
  *MIT License
  *coder:chhd 
@@ -47,13 +47,13 @@ std::string baseee::log::logger::get_format(std::string level){
     
 
     while(Tag){
-        const int tag_name = out.find("{name}");
+        const long unsigned int tag_name = out.find("{name}");
         if(tag_name != out.npos){
             out = out.substr(0,tag_name) + this->name + out.substr(tag_name+(std::string("{name}").size()));
             continue;
         }
 
-        const int tag_year = out.find("{year}");
+        const long unsigned int tag_year = out.find("{year}");
         if(tag_year != out.npos){
             std::time(&now);
             auto tm = std::localtime(&now);
@@ -61,7 +61,7 @@ std::string baseee::log::logger::get_format(std::string level){
             continue;
         }
 
-        const int tag_month = out.find("{month}");
+        const long unsigned int tag_month = out.find("{month}");
         if(tag_month != out.npos){
             std::time(&now);
             auto tm = std::localtime(&now);
@@ -70,7 +70,7 @@ std::string baseee::log::logger::get_format(std::string level){
         }
 
 
-        const int tag_day = out.find("{day}");
+        const long unsigned int tag_day = out.find("{day}");
         if(tag_day != out.npos){
             std::time(&now);
             auto tm = std::localtime(&now);
@@ -79,7 +79,7 @@ std::string baseee::log::logger::get_format(std::string level){
         }
 
 
-        const int tag_hour = out.find("{hour}");
+        const long unsigned int tag_hour = out.find("{hour}");
         if(tag_hour != out.npos){
             std::time(&now);
             auto tm = std::localtime(&now);
@@ -87,7 +87,7 @@ std::string baseee::log::logger::get_format(std::string level){
             continue;
         }
 
-        const int tag_min = out.find("{min}");
+        const long unsigned int tag_min = out.find("{min}");
         if(tag_min != out.npos){
             std::time(&now);
             auto tm = std::localtime(&now);
@@ -96,7 +96,7 @@ std::string baseee::log::logger::get_format(std::string level){
         }
 
 
-        const int tag_sec = out.find("{sec}");
+        const long unsigned int tag_sec = out.find("{sec}");
         if(tag_sec != out.npos){
             std::time(&now);
             auto tm = std::localtime(&now);
