@@ -7,53 +7,39 @@
  *update time:2020-7-22
  *
  *history:add trim and regex
- *
+ *add coder encoder
  * 
  */
 #include <string>
 #include <vector>
 #include <regex>
+#include <bitset>
+#include "../Baseee.hpp"
+#include "string.cpp"
+#include "utfEncoder.cpp"
 
 namespace baseee{
     namespace string{
         
-        std::string trim(const std::string &s){
-            //erase head and end space
-            unsigned int head = 0,end = 0;
-            unsigned int ptr = 0;
-            while(ptr != s.size() && std::isspace(s[ptr])){
-                ++head;
-                ++ptr;
-            }
-            ptr = s.size()-1;
-            while(ptr >= 0 && ptr < s.size() && std::isspace(s[ptr])){
-                ++end;
-                --ptr;
-            }
-            std::string out(s);
-            out.erase(out.end()-end,out.end());
-            out.erase(out.begin(),out.begin()+head);
-            /*while(end != 0){
-                out.erase(out.end()-1);
-                end--;
-            }
-            while(head != 0){
-                head--;
-                out.erase(out.begin());
-            }*/
-            return out;
-        }
+        std::string trim(const std::string &s);
 
-        std::vector<std::string> split(const std::string &regex_str,const std::string &s){
-            std::regex regex(regex_str);
-            std::vector<std::string> out(std::sregex_token_iterator(s.begin(),s.end(),regex,-1),std::sregex_token_iterator());
-            return out;
-        }
+        std::vector<std::string> split(const std::string &regex_str,const std::string &s);
 
-        std::vector<std::string> split(const std::regex &regex,const std::string &s){
-            std::vector<std::string> out(std::sregex_token_iterator(s.begin(),s.end(),regex,-1),std::sregex_token_iterator());
-            return out;
-        }
+        std::vector<std::string> split(const std::regex &regex,const std::string &s);
+
+
+        //Get UTF8 or UTF32
+        int utf8ToUtf32(const char in[],const int in_length,char32_t out[],const int out_length);
+        int utf32ToUtf8(const char32_t in[],const int in_length,char out[],const int out_length);
+
+        //Get UTF16 or UTF8
+        int utf8ToUtf16(const char in[],const int in_length,char16_t out[],const int out_length);
+        int utf16ToUtf8(const char16_t in[],const int in_length,char out[],const int out_length);
+
+        //get Base64
+        int binToBase64();
+        int base64Tobin();
+
 
     }
 }

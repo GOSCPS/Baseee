@@ -53,6 +53,12 @@ std::string baseee::log::logger::get_format(std::string level){
             continue;
         }
 
+        const long unsigned int tag_level = out.find("{level");
+        if(tag_level != out.npos){
+            out = out.substr(0,tag_level) + level + out.substr(tag_level+(std::string("{level}").size()));
+        }
+
+
         const long unsigned int tag_year = out.find("{year}");
         if(tag_year != out.npos){
             std::time(&now);

@@ -31,21 +31,21 @@ echo -e "Build Baseee lib!\n"
 mkdir Baseee
 
 #build base
-clang++ -c -std=c++17 -pthread -Wall -O3 -o Baseee/Baseee.pch src/Baseee.hpp
+clang++ -c -std=c++17 -pthread -Wall -O3 -x c++-header -o Baseee/Baseee.hpp.pch src/Baseee.hpp
 a=`echo $?`
 Error $a 
 echo -e "\033[32mBaseee base moudle build end\n\033[0m"
 
 
 #build log
-clang++ -c -std=c++17 -pthread -Wall -O3 -o Baseee/log.pch src/log/log.hpp
+clang++ -c -std=c++17 -pthread -Wall -O3 -x c++-header -o Baseee/log.hpp.pch src/log/log.hpp
 a=`echo $?`
 Error $a 
 echo -e "\033[32mBaseee log moudle build end\n\033[0m"
 
 
 #build string
-clang++ -c -std=c++17 -pthread -Wall -O3 -o Baseee/string.pch src/string/string.hpp
+clang++ -c -std=c++17 -pthread -Wall -O3 -x c++-header -o Baseee/string.hpp.pch src/string/string.hpp
 a=`echo $?`
 Error $a 
 echo -e "\033[32mBaseee string moudle build end\n\033[0m"

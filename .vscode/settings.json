@@ -1,9 +1,9 @@
 {
     "files.associations": {
-        "array": "cpp",
-        "atomic": "cpp",
         "*.tcc": "cpp",
         "bitset": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
         "cctype": "cpp",
         "chrono": "cpp",
         "clocale": "cpp",
