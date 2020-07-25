@@ -1,9 +1,9 @@
 #ifndef _BASEEE_BASE64_CPP_
 #define _BASEEE_BASE64_CPP_
 /*baseee::code
- *code base moudle
+ *code base64 moudle
  *MIT License
- *coder:chhd 
+ *coder:chhdao 
  */
 #include "code.hpp"
 #include "../Baseee.hpp"
@@ -51,9 +51,9 @@ namespace baseee{
                     out[out_ptr] = base64_table[static_cast<uint8_t>(end.to_ulong())];
 
                     out[out_ptr+3] = '=';
-
                     out_ptr+=4;
                     ptr+=3;
+
                     break;
                 }
                 else if(ptr < in_length){
@@ -70,33 +70,61 @@ namespace baseee{
 
                     out[out_ptr+3] = '=';
                     out[out_ptr+2] = '=';
-
                     out_ptr+=4;
                     ptr+=3;
+
                     break;
                 }
 
             else return baseee::RUNTIME_ERROR;
-
 
             }
         return baseee::SUCCESS;
         }
 
 
+        int base64ToBin(const char in[],const int in_length,char out[],const int out_length){
+            if(in_length%4 != 0) return baseee::BUFFER_ERROR;
+            if((in_length/4) *3 > out_length) return baseee::BUFFER_ERROR;
+            std::string base64_table("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 
+            
+            for(int ptr=0,out_ptr=0;ptr < in_length;ptr+=4,out_ptr+=3){
 
+                if(ptr+3 < in_length){
 
+                std::bitset<6> source_head(base64_table.find(in[ptr]));
+                std::bitset<6> source_also(base64_table.find(in[ptr+1]));
+                std::bitset<6> source_end;
+                std::bitset<6> source_heart;
+                in[ptr+2] == '=' ? source_heart=std::bitset<6>("00000000") : source_heart=std::bitset<6>(base64_table.find(in[ptr+2]));
+                in[ptr+3] == '=' ? source_end=std::bitset<6>("00000000") : source_end=std::bitset<6>(base64_table.find(in[ptr+3]));
 
+                std::bitset<24> out_buf(source_head.to_string() + source_also.to_string() + source_heart.to_string() + source_end.to_string());
+                std::bitset<8> out_head(out_buf.to_string().substr(16,8));
+                std::bitset<8> out_middle(out_buf.to_string().substr(8,8));
+                std::bitset<8> out_end(out_buf.to_string().substr(0,8));
 
+                out[out_ptr+2] = static_cast<short>(out_head.to_ulong());
+                out[out_ptr+1] = static_cast<short>(out_middle.to_ulong());
+                out[out_ptr] = static_cast<short>(out_end.to_ulong());
 
+                continue;
+                }
 
+                else return baseee::RUNTIME_ERROR;
+            }
+            /*for(int a=0;a < out_length;a++){
+                if(out[a] == '\0'){
+                    for(int b=0;b+a+1 < out_length;a++){
+                        out[a+b] = out[a+b+1];
+                    }
+                }
+                else continue;
+            }*/
 
-
-
-
-
-
+            return baseee::SUCCESS;
+        }
     }
 }
 

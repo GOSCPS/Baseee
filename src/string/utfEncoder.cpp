@@ -3,7 +3,7 @@
 /*baseee::string
  *string UTF encoder moudle
  *MIT License
- *coder:chhd 
+ *coder:chhdao 
  */
 
 #include <string>

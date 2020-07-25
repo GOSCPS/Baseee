@@ -3,7 +3,7 @@
 /*baseee::log
  *print_XXXXX and out_log
  *MIT License
- *coder:chhd 
+ *coder:chhdao 
  */
 #include "log.hpp"
 #include <string>

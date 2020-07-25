@@ -3,7 +3,7 @@
 /*baseee::log
  *log moudle
  *MIT License
- *coder:chhd 
+ *coder:chhdao 
  */
 #include <string>
 #include <thread>

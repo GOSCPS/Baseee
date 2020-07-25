@@ -3,7 +3,7 @@
 /*baseee::code
  *code moudle
  *MIT License
- *coder:chhd 
+ *coder:chhdao 
  */
 #include "base64.cpp"
 #include "../Baseee.hpp"

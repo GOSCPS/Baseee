@@ -3,7 +3,7 @@
 /*baseee::string
  *string moudle
  *MIT License
- *coder:chhd 
+ *coder:chhdao 
  */
 #include <string>
 #include <vector>

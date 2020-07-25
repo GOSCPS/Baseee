@@ -1,5 +1,13 @@
 #ifndef _BASEEE_BASEEE_HPP_
 #define _BASEEE_BASEEE_HPP_
+
+/*baseee
+ *baseee base moudle
+ *MIT License
+ *coder:chhdao 
+ */
+
+
 namespace baseee{
 const char VERSION[] = "000.001.000";
 const int SUCCESS = 0;

@@ -3,12 +3,8 @@
 /*baseee::log
  *set_log and get_format
  *MIT License
- *coder:chhd 
+ *coder:chhdao
  *update time:2020-7-21
- *
- *history:carry out
- *
- * 
  */
 #include <string>
 #include <vector>
