@@ -4,11 +4,6 @@
  *print_XXXXX and out_log
  *MIT License
  *coder:chhd 
- *update ime:2020-7-21
- *
- *history:carry out
- *
- * 
  */
 #include "log.hpp"
 #include <string>

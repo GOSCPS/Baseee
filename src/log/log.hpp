@@ -4,11 +4,6 @@
  *log moudle
  *MIT License
  *coder:chhd 
- *update time:2020-7-21
- *
- *history:carry out
- *add protected
- * 
  */
 #include <string>
 #include <thread>

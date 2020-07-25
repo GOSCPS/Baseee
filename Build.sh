@@ -50,6 +50,12 @@ a=`echo $?`
 Error $a 
 echo -e "\033[32mBaseee string moudle build end\n\033[0m"
 
+#Build code
+clang++ -c -std=c++17 -pthread -Wall -O3 -x c++-header -o Baseee/code.hpp.pch src/code/code.hpp
+a=`echo $?`
+Error $a 
+echo -e "\033[32mBaseee code moudle build end\n\033[0m"
+
 
 #build end
 echo -e "Baseee Build Ok,enjoy using Baseee!\n"

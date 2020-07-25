@@ -1,6 +1,10 @@
 #ifndef _BASEEE_UTFENCODER_CPP_
 #define _BASEEE_UTFENCODER_CPP_
-
+/*baseee::string
+ *string UTF encoder moudle
+ *MIT License
+ *coder:chhd 
+ */
 
 #include <string>
 #include <vector>
@@ -8,7 +12,8 @@
 #include <bitset>
 #include "../Baseee.hpp"
 
-
+//tools
+//move bit
 inline void BitChange(const std::bitset<8> a,std::bitset<32> &b,int c,int length){
     for(int d=0;d < length;++d){
         b[d+c] = a[d];
@@ -28,8 +33,8 @@ inline void BitChange(const std::bitset<32> a,std::bitset<8> &b,int c,int length
 namespace baseee{
     namespace string{
         int utf8ToUtf32(const char in[],const int in_length,char32_t out[],const int out_length){
-            const std::bitset<8> UTF8_1_HEAD("10000000");//UTF8 use bit
-            const std::bitset<8> IS_UTF8_1_HEAD("00000000");//UTF8 use bit of key
+            const std::bitset<8> UTF8_1_HEAD("10000000");//UTF8 占用位
+            const std::bitset<8> IS_UTF8_1_HEAD("00000000");//UTF8 固定位
 
             const std::bitset<8> UTF8_2_HEAD("11100000");
             const std::bitset<8> IS_UTF8_2_HEAD("11000000");
@@ -132,7 +137,7 @@ namespace baseee{
                 std::bitset<8> utf8Bit[4];
                 for(auto &a:utf8Bit) a.reset();
 
-                //One word
+                //1字节，utf8
                 if(utf32Bit.to_ulong() <= static_cast<unsigned long>(0x00007f)){
                     BitChange(utf32Bit,utf8Bit[0],0,7);
                     out[out_ptr] = static_cast<short>(utf8Bit[0].to_ulong());
@@ -141,7 +146,7 @@ namespace baseee{
                     continue;
                 }
 
-                //Two words
+                //2字节，utf8
                 else if(out_ptr+1 < out_length && utf32Bit.to_ullong() <= static_cast<unsigned long>(0x0007ff)){
                     utf8Bit[1] = IS_UTF8_BODY;
                     utf8Bit[0] = IS_UTF8_2_HEAD;
@@ -158,7 +163,7 @@ namespace baseee{
                     continue;
                 }
 
-                //Three words
+                //三字节，utf8
                 else if(out_ptr+2 < out_length && utf32Bit.to_ullong() <= static_cast<unsigned long>(0x00ffff)){
 
                     utf8Bit[2] = IS_UTF8_BODY;
@@ -180,7 +185,7 @@ namespace baseee{
                     continue;
                 }
 
-                //Four words
+                //四字节，utf8
                 else if(out_ptr+3 < out_length && utf32Bit.to_ullong() <= static_cast<unsigned long>(0x10ffff)){
 
                     utf8Bit[3] = IS_UTF8_BODY;

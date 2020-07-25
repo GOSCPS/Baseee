@@ -1,6 +1,12 @@
 #ifndef _BASEEE_STRING_CPP_
 #define _BASEEE_STRING_CPP_
 
+/*baseee::string
+ *string moudle
+ *MIT License
+ *coder:chhd 
+ */
+
 #include <string>
 #include <vector>
 #include <regex>
