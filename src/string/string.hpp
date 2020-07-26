@@ -11,6 +11,7 @@
 #include <bitset>
 #include "../Baseee.hpp"
 #include "string.cpp"
+#include "makeString.cpp"
 #include "utfEncoder.cpp"
 
 namespace baseee{
@@ -30,6 +31,9 @@ namespace baseee{
         //UTF16及UTF8的函数，暂未实现
         int utf8ToUtf16(const char in[],const int in_length,char16_t out[],const int out_length);
         int utf16ToUtf8(const char16_t in[],const int in_length,char out[],const int out_length);
+
+        //反转字符,UTF16-BE-LE
+        int stringFilp(char16_t in[],const int in_length);
 
     }
 }

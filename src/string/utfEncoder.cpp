@@ -218,6 +218,94 @@ namespace baseee{
 
         }
 
+
+        int utf8ToUtf16(const char in[],const int in_length,char16_t out[],const int out_length){
+            const std::bitset<8> UTF8_1_HEAD("10000000");//UTF8 use bit
+            const std::bitset<8> IS_UTF8_1_HEAD("00000000");//UTF8 use bit of key
+
+            const std::bitset<8> UTF8_2_HEAD("11100000");
+            const std::bitset<8> IS_UTF8_2_HEAD("11000000");
+
+            const std::bitset<8> UTF8_3_HEAD("11110000");
+            const std::bitset<8> IS_UTF8_3_HEAD("11100000");
+
+            const std::bitset<8> UTF8_4_HEAD("11111000");
+            const std::bitset<8> IS_UTF8_4_HEAD("11110000");
+
+            const std::bitset<8> UTF8_BODY("11000000");
+            const std::bitset<8> IS_UTF8_BODY("10000000");
+
+            const std::bitset<6> UTF16_HIGH("110110");
+            const std::bitset<6> UTF16_LOW("110111");
+
+            int ptr=0,out_ptr=0;
+
+            while(ptr < in_length && out_ptr < out_length){
+
+                if(((std::bitset<8>(in[ptr]))&(UTF8_1_HEAD)) == IS_UTF8_1_HEAD){
+                    out[out_ptr] = static_cast<uint16_t>((std::bitset<8>(in[ptr])&(~UTF8_1_HEAD)).to_ulong());
+                    ++ptr;
+                    ++out_ptr;
+                    continue;
+                }
+
+                else if(ptr+1 < in_length && (std::bitset<8>(in[ptr])&(UTF8_2_HEAD)) == IS_UTF8_2_HEAD){
+                    std::bitset<8> one(in[ptr]),two(in[ptr+1]);
+                    //one &= (~UTF8_2_HEAD);//5
+                    //two &= (~UTF8_BODY);//6
+
+                    std::bitset<16> buf("00000" + one.to_string().substr(3,5) + two.to_string().substr(2,6));
+
+                    out[out_ptr] = static_cast<uint16_t>(buf.to_ulong());
+                    ++out_ptr;
+                    ptr+=2;
+                    continue;
+                }
+
+                else if(ptr+2 < in_length && ((std::bitset<8>(in[ptr]))&(UTF8_3_HEAD)) == IS_UTF8_3_HEAD){
+                    std::bitset<8> one(in[ptr]),two(in[ptr+1]),three(in[ptr+2]);
+                    //one &= (~UTF8_3_HEAD);//4
+                    //two &= (~UTF8_BODY);//6
+                    //three &= (~UTF8_BODY);//6
+
+                    
+                    out[out_ptr] = static_cast<uint16_t>(std::bitset<16>(one.to_string().substr(4,4) + two.to_string().substr(2,6) + three.to_string().substr(2,6)).to_ulong());
+
+                    ++out_ptr;
+                    ptr+=3;
+                    continue;
+                }
+
+
+                else if(ptr+3 < in_length && out_ptr+1 < out_length && ((std::bitset<8>(in[ptr]))&(UTF8_4_HEAD)) == IS_UTF8_4_HEAD){
+                    char32_t buf[1];
+                    const char *const p = &in[ptr];
+                    utf8ToUtf32(p,4,buf,1);
+                    buf[0] = buf[0] - 0x10000;
+                    std::bitset<32> Bit(buf[0]);
+                    std::bitset<10> high(Bit.to_string().substr(12,10));
+                    std::bitset<10> low(Bit.to_string().substr(22,10));
+
+                    char16_t out_buf[2];
+                    out_buf[0] = static_cast<uint16_t>(high.to_ulong()+0xD800);
+                    out_buf[1] = static_cast<uint16_t>(low.to_ulong()+0xDC00);
+
+                    out[out_ptr] = out_buf[0];
+                    out[out_ptr+1] = out_buf[1];
+
+                    out_ptr+=2;
+                    ptr+=4;
+                    continue;
+                }
+
+
+                else return baseee::RUNTIME_ERROR;
+            }
+            return baseee::SUCCESS;
+        }
+
+
+
     }
 }
 
