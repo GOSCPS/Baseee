@@ -304,7 +304,6 @@ namespace baseee{
             return baseee::SUCCESS;
         }
 
-        // !!!---unsafe---!!!
         int utf16ToUtf8(const char16_t in[],const int in_length,char out[],const int out_length){
             const std::bitset<8> UTF8_1_HEAD("10000000");//UTF8 use bit
             const std::bitset<8> IS_UTF8_1_HEAD("00000000");//UTF8 use bit of key
@@ -333,12 +332,18 @@ namespace baseee{
                     std::bitset<16> low(in[ptr+1]);
                     std::bitset<8> o[4];
 
-                    //low   aaaaaabb bb(bbbbbb
-                    //high  aaaaaabb (bbbbbb(bb
-                    o[3] = std::bitset<8>("10"+low.to_string().substr(10,6));
-                    o[2] = std::bitset<8>("10"+buf.to_string().substr(14,2)+low.to_string().substr(6,4));
-                    o[1] = std::bitset<8>("10"+buf.to_string().substr(8,6));
-                    o[0] = std::bitset<8>("111100"+buf.to_string().substr(6,2));
+                    uint16_t H=buf.to_ulong(),L=low.to_ulong();
+                    H = H - 0xD800;
+                    L = L - 0xDC00;
+                    std::bitset<20> F(std::bitset<10>(H).to_string()+std::bitset<10>(L).to_string());
+                    uint32_t G = F.to_ulong() + 0x10000;
+
+                    std::bitset<21> O(G);
+                    o[0] = std::bitset<8>("11110"+O.to_string().substr(0,3)).to_ulong();
+                    o[1] = std::bitset<8>("10"+O.to_string().substr(3,6)).to_ulong();
+                    o[2] = std::bitset<8>("10"+O.to_string().substr(9,6)).to_ulong();
+                    o[3] = std::bitset<8>("10"+O.to_string().substr(15,6)).to_ulong();
+
 
                     std::cout << buf << low << std::endl;
                     std::cout << o[0] << o[1] << o[2] << o[3] << std::endl;
