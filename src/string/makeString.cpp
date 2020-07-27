@@ -15,7 +15,7 @@ namespace baseee
     namespace string
     {
         
-        int stringFilp(char16_t in[],const int in_length){
+        int stringFlip(char16_t in[],const int in_length){
             for(int a=0;a < in_length;a++){
                 std::bitset<16> i(in[a]);
                 std::bitset<8> o_head(i.to_string().substr(0,8));

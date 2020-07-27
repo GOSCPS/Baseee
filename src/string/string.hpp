@@ -33,7 +33,7 @@ namespace baseee{
         int utf16ToUtf8(const char16_t in[],const int in_length,char out[],const int out_length);
 
         //反转字符,UTF16-BE-LE
-        int stringFilp(char16_t in[],const int in_length);
+        int stringFlip(char16_t in[],const int in_length);
 
     }
 }

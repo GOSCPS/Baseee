@@ -304,7 +304,96 @@ namespace baseee{
             return baseee::SUCCESS;
         }
 
+        // !!!---unsafe---!!!
+        int utf16ToUtf8(const char16_t in[],const int in_length,char out[],const int out_length){
+            const std::bitset<8> UTF8_1_HEAD("10000000");//UTF8 use bit
+            const std::bitset<8> IS_UTF8_1_HEAD("00000000");//UTF8 use bit of key
 
+            const std::bitset<8> UTF8_2_HEAD("11100000");
+            const std::bitset<8> IS_UTF8_2_HEAD("11000000");
+
+            const std::bitset<8> UTF8_3_HEAD("11110000");
+            const std::bitset<8> IS_UTF8_3_HEAD("11100000");
+
+            const std::bitset<8> UTF8_4_HEAD("11111000");
+            const std::bitset<8> IS_UTF8_4_HEAD("11110000");
+
+            const std::bitset<8> UTF8_BODY("11000000");
+            const std::bitset<8> IS_UTF8_BODY("10000000");
+
+            const std::bitset<6> UTF16_HIGH("110110");
+            const std::bitset<6> UTF16_LOW("110111");
+
+            int ptr=0,out_ptr=0;
+
+            while(ptr < in_length && out_ptr < out_length){
+                std::bitset<16> buf(in[ptr]);
+
+                if(out_ptr+3 < out_length && ptr+1 < in_length && (buf&std::bitset<16>("1111110000000000")) == std::bitset<16>(UTF16_HIGH.to_string()+"0000000000")){
+                    std::bitset<16> low(in[ptr+1]);
+                    std::bitset<8> o[4];
+
+                    //low   aaaaaabb bb(bbbbbb
+                    //high  aaaaaabb (bbbbbb(bb
+                    o[3] = std::bitset<8>("10"+low.to_string().substr(10,6));
+                    o[2] = std::bitset<8>("10"+buf.to_string().substr(14,2)+low.to_string().substr(6,4));
+                    o[1] = std::bitset<8>("10"+buf.to_string().substr(8,6));
+                    o[0] = std::bitset<8>("111100"+buf.to_string().substr(6,2));
+
+                    std::cout << buf << low << std::endl;
+                    std::cout << o[0] << o[1] << o[2] << o[3] << std::endl;
+
+                    
+                    out[out_ptr] = static_cast<uint8_t>(o[0].to_ulong());
+                    out[out_ptr+1] = static_cast<uint8_t>(o[1].to_ulong());
+                    out[out_ptr+2] = static_cast<uint8_t>(o[2].to_ulong());
+                    out[out_ptr+3] = static_cast<uint8_t>(o[3].to_ulong());
+
+                    ptr+=2;
+                    out_ptr+=4;
+                    continue;
+                }
+
+                else if(out_ptr+2 < out_length && buf.to_ulong() >= 0x000800 && buf.to_ulong() <= 0x00ffff){
+                    std::bitset<8> o[3];
+                    o[2] = std::bitset<8>("10"+buf.to_string().substr(10,6));
+                    o[1] = std::bitset<8>("10"+buf.to_string().substr(4,6));
+                    o[0] = std::bitset<8>("1110" + buf.to_string().substr(0,4));
+
+                    out[out_ptr] = static_cast<uint8_t>(o[0].to_ulong());
+                    out[out_ptr+1] = static_cast<uint8_t>(o[1].to_ulong());
+                    out[out_ptr+2] = static_cast<uint8_t>(o[2].to_ulong());
+
+                    ++ptr;
+                    out_ptr+=3;
+                    continue;
+                }
+
+                else if(out_ptr+1 < out_length && buf.to_ulong() >= 0x000080 && buf.to_ulong() <= 0x0007ff){
+                    std::bitset<8> o[2];
+                    o[1] = std::bitset<8>("10"+buf.to_string().substr(10,6));
+                    o[0] = std::bitset<8>("110" + buf.to_string().substr(5,5));
+
+                    out[out_ptr] = static_cast<uint8_t>(o[0].to_ulong());
+                    out[out_ptr+1] = static_cast<uint8_t>(o[1].to_ulong());
+
+                    ++ptr;
+                    out_ptr+=2;
+                    continue;
+                }
+
+                else if(buf.to_ulong() >= 0x000000 && buf.to_ulong() <= 0x00007f){
+                    out[out_ptr] = static_cast<uint8_t>(std::bitset<8>("0"+buf.to_string().substr(9,7)).to_ulong());
+                    ++ptr;
+                    ++out_ptr;
+                    continue;
+                }
+
+                else return baseee::RUNTIME_ERROR;
+            }
+
+        return baseee::SUCCESS;
+        }
 
     }
 }
