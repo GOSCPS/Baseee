@@ -343,11 +343,6 @@ namespace baseee{
                     o[1] = std::bitset<8>("10"+O.to_string().substr(3,6)).to_ulong();
                     o[2] = std::bitset<8>("10"+O.to_string().substr(9,6)).to_ulong();
                     o[3] = std::bitset<8>("10"+O.to_string().substr(15,6)).to_ulong();
-
-
-                    std::cout << buf << low << std::endl;
-                    std::cout << o[0] << o[1] << o[2] << o[3] << std::endl;
-
                     
                     out[out_ptr] = static_cast<uint8_t>(o[0].to_ulong());
                     out[out_ptr+1] = static_cast<uint8_t>(o[1].to_ulong());
