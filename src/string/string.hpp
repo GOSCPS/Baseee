@@ -35,6 +35,7 @@ namespace baseee{
         //反转字符,UTF16-BE-LE
         int stringFlip(char16_t in[],const int in_length);
 
+
     }
 }
 

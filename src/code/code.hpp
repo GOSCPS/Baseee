@@ -17,7 +17,8 @@ namespace baseee{
 
         //Md5 
         //out 128Bit(16 char[])
-        int md5(const char in[],const int in_length,char out[]);
+        //!!!---已弃用---!!!
+        uint32_t * md5(const char in[],const int in_length);
 
         
     }

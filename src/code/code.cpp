@@ -96,11 +96,11 @@ namespace baseee{
         }
 
 
-        uint32_t * md5Calculation(uint32_t *ptr){
-            const uint32_t A = 0x67452301;
-            const uint32_t B = 0xEFCDAB89;
-            const uint32_t C = 0x98BADCFE;
-            const uint32_t D = 0x10325476;
+        uint32_t * md5Calculation(uint32_t *ptr,uint32_t A,uint32_t B,uint32_t C,uint32_t D){
+            /*uint32_t A = 0x67452301;
+            uint32_t B = 0xEFCDAB89;
+            uint32_t C = 0x98BADCFE;
+            uint32_t D = 0x10325476;*/
             uint32_t a = A;
             uint32_t b = B;
             uint32_t c = C;
@@ -220,7 +220,7 @@ namespace baseee{
         }
 
 
-        int md5(const char in[],const int in_length,char out[]){
+        uint32_t *md5(const char in[],const int in_length){
             auto re = md5Fill(in,in_length);
             uint8_t * ptr = re.first;
             uint64_t length = re.second;
@@ -235,9 +235,12 @@ namespace baseee{
             group.push_back(buildMd5Group(&ptr[p]));
             p += 64;
             }
-            std::vector<uint32_t*> out_;
+
+            //处理
+            uint32_t *key = new uint32_t[4]{0x67452301,0xEFCDAB89,0x98BADCFE,0x10325476};
+
             for(auto &s:group){
-                out_.push_back(md5Calculation(s));
+                key = md5Calculation(s,key[0],key[1],key[2],key[3]);
             }
 
             //free ram
@@ -245,7 +248,7 @@ namespace baseee{
                 delete []s;
             }
             delete []ptr;
-            return baseee::SUCCESS;
+            return key;
         }
     }
 }
