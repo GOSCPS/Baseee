@@ -56,6 +56,13 @@ a=`echo $?`
 Error $a 
 echo -e "\033[32mBaseee code moudle build end\n\033[0m"
 
+#Build ini
+clang++ -c -std=c++17 -pthread -Wall -O3 -x c++-header -o Baseee/ini.hpp.pch src/ini/ini.hpp
+a=`echo $?`
+Error $a 
+echo -e "\033[32mBaseee code moudle build end\n\033[0m"
+
+
 
 #build end
 echo -e "Baseee Build Ok,enjoy using Baseee!\n"
