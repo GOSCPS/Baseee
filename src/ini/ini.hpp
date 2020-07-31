@@ -23,6 +23,8 @@ namespace baseee{
 
             IniParser(std::vector<std::string> in) : source(in) {Parser();}
             //IniParser() = default;
+            //IniParser & IniParser(Iniparser&) = delete;
+            //IniParser & operator=
 
             private:
             std::vector<std::string> source;
