@@ -1,0 +1,25 @@
+# ninja log v5
+6	1127	617911917	baseee-string/CMakeFiles/baseee_string.dir/string.cpp.obj	238adaf1fc52eb51
+1127	1344	617911917	baseee-string/baseee_string.lib	b093a8fc10a732c6
+1	1370	617911917	CMakeFiles/baseee.dir/baseee.cpp.obj	6448a1af2c486a8a
+1371	2108	617911918	baseee.exe	dcc5986ea4cbdd1
+1	779	617911935	CMakeFiles/baseee.dir/baseee.cpp.obj	6448a1af2c486a8a
+779	1204	617911935	baseee.exe	dcc5986ea4cbdd1
+0	1018	617912245	CMakeFiles/unit-test.dir/unit-test.cpp.obj	c6d15b1a775fa8f7
+1019	2257	617912246	unit-test.exe	7b830520c3edb6e5
+0	846	617912266	CMakeFiles/unit-test.dir/unit-test.cpp.obj	c6d15b1a775fa8f7
+846	1292	617912266	unit-test.exe	7b830520c3edb6e5
+40	1870	617948712	baseee-string/CMakeFiles/baseee-string.dir/string.cpp.obj	4b7de09170dccbd7
+2	2028	617948712	CMakeFiles/unit-test.dir/unit-test.cpp.obj	37b34d3660615ada
+2	134	617948904	baseee-string/baseee-string.lib	da3949c0b8ee29b
+1	826	617949121	baseee-log/CMakeFiles/baseee-log.dir/log.cpp.obj	487a6caa1455db55
+827	1036	617949121	baseee-log/baseee-log.lib	14e1cefe9b836e7d
+1036	1935	617949122	unit-test.exe	4a76ade52b418d2
+5	1046	617953271	baseee-string/CMakeFiles/baseee-string.dir/string.cpp.obj	4b7de09170dccbd7
+5	134	617953357	baseee-string/baseee-string.lib	da3949c0b8ee29b
+1	856	617953430	CMakeFiles/unit-test.dir/unit-test.cpp.obj	37b34d3660615ada
+0	665	617953584	unit-test.exe	68496a617e1afd92
+0	625	617953795	CMakeFiles/unit-test.dir/unit-test.cpp.obj	37b34d3660615ada
+625	954	617953795	unit-test.exe	68496a617e1afd92
+1	844	617953979	CMakeFiles/unit-test.dir/unit-test.cpp.obj	37b34d3660615ada
+845	1202	617953979	unit-test.exe	68496a617e1afd92
