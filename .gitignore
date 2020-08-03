@@ -361,17 +361,18 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-baseee/CMakeLists.txt.user
-baseee/CMakeCache.txt
-baseee/CMakeFiles
-baseee/CMakeScripts
-baseee/Testing
-baseee/Makefile
-baseee/cmake_install.cmake
-baseee/install_manifest.txt
-baseee/compile_commands.json
-baseee/CTestTestfile.cmake
-baseee/_deps
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
 
 baseee/out/
-.baseee/vs/
+baseee/.vs/
+baseee/out/build
