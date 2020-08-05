@@ -45,8 +45,11 @@ namespace baseee {
 	namespace coder {
 		//Unicode编码转换
 		//输入迭代器
+		//成功返回0
 		template<typename I,typename O>
-		int Utf8ToUtf32(I,I,O,O);
+		int Utf8ToUtf32(I, I, O, O);
+		template<typename I, typename O>
+		int Utf32ToUtf8(I, I, O, O);
 	}
 
 }
