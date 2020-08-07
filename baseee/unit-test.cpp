@@ -20,17 +20,13 @@ using namespace baseee;
 
 int main(int argc,char *argv[])
 {
-	vector<char32_t> in;//= { U"🎀🏳️‍🌈Unicode统一世界🏳️‍🌈🎀" };
-	vector<char> out;
-	vector<char> key;//= { u8"🎀🏳️‍🌈Unicode统一世界🏳️‍🌈🎀" };
+	array<char,8> in = { u8"Unicode" };
+	array<char16_t,8> out;
+	array<char16_t,8> key = { u"Unicode" };
 
 
 	time_t b = clock();
-	for (int a = 0; a < 3; a++) {
-		cout << baseee::coder::Utf32ToUtf8(in.cbegin(), in.cend(), out.begin(), out.end()) << endl;
-		cout << baseee::coder::Utf8ToUtf32(out.cbegin(), out.cend(), in.begin(), in.end()) << endl;
-		cout << baseee::coder::Utf32ToUtf8(in.cbegin(), in.cend(), out.begin(), out.end()) << endl;
-	}
+	baseee::coder::Utf8ToUtf16(in.cbegin(), in.cend(), out.begin(), out.end());
 	time_t e = clock();
 	int ok = 0, err = 0;
 	for (int a = 0; a < out.size(); a++) {

@@ -1,6 +1,6 @@
 #构建
-add_library(baseee-string string.cpp string.hpp )
+add_library(baseee-string  "string.hpp" "string.cpp" "coder.cpp")
 
 #安装
 install (TARGETS baseee-string DESTINATION bin)
-install (FILES string.hpp DESTINATION include)
+install (FILES "string.hpp" DESTINATION include)

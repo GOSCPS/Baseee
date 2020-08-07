@@ -4,6 +4,7 @@
 //Copyright(c) 2020 chhdao
 //
 #include "string.cpp"
+#include "coder.cpp"
 #include <string>
 #include <regex>
 #include <vector>
@@ -50,6 +51,21 @@ namespace baseee {
 		int Utf8ToUtf32(I, I, O, O);
 		template<typename I, typename O>
 		int Utf32ToUtf8(I, I, O, O);
+		template<typename I,typename O>
+		int Utf8ToUtf16(I, I, O, O);
+		template<typename I, typename O>
+		int Utf16ToUtf8(I, I, O, O);
+
+		//获取Bom
+		//输入编码和字节序
+		template<typename O>
+		O GetBom(const std::string&, const std::string&);
+		//UTF-8仅有编码
+		template<typename O>
+		O GetBom(const std::string&);
+
+
+
 	}
 
 }

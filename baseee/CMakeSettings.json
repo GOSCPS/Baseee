@@ -10,7 +10,13 @@
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "D:/work/vspkg/vcpkg-master/scripts/buildsystems/vcpkg.cmake"
+        }
+      ]
     }
   ]
 }

@@ -5,7 +5,6 @@
 //Copyright(c) 2020 chhdao
 //
 
-#include "log.hpp"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -13,6 +12,7 @@
 #include <mutex>
 #include <thread>
 #include <sstream>
+#include "log.hpp"
 
 std::string baseee::log::logger::BuildOutFileName(const std::string &format) {
 	time_t rwtime;

@@ -27,9 +27,8 @@ add_subdirectory (src/baseee-log)
 add_executable (unit-test "unit-test.cpp")
 
 # 链接
-# target_link_libraries (unit-test baseee-string)
-# target_link_libraries (unit-test baseee-log)
-# target_link_libraries (unit-test baseee-python)
+target_link_libraries (unit-test baseee-string)
+#target_link_libraries (unit-test baseee-log)
 #TARGET_LINK_LIBRARIES(unit-test ${PYTHON_LIBRARIES})
 
 
