@@ -4,8 +4,8 @@
 //
 
 #include <iostream>
-#include "baseee-string/string.hpp"
-#include "baseee-log/log.hpp"
+#include "src/baseee-string/string.hpp"
+#include "src/baseee-log/log.hpp"
 #include <utility>
 #include <thread>
 #include <array>
@@ -24,6 +24,7 @@ int main(int argc,char *argv[])
 	array<char16_t,8> out;
 	array<char16_t,8> key = { u"Unicode" };
 
+	log::logger logger("unit-test","test :",0,cerr,"");
 
 	time_t b = clock();
 	baseee::coder::Utf8ToUtf16(in.cbegin(), in.cend(), out.begin(), out.end());
@@ -41,6 +42,8 @@ int main(int argc,char *argv[])
 	cout << "ERR:" << err << endl;
 	cout << "begin:" << b << "\nend:" << e << endl;
 	cout << "use:" << e - b << endl;
+
+	logger << pair<int,std::string>{logger.Level_Info, "test end"};
 
 
 	return 0;

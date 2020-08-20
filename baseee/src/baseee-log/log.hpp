@@ -13,13 +13,14 @@
 
 namespace baseee {
 	namespace log {
+
 		class logger {
 		public:
 			logger& operator=(const logger&) = delete;
 			logger() = delete;
 			logger(std::string ProgramName,std::string LogFormat, int LowestOutLevel, std::ostream& OutStream, std::string OutFileFormat) :
 				format(LogFormat), lowest(LowestOutLevel), os(OutStream),name(ProgramName){
-				ofs = std::ofstream();
+				if(!OutFileFormat.empty())ofs = std::ofstream();
 				ofs.open(BuildOutFileName(OutFileFormat), std::ios::out | std::ios::ate);
 				return;
 			}
@@ -36,6 +37,11 @@ namespace baseee {
 			void PrintLog(const int level,const std::string log);
 			void LogStream(const std::pair<int,std::string> log);
 
+			//日志流
+			const int Log_Info = 0;
+			const int Log_Important = 0;
+			const int Log_Warning = 0;
+			const int Log_fatal = 0;
 
 			//日志等级
 			const int Level_Info = 0;
@@ -61,5 +67,3 @@ namespace baseee {
 
 	}
 }
-
-#include "log.cpp"

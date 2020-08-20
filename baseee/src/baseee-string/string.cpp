@@ -11,6 +11,7 @@
 #include <cstdarg>
 #include <cstring>
 #include <memory>
+#include "string.hpp"
 
 namespace baseee {
 	namespace string {

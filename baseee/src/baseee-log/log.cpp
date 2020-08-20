@@ -14,10 +14,13 @@
 #include <sstream>
 #include "log.hpp"
 
+#define _CRT_SECURE_NO_WARNINGS
+
+
 std::string baseee::log::logger::BuildOutFileName(const std::string &format) {
 	time_t rwtime;
 	time(&rwtime);
-	struct tm *time = localtime(&rwtime);
+	struct tm* time = localtime(&rwtime);
 	std::string out = format;
 	while (true) {
 		if (out.find("{year}") != out.npos) {

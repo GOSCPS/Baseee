@@ -8,9 +8,10 @@
 #include <cstdarg>
 #include <cstring>
 #include <memory>
+#include "string.hpp"
 
 
-namespace coder {
+namespace baseee {
 	namespace coder {
 		template<typename I, typename O>
 		int Utf8ToUtf32(I b, I e, O ob, O oe) {
@@ -115,6 +116,39 @@ namespace coder {
 			return 0;
 		}
 
+		template<typename I, typename O>
+		int Utf8ToUtf16(I b, I e, O ob, O oe) {
+			const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
+			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
+			const uint8_t UTF8_BODY = 0b11000000;
+			//const uint8_t UTF8_BODY_KEY = 0b10000000;
+
+			while (b != e && ob != oe) {
+
+				if (((*b) & UTF8_HEAD[0]) == UTF8_HEAD_KEY[0]) {
+					*ob = (*b) & (~UTF8_HEAD[0]));
+					++ob;
+					++b;
+					continue;
+				}
+
+
+				else if (((*b) & UTF8_HEAD[1]) == UTF8_HEAD_KEY[1] && (b + 1) != e) {
+					uint8_t head = (*b) & (~UTF8_HEAD[1]));
+					uint8_t end = (*(b + 1)) & (~UTF8_BODY));
+					*ob = (static_cast<uint16_t>(head) << 6) + static_cast<uint16_t>(end);
+					b += 2;
+					++ob;
+					continue;
+				}
+
+				else return -1;
+			}
+
+			return 0;
+		}
+
+
 		template<typename O>
 		O GetBom(const std::string& code, const std::string& mark) {
 			switch (code)
@@ -203,43 +237,6 @@ namespace coder {
 			}
 			return nullptr;
 		}
-
-		template<typename I, typename O>
-		int Utf8ToUtf16(I b, I e, O ob, O oe) {
-			const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
-			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
-			const uint8_t UTF8_BODY = 0b11000000;
-			//const uint8_t UTF8_BODY_KEY = 0b10000000;
-
-
-			while (b != e && ob != oe) {
-
-				if (((*b) & UTF8_HEAD[0]) == UTF8_HEAD_KEY[0]) {
-					*ob = (*b) & (~UTF8_HEAD[0]);
-					++b;
-					++ob;
-					continue;
-				}
-
-				else if (((*b) & UTF8_HEAD[1]) == UTF8_HEAD_KEY[1] && b+1 != e) {
-					*ob = (*b) & (~UTF8_HEAD[1]);
-					*ob <<= 6;
-					*ob = *ob + ((*(b + 1)) & (~UTF8_BODY));
-					b += 2;
-					++ob;
-					continue;
-				}
-
-
-
-
-
-					else return -1;
-			}
-
-			return 0;
-		}
-
 
 
 	}

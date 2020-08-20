@@ -3,16 +3,16 @@
 //MIT License
 //Copyright(c) 2020 chhdao
 //
-#include "string.cpp"
-#include "coder.cpp"
 #include <string>
 #include <regex>
 #include <vector>
 
+/*wstring爬*/
+
 namespace baseee {
 	namespace string {
-		//wstring爬
-		//trim:去除头尾空格
+		
+		//trim:去除头尾空格,不包括\n\t等空白控制字符
 		//返回string
 		std::string trim(const std::string& s);
 		std::string HeadTrim(const std::string& s);
@@ -63,8 +63,6 @@ namespace baseee {
 		//UTF-8仅有编码
 		template<typename O>
 		O GetBom(const std::string&);
-
-
 
 	}
 
