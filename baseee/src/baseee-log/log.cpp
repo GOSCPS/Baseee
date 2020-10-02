@@ -14,8 +14,6 @@
 #include <sstream>
 #include "log.hpp"
 
-#define _CRT_SECURE_NO_WARNINGS
-
 
 std::string baseee::log::logger::BuildOutFileName(const std::string &format) {
 	time_t rwtime;

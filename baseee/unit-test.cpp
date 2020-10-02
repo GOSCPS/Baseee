@@ -4,8 +4,8 @@
 //
 
 #include <iostream>
-#include "src/baseee-string/string.hpp"
-#include "src/baseee-log/log.hpp"
+#include "string.hpp"
+#include "log.hpp"
 #include <utility>
 #include <thread>
 #include <array>
@@ -16,35 +16,30 @@
 using namespace std;
 using namespace baseee;
 
-
-
 int main(int argc,char *argv[])
 {
-	array<char,8> in = { u8"Unicode" };
-	array<char16_t,8> out;
-	array<char16_t,8> key = { u"Unicode" };
+	array<char,13> Source = {u8"𐐷aa哈哈"};
+	array<char16_t, 7> Key = { u"𐐷aa哈哈" };
+	array<char16_t, 7> Aims;
+	array<char, 13> Tmp = {};
 
-	log::logger logger("unit-test","test :",0,cerr,"");
+	cout << baseee::coder::Utf8ToUtf16(Source.begin(), Source.end(),
+		Aims.begin(), Aims.end()) << endl;
+	cout << baseee::coder::Utf16ToUtf8(Aims.begin(), Aims.end(), Tmp.begin(), Tmp.end())
+		<< endl;
+	cout << baseee::coder::Utf8ToUtf16(Tmp.begin(), Tmp.end(),
+		Aims.begin(), Aims.end()) << endl;
 
-	time_t b = clock();
-	baseee::coder::Utf8ToUtf16(in.cbegin(), in.cend(), out.begin(), out.end());
-	time_t e = clock();
-	int ok = 0, err = 0;
-	for (int a = 0; a < out.size(); a++) {
-		if (out[a] == key[a]) ++ok;
+	for (auto a = 0; a < Key.size(); a++) {
+		if (Key[a] == Aims[a]) {
+			cout << "OK" << endl;
+		}
 		else {
-			++err;
-			cout << "right:" << bitset<8>(key[a]) << endl;
-			cout << "error:" << bitset<8>(out[a]) << endl;
+			cout << "ERROR" << endl;
+			cout << "At " << a << endl;
+			cout << bitset<16>(Key[a]) << " <- " << bitset<16>(Aims[a]) << endl;
 		}
 	}
-	cout << "OK:" << ok << endl;
-	cout << "ERR:" << err << endl;
-	cout << "begin:" << b << "\nend:" << e << endl;
-	cout << "use:" << e - b << endl;
-
-	logger << pair<int,std::string>{logger.Level_Info, "test end"};
-
 
 	return 0;
 }

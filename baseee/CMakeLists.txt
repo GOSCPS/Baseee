@@ -7,35 +7,42 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project ("baseee" VERSION 0.1.0)
+project ("baseee" VERSION 0.1.0 LANGUAGES CXX)
 
-# 将源代码添加到此项目的可执行文件。
 
 # 让Windows安全函数爬
 if(WIN32)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-# 引入文件
+configure_file(config.h.in config.h)
 
-add_subdirectory (src/baseee-string) 
+#构建模块
+set(BaseeeString ${PROJECT_SOURCE_DIR}/src/baseee-string)
+add_library(baseee-string STATIC ${BaseeeString}/string.cpp )
 
-add_subdirectory (src/baseee-log) 
+set(BaseeeLog ${PROJECT_SOURCE_DIR}/src/baseee-log)
+add_library(baseee-log STATIC ${BaseeeLog}/log.cpp)
 
-# 构建单元测试
-add_executable(unit-test "unit-test.cpp")
+#构建单元测试
+aux_source_directory(. ALL_SOURCE_FILE)
+add_executable(unit-test 
+${ALL_SOURCE_FILE}
+)
 
-# 链接
-target_link_libraries(unit-test PRIVATE baseee-log)
-target_link_libraries(unit-test PRIVATE baseee-string)
+target_include_directories(unit-test PRIVATE ${BaseeeLog} ${BaseeeString})
 
-target_include_directories(unit-test PRIVATE ${PROJECT_SOURCE_DIR}/src/baseee-string)
-target_include_directories(unit-test PRIVATE ${PROJECT_SOURCE_DIR}/src/baseee-string)
-
-# TODO: 如有需要，请添加测试并安装目标。
+target_link_libraries(unit-test baseee-log baseee-string)
 
 #安装
-install (FILES "${PROJECT_BINARY_DIR}/src/string.hpp"
-         DESTINATION include)
-install (FILES "${PROJECT_BINARY_DIR}/src/log.hpp"
-         DESTINATION include)
+install(FILES 
+${BaseeeLog}/log.hpp
+${BaseeeString}/string.hpp
+DESTINATION include
+)
+
+install(TARGETS
+baseee-string
+baseee-log 
+DESTINATION lib
+)
