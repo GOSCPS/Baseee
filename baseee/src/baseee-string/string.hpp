@@ -1,8 +1,13 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
+ * IS LICENSED UNDER MIT
+ * File:     string.hpp
+ * Content:  baseee string module head file
+ * Copyright (c) 2020 Chhdao All rights reserved.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
-// string.hpp字符串处理声明
-//MIT License
-//Copyright(c) 2020 chhdao
-//
+
+
 #include <string>
 #include <regex>
 #include <bitset>
@@ -154,6 +159,7 @@ namespace baseee {
 			return 0;
 		}
 
+		
 		template<typename I, typename O>
 		int Utf8ToUtf16(I b, I e, O ob, O oe) {
 			const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
@@ -228,10 +234,10 @@ namespace baseee {
 		
 		template<typename I, typename O>
 		int Utf16ToUtf8(I b, I e, O ob, O oe) {
-	    	/*const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
+	    	const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
 			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
 			const uint8_t UTF8_BODY = 0b11000000;
-			const uint8_t UTF8_BODY_KEY = 0b10000000;*/
+			const uint8_t UTF8_BODY_KEY = 0b10000000;
 
 			const uint16_t UTF16_HEAD = 0b1101100000000000;
 			//const uint16_t UTF16_END = 0b1101110000000000;
@@ -248,20 +254,19 @@ namespace baseee {
 					first = first - 0xD800;
 					end = end - 0xDC00;
 
-					uint32_t all = (first << 16) + end;
-					std::bitset<12> First(std::bitset<32>(all).to_string().substr(12,10));
-					std::bitset<12> Second(std::bitset<32>(all).to_string().substr(22, 10));
-					all = (First.to_ulong() << 12) + (Second.to_ulong());
+					std::bitset<10> First(std::bitset<16>(first).to_string().substr(6, 10));
+					std::bitset<10> Second(std::bitset<16>(end).to_string().substr(6, 10));
+					uint32_t all = (First.to_ulong() << 10) + (Second.to_ulong());
 
 					all = all + 0x10000;
 
-					std::array<uint32_t, 1> Aims = { all };
-					std::array<uint8_t, 4> Out;
-					Utf32ToUtf8(Aims.begin(), Aims.end(), Out.begin(), Out.end());
-
+					array<char32_t, 1> Aims = { all };
+					array<char, 4> Out = { 0,0,0,0 };
+					//Utf32ToUtf8(&all, (&all) + 1, ob, (ob + 4));
+					Utf32ToUtf8(Aims.cbegin(), Aims.cend(), Out.begin(), Out.end());
 					*ob = Out[0];
 					*(ob + 1) = Out[1];
-					*(ob + 1) = Out[2];
+					*(ob + 2) = Out[2];
 					*(ob + 3) = Out[3];
 
 					ob += 4;

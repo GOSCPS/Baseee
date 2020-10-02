@@ -1,3 +1,10 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
+ * IS LICENSED UNDER MIT
+ * File:     log.hpp
+ * Content:  baseee log module head file
+ * Copyright (c) 2020 Chhdao All rights reserved.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
 
 #include <iostream>
@@ -37,6 +44,18 @@ namespace baseee {
 			void PrintLog(const int level,const std::string log);
 			void LogStream(const std::pair<int,std::string> log);
 
+			//设置默认打印等级
+			void SetDefaultOutPutLevel(int Level) {
+				DefaultLevel = Level;
+			}
+
+			//使用默认打印等级的输出流
+			logger& operator<<(std::string log) {
+				PrintLog(DefaultLevel, log);
+				return *this;
+			}
+
+
 			//日志流
 			const int Log_Info = 0;
 			const int Log_Important = 0;
@@ -59,6 +78,7 @@ namespace baseee {
 
 			std::mutex mtx;
 
+			int DefaultLevel = Level_Info;
 
 			std::string BuildOutFormat(const int& level);//构建输出格式
 			std::string BuildOutFileName(const std::string& format);//构建文件名称

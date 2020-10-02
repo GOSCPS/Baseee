@@ -1,7 +1,10 @@
-﻿// unit-test.cpp单元测试
-//MIT License
-//Copyright(c) 2020 chhdao
-//
+﻿/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
+ * IS LICENSED UNDER MIT
+ * File:     unit-test.cpp
+ * Content:  baseee unit test
+ * Copyright (c) 2020 Chhdao All rights reserved.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <iostream>
 #include "string.hpp"
@@ -16,30 +19,83 @@
 using namespace std;
 using namespace baseee;
 
+array<char, 57> TESTLISTU8 = { u8"你好-Hello-$-€-𐐷-𤭢-🏳️‍🌈-Greater Test" };
+array<char16_t, 39> TESTLISTU16 = { u"你好-Hello-$-€-𐐷-𤭢-🏳️‍🌈-Greater Test" };
+array<char32_t, 35> TESTLISTU32 = { U"你好-Hello-$-€-𐐷-𤭢-🏳️‍🌈-Greater Test" };
+const auto U8Size = TESTLISTU8.size();
+const auto U16Size = TESTLISTU16.size();
+const auto U32Size = TESTLISTU32.size();
+
+void StringCoderTest1();
+void StringCoderTest2();
+
 int main(int argc,char *argv[])
 {
-	array<char,13> Source = {u8"𐐷aa哈哈"};
-	array<char16_t, 7> Key = { u"𐐷aa哈哈" };
-	array<char16_t, 7> Aims;
-	array<char, 13> Tmp = {};
+	StringCoderTest1();
+	StringCoderTest2();
+	return 0;
+}
 
-	cout << baseee::coder::Utf8ToUtf16(Source.begin(), Source.end(),
-		Aims.begin(), Aims.end()) << endl;
-	cout << baseee::coder::Utf16ToUtf8(Aims.begin(), Aims.end(), Tmp.begin(), Tmp.end())
-		<< endl;
-	cout << baseee::coder::Utf8ToUtf16(Tmp.begin(), Tmp.end(),
-		Aims.begin(), Aims.end()) << endl;
+void StringCoderTest1() {
+	{
+		cout << "Test:Utf8 To Utf32" << endl;
 
-	for (auto a = 0; a < Key.size(); a++) {
-		if (Key[a] == Aims[a]) {
-			cout << "OK" << endl;
+		array<char32_t, U32Size> buf = {};
+		cout << coder::Utf8ToUtf32(TESTLISTU8.cbegin(), TESTLISTU8.cend(), buf.begin(), buf.end()) << endl;
+
+		for (int a = 0; a < buf.size(); a++) {
+			if (buf[a] != TESTLISTU32[a]) {
+				cout << "Error At " << a << endl;
+			}
 		}
-		else {
-			cout << "ERROR" << endl;
-			cout << "At " << a << endl;
-			cout << bitset<16>(Key[a]) << " <- " << bitset<16>(Aims[a]) << endl;
-		}
+
+		cout << "Right!" << endl;
 	}
 
-	return 0;
+	{
+		cout << "Test:Utf32 To Utf8" << endl;
+
+		array<char, U8Size> buf = {};
+		cout << coder::Utf32ToUtf8(TESTLISTU32.cbegin(), TESTLISTU32.cend(), buf.begin(), buf.end()) << endl;
+
+		for (int a = 0; a < buf.size(); a++) {
+			if (buf[a] != TESTLISTU8[a]) {
+				cout << "Error At " << a << endl;
+			}
+		}
+
+		cout << "Right!" << endl;
+	}
+}
+
+void StringCoderTest2() {
+	{
+		cout << "Test:Utf8 To Utf16" << endl;
+
+		array<char16_t, U16Size> buf = {};
+		cout << coder::Utf8ToUtf16(TESTLISTU8.cbegin(), TESTLISTU8.cend(), buf.begin(), buf.end()) << endl;
+
+		for (int a = 0; a < buf.size(); a++) {
+			if (buf[a] != TESTLISTU16[a]) {
+				cout << "Error At " << a << endl;
+			}
+		}
+
+		cout << "Right!" << endl;
+	}
+
+	{
+		cout << "Test:Utf16 To Utf8" << endl;
+
+		array<char, U8Size> buf = {};
+		cout << coder::Utf16ToUtf8(TESTLISTU16.cbegin(), TESTLISTU16.cend(), buf.begin(), buf.end()) << endl;
+
+		for (int a = 0; a < buf.size(); a++) {
+			if (buf[a] != TESTLISTU8[a]) {
+				cout << "Error At " << a << endl;
+			}
+		}
+
+		cout << "Right!" << endl;
+	}
 }

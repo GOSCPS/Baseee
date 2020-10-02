@@ -1,8 +1,11 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
+ * IS LICENSED UNDER MIT
+ * File:     string.cpp
+ * Content:  baseee string module file
+ * Copyright (c) 2020 Chhdao All rights reserved.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
-// string.cpp字符串处理源文件
-//MIT License
-//Copyright(c) 2020 chhdao
-//
 
 #include <string>
 #include <regex>
