@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #构建发布
-SET(CMAKE_BUILD_TYPE "Release")
+#SET(CMAKE_BUILD_TYPE "Release")
 
 project ("baseee" VERSION 0.1.0 LANGUAGES CXX)
 
@@ -32,7 +32,7 @@ if(WIN32)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-configure_file(config.h.in config.h)
+#configure_file(config.h.in config.h)
 
 #构建模块
 set(BaseeeString ${PROJECT_SOURCE_DIR}/src/baseee-string)
