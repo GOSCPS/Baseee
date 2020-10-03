@@ -325,95 +325,51 @@ namespace baseee {
 			return 0;
 		}
 
+		enum UnicodeBom : uint8_t
+		{
+			UTF16_LE = 0,//0xFF 0xFE
+			UTF16_BE = 1,//0xFE 0xFF
+			UTF32_LE,//0xFFFE 0x0000
+			UTF32_BE,//0x0000 0xFFFE
+			UTF8//0xEF 0xBB 0xBF
+		};
+
 
 		template<typename O>
-		O GetBom(const std::string& code, const std::string& mark) {
-			switch (code)
+		O GetBom(UnicodeBom BomType) {	
+			switch (BomType)
 			{
-			case "utf-16":
-			case "UTF-16":
-			case "UTF16":
-			case "utf16":
-			case "utf_16":
-			case "UTF_16":
-				switch (mark)
-				{
-				case "LE":
-				case "le":
-					std::shared_ptr<char16_t> out(new char16_t[2]);
-					out.operator[0] = 0xFF;
-					out.operator[1] = 0xFE;
-					return out;
-					break;
-
-				case "BE":
-				case "be":
-					std::shared_ptr<char16_t> out(new char16_t[2]);
-					out.operator[0] = 0xFE;
-					out.operator[1] = 0xFF;
-					return out;
-					break;
-				default:
-					break;
-				}
-				break;
-
-			case "utf-32":
-			case "UTF-32":
-			case "utf32":
-			case "UTF32":
-			case "utf_32":
-			case "UTF_32":
-				switch (mark)
-				{
-				case "LE":
-				case "le":
-					std::shared_ptr<char16_t> out(new char32_t[2]);
-					out.operator[0] = 0xFFFE;
-					out.operator[1] = 0x0000;
-					return out;
-					break;
-
-				case "BE":
-				case "be":
-					std::shared_ptr<char16_t> out(new char32_t[2]);
-					out.operator[0] = 0x0000;
-					out.operator[1] = 0xFEFF;
-					return out;
-					break;
-
-				default:
-					break;
-				}
-				break;
-
-
+			case baseee::coder::UTF16_LE:
+				auto ptr = new char16_t[2];
+				ptr[0] = 0xFF;
+				ptr[1] = 0xFE
+				return ptr;
+			case baseee::coder::UTF16_BE:
+				auto ptr = new char16_t[2];
+				ptr[0] = 0xFE;
+				ptr[1] = 0xFF
+				return ptr;
+			case baseee::coder::UTF32_LE:
+				auto ptr = new char32_t[2];
+				ptr[0] = 0xFFFE;
+				ptr[1] = 0x0000
+				return ptr;
+			case baseee::coder::UTF32_BE:
+				auto ptr = new char32_t[2];
+				ptr[0] = 0x0000;
+				ptr[1] = 0xFFFE
+				return ptr;
+			case baseee::coder::UTF8:
+				auto ptr = new char8_t[3];
+				ptr[0] = 0xEF;
+				ptr[1] = 0xBB;
+				ptr[2] = 0xBF;
+				return ptr;
 			default:
-				break;
+				return nullptr;
 			}
-			return nullptr;
 		}
 
-		template<typename O>
-		O GetBom(const std::string& code) {
-			switch (code)
-			{
-			case "utf-8":
-			case "UTF-8":
-			case "utf8":
-			case "UTF8":
-			case "utf_8":
-			case "UTF_8":
-				std::shared_ptr<char> out(new char[3]);
-				out.operator[0] = 0xEF;
-				out.operator[1] = 0xBB;
-				out.operator[2] = 0xBF;
-				return out;
-			default:
-				break;
-			}
-			return nullptr;
-		}
 	}
 
 }
