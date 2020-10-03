@@ -11,149 +11,121 @@
 #include <fstream>
 #include <ctime>
 #include <mutex>
+#include <sstream>
 #include <thread>
 #include <sstream>
+#include <ctime>
+#include <exception>
 #include "log.hpp"
 
 
-std::string baseee::log::logger::BuildOutFileName(const std::string &format) {
-	time_t rwtime;
-	time(&rwtime);
-	struct tm* time = localtime(&rwtime);
-	std::string out = format;
-	while (true) {
-		if (out.find("{year}") != out.npos) {
-			out.replace(out.find("{year}"), 6, std::to_string(time->tm_year + 1900));
-			continue;
-		}
-
-		else if (out.find("{month}") != out.npos) {
-			out.replace(out.find("{month}"), 7, std::to_string(time->tm_mon + 1));
-			continue;
-		}
-
-		else if (out.find("{day}") != out.npos) {
-			out.replace(out.find("{day}"), 5, std::to_string(time->tm_mday));
-			continue;
-		}
-
-		else if (out.find("{hour}") != out.npos) {
-			out.replace(out.find("{hour}"), 6, std::to_string(time->tm_hour));
-			continue;
-		}
-
-		else if (out.find("{min}") != out.npos) {
-			out.replace(out.find("{min}"), 5, std::to_string(time->tm_min));
-			continue;
-		}
-
-		else if (out.find("{sec}") != out.npos) {
-			out.replace(out.find("{sec}"), 5, std::to_string(time->tm_sec));
-			continue;
-		}
-
-		else if (out.find("{name}") != out.npos) {
-			out.replace(out.find("{name}"), 6, name);
-			continue;
-		}
-
-		else break;
-	}
-	return out;
+void baseee::log::logger::PrintLog(std::string& log) {
+	PrintLog(this->DefaultOutLevel, log);
+	return;
 }
 
-std::string baseee::log::logger::BuildOutFormat(const int &level) {
-	time_t rwtime;
-	time(&rwtime);
-	struct tm* time = localtime(&rwtime);
-	std::string out = format;
-	while (true) {
-		if (out.find("{year}") != out.npos) {
-			out.replace(out.find("{year}"), 6, std::to_string(time->tm_year + 1900));
-			continue;
-		}
+void baseee::log::logger::PrintLog(LogLevel level, std::string& log) {
 
-		else if (out.find("{month}") != out.npos) {
-			out.replace(out.find("{month}"), 7, std::to_string(time->tm_mon + 1));
-			continue;
-		}
-
-		else if (out.find("{day}") != out.npos) {
-			out.replace(out.find("{day}"), 5, std::to_string(time->tm_mday));
-			continue;
-		}
-
-		else if (out.find("{hour}") != out.npos) {
-			out.replace(out.find("{hour}"), 6, std::to_string(time->tm_hour));
-			continue;
-		}
-
-		else if (out.find("{min}") != out.npos) {
-			out.replace(out.find("{min}"), 5, std::to_string(time->tm_min));
-			continue;
-		}
-
-		else if (out.find("{sec}") != out.npos) {
-			out.replace(out.find("{sec}"), 5, std::to_string(time->tm_sec));
-			continue;
-		}
-
-		else if (out.find("{name}") != out.npos) {
-			out.replace(out.find("{name}"), 6, name);
-			continue;
-		}
-
-		else if (out.find("{level}") != out.npos) {
-			out.replace(out.find("{level}"), 7, GetLevelString(level));
-			continue;
-		}
-
-		else if (out.find("{threadId}") != out.npos) {
-			std::ostringstream oss;
-			oss << std::this_thread::get_id();
-			out.replace(out.find("{threadId}"), 10, oss.str());
-			continue;
-		}
-
-		else break;
-	}
-	return out;
-}
-
-std::string baseee::log::logger::GetLevelString(const int& level) {
-	switch (level)
 	{
-	case 0:
-		return "Info";
-		break;
-	case 1:
-		return "Important";
-		break;
-	case 2:
-		return "Warning";
-		break;
-	case 3:
-		return "Eroor";
-		break;
-	case 4:
-		return "Fatal";
-		break;
-	default:
-		return "OtherLevel:" + std::to_string(level);
-		break;
+		auto Lowest = static_cast<std::underlying_type<LogLevel>::type>(this->LowestLevelOutStream);
+		auto Origin = static_cast<std::underlying_type<LogLevel>::type>(level);
+
+		if (Origin >= Lowest && this->OutStream.good()) {
+			std::string OutLog = this->GetFormat(baseee::log::ToString(level), this->LogFormat) + log;
+			this->OutStream.write(OutLog.c_str(), OutLog.size());
+			this->OutStream.flush();
+		}
 	}
-}
 
-void baseee::log::logger::PrintLog(const int level,const std::string log) {
-	mtx.lock();
-	if (ofs.good()) ofs << BuildOutFormat(level) << log << std::endl;
-	if (level >= lowest && os.good()) os << BuildOutFormat(level) << log << std::endl;
-	mtx.unlock();
+	{
+		auto Lowest = static_cast<std::underlying_type<LogLevel>::type>(this->LowestLevelOutFile);
+		auto Origin = static_cast<std::underlying_type<LogLevel>::type>(level);
+
+		if (Origin >= Lowest && this->OutFile.is_open()) {
+			std::string OutLog = this->GetFormat(baseee::log::ToString(level), this->LogFormat) + log;
+			this->OutFile.write(OutLog.c_str(), OutLog.size());
+			this->OutFile.flush();
+		}
+	}
+
 	return;
 }
 
-void baseee::log::logger::LogStream(const std::pair<int, std::string> log) {
-	PrintLog(log.first,log.second);
-	return;
+
+std::string baseee::log::logger::GetFormat(std::string level,std::string format) noexcept {
+	auto t = std::time(0);
+	std::tm* tm = std::gmtime(&t);
+
+	std::string Out = format;
+
+	while (true) {
+
+		if (Out.find("{year}") != Out.npos) {
+			Out.replace(Out.find("{year}"),
+				sizeof "{year}"-1,
+				std::to_string(tm->tm_year + 1900));
+		}
+
+		else if (Out.find("{month}") != Out.npos) {
+			Out.replace(Out.find("{month}"),
+				sizeof "{month}"-1,
+				std::to_string(tm->tm_mon + 1));
+		}
+
+		else if (Out.find("{day}") != Out.npos) {
+			Out.replace(Out.find("{day}"),
+				sizeof "{day}"-1,
+				std::to_string(tm->tm_mday));
+		}
+
+		else if (Out.find("{hour}") != Out.npos) {
+			Out.replace(Out.find("{hour}"),
+				sizeof "{year}"-1,
+				std::to_string(tm->tm_hour + 1));
+		}
+
+		else if (Out.find("{min}") != Out.npos) {
+			Out.replace(Out.find("{min}"),
+				sizeof "{min}"-1,
+				std::to_string(tm->tm_min));
+		}
+
+		else if (Out.find("{sec}") != Out.npos) {
+			Out.replace(Out.find("{sec}"),
+				sizeof "{sec}"-1,
+				std::to_string(tm->tm_sec));
+		}
+
+		else if (Out.find("{threadId}") != Out.npos) {
+			std::ostringstream s;
+			s << std::this_thread::get_id();
+			Out.replace(Out.find("{threadId}"),
+				sizeof "{threadId}"-1,
+				s.str());
+		}
+
+		else if (Out.find("{level}") != Out.npos) {
+			Out.replace(Out.find("{level}"),
+				sizeof "{level}"-1,
+				level);
+		}
+
+		else break;
+	}
+	return Out;
 }
 
+void baseee::log::logger::OpenFile(std::string f) {
+	if (f == "") 
+		return;
+
+	auto s = GetFormat("",f);
+
+	this->OutFile.open(s, std::ios::out);
+
+	if (!this->OutFile) {
+		throw new std::runtime_error("Open File Error" + s);
+	}
+
+	return;
+}

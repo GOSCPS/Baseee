@@ -20,16 +20,15 @@
 #include <vector>
 #include <array>
 
-/*wstring爬*/
 
 namespace baseee {
 	namespace string {
 		
 		//trim:去除头尾空格,不包括\n\t等空白控制字符
 		//返回string
-		std::string trim(const std::string& s);
-		std::string HeadTrim(const std::string& s);
-		std::string EndTrim(const std::string& s);
+		std::string trim(const std::string& s)noexcept;
+		std::string HeadTrim(const std::string& s)noexcept;
+		std::string EndTrim(const std::string& s)noexcept;
 
 		//split，根据正则表达式分割字符串，返回结果集
 		//s字符串，r正则表达式
@@ -38,27 +37,27 @@ namespace baseee {
 
 		//ExpandsTabs 将tab转化为空格
 		//默认一个tab为8空格
-		std::string ExpandsTabs(const std::string& s, const int TabSizes);
+		std::string ExpandsTabs(const std::string& s, const int TabSizes)noexcept;
 
-		// *With判断字符串是否以end/start结尾/开头
-		bool StartsWith(const std::string& s, const std::string &start);
-		bool EndWith(const std::string& s, const std::string& end);
+		//With判断字符串是否以end/start结尾/开头
+		bool StartsWith(const std::string& s, const std::string &start)noexcept;
+		bool EndWith(const std::string& s, const std::string& end)noexcept;
 
 		//center 将字符串居中
 		//SurplusSpaceLeft控制是否将多余的空格分配在左侧(begin)，否则分配在右侧(end)(默认true)
-		std::string center(const std::string& s,const bool SurplusSpaceLeft);
+		std::string center(const std::string& s,const bool SurplusSpaceLeft)noexcept;
 
 		//大写转小写，小写转大写
-		std::string SwapCase(const std::string& s);
+		std::string SwapCase(const std::string& s)noexcept;
 
 		//格式化字符串
 		//返回string的vsnprintf
-		std::string format(const char * fmt, ...);
+		std::string format(const char * fmt, ...)noexcept;
 	}
 
 	namespace coder {
 		template<typename I, typename O>
-		int Utf8ToUtf32(I b, I e, O ob, O oe) {
+		int Utf8ToUtf32(I b, I e, O ob, O oe) noexcept {
 			const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
 			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
 			const uint8_t UTF8_BODY = 0b11000000;
@@ -112,7 +111,7 @@ namespace baseee {
 		}
 
 		template<typename I, typename O>
-		int Utf32ToUtf8(I b, I e, O ob, O oe) {
+		int Utf32ToUtf8(I b, I e, O ob, O oe) noexcept {
 			const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
 			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
 			const uint8_t UTF8_BODY = 0b11000000;
@@ -162,7 +161,7 @@ namespace baseee {
 
 		
 		template<typename I, typename O>
-		int Utf8ToUtf16(I b, I e, O ob, O oe) {
+		int Utf8ToUtf16(I b, I e, O ob, O oe) noexcept {
 			const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
 			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
 			const uint8_t UTF8_BODY = 0b11000000;
@@ -234,7 +233,7 @@ namespace baseee {
 		}
 		
 		template<typename I, typename O>
-		int Utf16ToUtf8(I b, I e, O ob, O oe) {
+		int Utf16ToUtf8(I b, I e, O ob, O oe) noexcept {
 	    	const uint8_t UTF8_HEAD[4] = { 0b10000000, 0b11100000,0b11110000,0b11111000 };//utf8头的占用
 			const uint8_t UTF8_HEAD_KEY[4] = { 0b00000000,0b11000000,0b11100000,0b11110000 };//utf8头
 			const uint8_t UTF8_BODY = 0b11000000;
@@ -326,7 +325,17 @@ namespace baseee {
 			return 0;
 		}
 
-		enum UnicodeBom : uint8_t
+
+		const ::std::array<char16_t, 2> BomUtf16_LE = { u'\xFF' ,u'\xFE' };
+		const ::std::array<char16_t, 2> BomUtf16_BE = { u'\xFE' ,u'\xFF' };
+
+		const ::std::array<char32_t, 2> BomUtf32_LE = { U'\xFFFE' ,U'\x0000' };
+		const ::std::array<char32_t, 2> BomUtf32_BE = { U'\x0000' ,U'\xFFFE' };
+
+		const ::std::array<char, 3> BomUtf8 = { '\xEF' ,'\xBB' ,'\xBF' };
+
+
+		/*enum UnicodeBom : uint8_t
 		{
 			UTF16_LE,//0xFF 0xFE
 			UTF16_BE,//0xFE 0xFF
@@ -334,17 +343,8 @@ namespace baseee {
 			UTF32_BE,//0x0000 0xFFFE
 			UTF8//0xEF 0xBB 0xBF
 		};
-
-		const std::array<char16_t, 2> BomUtf16_LE = { u'\xFF' ,u'\xFE' };
-		const std::array<char16_t, 2> BomUtf16_BE = { u'\xFE' ,u'\xFF' };
-
-		const std::array<char32_t, 2> BomUtf32_LE = { U'\xFFFE' ,U'\x0000' };
-		const std::array<char32_t, 2> BomUtf32_BE = { U'\x0000' ,U'\xFFFE' };
-
-		const char BomUtf8[3] = { '\xEF' ,'\xBB' ,'\xBF' };
-
 		
-		void *GetBom(UnicodeBom BomType) {	
+		void *GetBom(UnicodeBom BomType) noexcept {
 			char16_t *U16Ptr = nullptr;
 			char32_t *U32Ptr = nullptr;
 			char *U8Ptr = nullptr;
@@ -379,7 +379,7 @@ namespace baseee {
 			default:
 				return nullptr;
 			}
-		}
+		}*/
 
 	}
 

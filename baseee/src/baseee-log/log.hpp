@@ -12,77 +12,97 @@
 #include <fstream>
 #include <utility>
 #include <mutex>
-// log.hpp日志声明
-//MIT License
-//Copyright(c) 2020 chhdao
-//
-
+#include <string>
+#include <sstream>
 
 namespace baseee {
 	namespace log {
+
+		enum class LogLevel : uint8_t
+		{
+			Level_Debug = 0,
+			Level_Info = 1,
+			Level_News = 2,
+			Level_Note,
+			Level_Warning,
+			Level_Error,
+			Level_Fatal
+		};
+
+		inline const std::string ToString(LogLevel v)
+		{
+			switch (v)
+			{
+			case LogLevel::Level_Debug:   return "Debug";
+			case LogLevel::Level_Info:   return "Info";
+			case LogLevel::Level_News: return "News";
+			case LogLevel::Level_Note: return "Note";
+			case LogLevel::Level_Warning: return "Warning";
+			case LogLevel::Level_Error: return "Error";
+			case LogLevel::Level_Fatal: return "Fatal";
+				default: return "";
+			}
+		}
 
 		class logger {
 		public:
 			logger& operator=(const logger&) = delete;
 			logger() = delete;
-			logger(std::string ProgramName,std::string LogFormat, int LowestOutLevel, std::ostream& OutStream, std::string OutFileFormat) :
-				format(LogFormat), lowest(LowestOutLevel), os(OutStream),name(ProgramName){
-				if(!OutFileFormat.empty())ofs = std::ofstream();
-				ofs.open(BuildOutFileName(OutFileFormat), std::ios::out | std::ios::ate);
+
+			logger(std::string LogFormat, std::string OutFile, std::ostream &os) : OutStream(os){
+				this->LogFormat = LogFormat;
+				OpenFile(OutFile);
 				return;
 			}
 
-			logger &operator<<(std::pair<int, std::string> log) {
-				(this->LogStream)(log);
-				return *this;
+			void SetLowestLevelOutConsole(LogLevel level) noexcept {
+				LowestLevelOutStream = level;
+				return;
 			}
 
-
-			~logger() = default;
-
-			//打印日志
-			void PrintLog(const int level,const std::string log);
-			void LogStream(const std::pair<int,std::string> log);
-
-			//设置默认打印等级
-			void SetDefaultOutPutLevel(int Level) {
-				DefaultLevel = Level;
+			void SetLowestLevelOutFile(LogLevel level) noexcept {
+				LowestLevelOutFile = level;
+				return;
 			}
 
-			//使用默认打印等级的输出流
-			logger& operator<<(std::string log) {
-				PrintLog(DefaultLevel, log);
-				return *this;
+			void SetDefaultOutLevel(LogLevel level) noexcept {
+				this->DefaultOutLevel = level;
+				return;
 			}
 
+			void PrintLog(std::string& log);
+			void PrintLog(LogLevel level, std::string& log);
 
-			//日志流
-			const int Log_Info = 0;
-			const int Log_Important = 0;
-			const int Log_Warning = 0;
-			const int Log_fatal = 0;
+			logger *operator<<(std::string& log) {
+				PrintLog(log);
+				return this;
+			}
 
-			//日志等级
-			const int Level_Info = 0;
-			const int Level_Important = 1;
-			const int Level_Warning = 2;
-			const int Level_Error = 3;
-			const int Level_Fatal = 4;
-			
+			template<typename T>
+			logger* operator<<(T log) {
+				std::ostringstream s;
+				s << log;
+				PrintLog(s.str());
+				return this;
+			}
+
 		private:
-			const std::string name;
-			const std::string format;
-			const int lowest;	//如果要打印的日志高于这个等级，则输出到os
-			std::ostream& os;
-			std::ofstream ofs;
+			//等于高于这个等级则输出到OutStream
+			LogLevel LowestLevelOutStream;
+			std::ostream& OutStream;
 
-			std::mutex mtx;
+			//等于高于这个等级则输出到OutFile
+			LogLevel LowestLevelOutFile;
+			std::fstream OutFile;
 
-			int DefaultLevel = Level_Info;
+			//默认输出等级
+			LogLevel DefaultOutLevel = LogLevel::Level_Info;
+			
+			//日志格式
+			std::string LogFormat;
 
-			std::string BuildOutFormat(const int& level);//构建输出格式
-			std::string BuildOutFileName(const std::string& format);//构建文件名称
-			std::string GetLevelString(const int& level);//根据等级构建对应字符串
+			std::string GetFormat(std::string level, std::string format) noexcept;
+			void OpenFile(std::string f);
 		};
 
 	}

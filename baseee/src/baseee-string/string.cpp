@@ -17,7 +17,7 @@
 
 namespace baseee {
 	namespace string {
-		std::string trim(const std::string& s) {
+		std::string trim(const std::string& s) noexcept {
 			std::string out(s);
 			if (out.empty()) return "";
 			out.erase(0, out.find_first_not_of(" "));
@@ -25,14 +25,14 @@ namespace baseee {
 			return out;
 		}
 
-		std::string HeadTrim(const std::string& s) {
+		std::string HeadTrim(const std::string& s) noexcept {
 			std::string out(s);
 			if (out.empty()) return "";
 			out.erase(0, out.find_first_not_of(" "));
 			return out;
 		}
 
-		std::string EndTrim(const std::string& s) {
+		std::string EndTrim(const std::string& s) noexcept {
 			std::string out(s);
 			if (out.empty()) return "";
 			out.erase(out.find_last_not_of(" ") + 1);
@@ -40,18 +40,18 @@ namespace baseee {
 		}
 
 
-		std::vector<std::string> split(const std::string& s, const std::regex& r) {
+		std::vector<std::string> split(const std::string& s, const std::regex& r){
 			std::vector<std::string> out(std::sregex_token_iterator(s.begin(), s.end(), r, -1), std::sregex_token_iterator());
 			return out;
 		}
 
 
-		std::vector<std::string> split(const std::string& s, const std::string& r) {
+		std::vector<std::string> split(const std::string& s, const std::string& r){
 			std::regex re(r);
 			return baseee::string::split(s, re);
 		}
 
-		std::string ExpandsTabs(const std::string& s, const int TabSizes = 8) {
+		std::string ExpandsTabs(const std::string& s, const int TabSizes = 8) noexcept {
 			std::string out(s);
 			while (out.find('\t') != out.npos) {
 				out.replace(out.find('\t'), 1, std::string(TabSizes,' '));
@@ -59,14 +59,14 @@ namespace baseee {
 			return out;
 		}
 
-		bool StartsWith(const std::string& s, const std::string& start) {
+		bool StartsWith(const std::string& s, const std::string& start) noexcept {
 			return s.find(start) == 0 ? true : false;
 		}
-		bool EndWith(const std::string& s, const std::string& end) {
+		bool EndWith(const std::string& s, const std::string& end) noexcept {
 			return s.find(end) == (s.size()-end.size()) ? true : false;
 		}
 
-		std::string center(const std::string& s, const bool SurplusSpaceLeft = true) {
+		std::string center(const std::string& s, const bool SurplusSpaceLeft = true) noexcept {
 			std::string out = trim(s);
 			if (out.size() == s.size()) return out;
 			auto length = (s.size() - out.size()) / 2;
@@ -80,7 +80,7 @@ namespace baseee {
 		}
 		
 
-		std::string SwapCase(const std::string& s) {
+		std::string SwapCase(const std::string& s) noexcept {
 			std::string out(s);
 			for (char &c : out) {
 				if (std::islower(c)) {
@@ -97,7 +97,7 @@ namespace baseee {
 		}
 
 
-		std::string format(const char* fmt, ...) {
+		std::string format(const char* fmt, ...) noexcept {
 			int len = 0;
 			std::string str;
 			va_list args;
