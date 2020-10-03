@@ -3,6 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/chhdao/Baseee)
 ![GitHub repo size](https://img.shields.io/github/repo-size/chhdao/Baseee)
 ![c++ Version](https://img.shields.io/badge/C%2B%2B-17-blue)
+<hr>
 
 Baseee是一个跨平台c++程序库   
 旨在扩展c++   
@@ -22,5 +23,15 @@ $ cmake ..
 $ cmake --build .
 $ cmake --install .
 ```
-即可完成源码安装。  
+即可完成源码安装。    
+
+你也可以使用Vcpkg:  
+```
+$ vcpkg install baseee
+```
+最后，将下面的内容加入你的CMakeLists.txt
+```
+find_package(Baseee CONFIG REQUIRED)
+target_link_libraries(main PRIVATE baseee::baseee-log baseee::baseee-string)
+```
 Enjoy!  
