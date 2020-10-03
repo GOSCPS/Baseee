@@ -352,15 +352,15 @@ namespace baseee {
 			case baseee::coder::UTF32_LE:
 				auto ptr = new char32_t[2];
 				ptr[0] = 0xFFFE;
-				ptr[1] = 0x0000
+				ptr[1] = 0x0000;
 				return ptr;
 			case baseee::coder::UTF32_BE:
 				auto ptr = new char32_t[2];
 				ptr[0] = 0x0000;
-				ptr[1] = 0xFFFE
+				ptr[1] = 0xFFFE;
 				return ptr;
 			case baseee::coder::UTF8:
-				auto ptr = new char8_t[3];
+				auto ptr = new char[3];
 				ptr[0] = 0xEF;
 				ptr[1] = 0xBB;
 				ptr[2] = 0xBF;
