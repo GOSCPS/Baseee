@@ -37,11 +37,9 @@ configure_file(config.h.in config.h)
 #构建模块
 set(BaseeeString ${PROJECT_SOURCE_DIR}/src/baseee-string)
 add_library(baseee-string STATIC ${BaseeeString}/string.cpp)
-add_library(baseee-string-shared SHARED ${BaseeeString}/string.cpp)
 
 set(BaseeeLog ${PROJECT_SOURCE_DIR}/src/baseee-log)
 add_library(baseee-log STATIC ${BaseeeLog}/log.cpp)
-add_library(baseee-log-shared SHARED ${BaseeeLog}/log.cpp)
 
 #构建单元测试
 aux_source_directory(. ALL_SOURCE_FILE)
@@ -57,8 +55,6 @@ target_link_libraries(unit-test baseee-log baseee-string)
 install(TARGETS 
 baseee-string
 baseee-log 
-baseee-string-shared
-baseee-log-shared
 EXPORT BaseeeLib
 LIBRARY DESTINATION lib  # 动态库安装路径
 ARCHIVE DESTINATION lib  # 静态库安装路径
