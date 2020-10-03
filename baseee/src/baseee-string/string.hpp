@@ -18,6 +18,7 @@
 #include <cstring>
 #include <memory>
 #include <vector>
+#include <array>
 
 /*wstring≈¿*/
 
@@ -327,44 +328,54 @@ namespace baseee {
 
 		enum UnicodeBom : uint8_t
 		{
-			UTF16_LE = 0,//0xFF 0xFE
-			UTF16_BE = 1,//0xFE 0xFF
+			UTF16_LE,//0xFF 0xFE
+			UTF16_BE,//0xFE 0xFF
 			UTF32_LE,//0xFFFE 0x0000
 			UTF32_BE,//0x0000 0xFFFE
 			UTF8//0xEF 0xBB 0xBF
 		};
 
+		const std::array<char16_t, 2> BomUtf16_LE = { u'\xFF' ,u'\xFE' };
+		const std::array<char16_t, 2> BomUtf16_BE = { u'\xFE' ,u'\xFF' };
 
-		template<typename O>
-		O GetBom(UnicodeBom BomType) {	
+		const std::array<char32_t, 2> BomUtf32_LE = { U'\xFFFE' ,U'\x0000' };
+		const std::array<char32_t, 2> BomUtf32_BE = { U'\x0000' ,U'\xFFFE' };
+
+		const char BomUtf8[3] = { '\xEF' ,'\xBB' ,'\xBF' };
+
+		
+		void *GetBom(UnicodeBom BomType) {	
+			char16_t *U16Ptr = nullptr;
+			char32_t *U32Ptr = nullptr;
+			char *U8Ptr = nullptr;
 			switch (BomType)
 			{
 			case baseee::coder::UTF16_LE:
-				auto ptr = new char16_t[2];
-				ptr[0] = 0xFF;
-				ptr[1] = 0xFE
-				return ptr;
+				U16Ptr = new char16_t[2];
+				U16Ptr[0] = u'\xFF';
+				U16Ptr[1] = u'\xFE';
+				return static_cast<void*>(U16Ptr);
 			case baseee::coder::UTF16_BE:
-				auto ptr = new char16_t[2];
-				ptr[0] = 0xFE;
-				ptr[1] = 0xFF
-				return ptr;
+				U16Ptr = new char16_t[2];
+				U16Ptr[0] = u'\xFE';
+				U16Ptr[1] = u'\xFF';
+				return static_cast<void*>(U16Ptr);
 			case baseee::coder::UTF32_LE:
-				auto ptr = new char32_t[2];
-				ptr[0] = 0xFFFE;
-				ptr[1] = 0x0000;
-				return ptr;
+				U32Ptr = new char32_t[2];
+				U32Ptr[0] = U'\xFFFE';
+				U32Ptr[1] = U'\x0000';
+				return static_cast<void*>(U32Ptr);
 			case baseee::coder::UTF32_BE:
-				auto ptr = new char32_t[2];
-				ptr[0] = 0x0000;
-				ptr[1] = 0xFFFE;
-				return ptr;
+				U32Ptr = new char32_t[2];
+				U32Ptr[0] = U'\x0000';
+				U32Ptr[1] = U'\xFFFE';
+				return static_cast<void*>(U32Ptr);
 			case baseee::coder::UTF8:
-				auto ptr = new char[3];
-				ptr[0] = 0xEF;
-				ptr[1] = 0xBB;
-				ptr[2] = 0xBF;
-				return ptr;
+				U8Ptr = new char[3];
+				U8Ptr[0] = '\xEF';
+				U8Ptr[1] = '\xBB';
+				U8Ptr[2] = '\xBF';
+				return static_cast<void*>(U8Ptr);
 			default:
 				return nullptr;
 			}

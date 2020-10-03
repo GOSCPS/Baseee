@@ -28,11 +28,13 @@ const auto U32Size = TESTLISTU32.size();
 
 void StringCoderTest1();
 void StringCoderTest2();
+void StringCoderTest3();
 
 int main(int argc,char *argv[])
 {
 	StringCoderTest1();
 	StringCoderTest2();
+	StringCoderTest3();
 	return 0;
 }
 
@@ -98,4 +100,16 @@ void StringCoderTest2() {
 
 		cout << "Right!" << endl;
 	}
+}
+
+
+void StringCoderTest3() {
+	cout << "Test:Get Unicode Bom" << endl;
+	delete coder::GetBom(coder::UnicodeBom::UTF16_BE);
+	delete coder::GetBom(coder::UnicodeBom::UTF16_LE);
+	delete coder::GetBom(coder::UnicodeBom::UTF32_BE);
+	delete coder::GetBom(coder::UnicodeBom::UTF32_LE);
+	delete coder::GetBom(coder::UnicodeBom::UTF8);
+	cout << "Right!" << endl;
+	return;
 }
