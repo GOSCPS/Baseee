@@ -5,7 +5,6 @@
  * Content:  baseee log module file
  * Copyright (c) 2020 Chhdao All rights reserved.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#pragma once
 
 #include <string>
 #include <iostream>

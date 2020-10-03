@@ -260,8 +260,8 @@ namespace baseee {
 
 					all = all + 0x10000;
 
-					array<char32_t, 1> Aims = { all };
-					array<char, 4> Out = { 0,0,0,0 };
+					std::array<char32_t, 1> Aims = { all };
+					std::array<char, 4> Out = { 0,0,0,0 };
 					//Utf32ToUtf8(&all, (&all) + 1, ob, (ob + 4));
 					Utf32ToUtf8(Aims.cbegin(), Aims.cend(), Out.begin(), Out.end());
 					*ob = Out[0];
@@ -347,7 +347,7 @@ namespace baseee {
 					break;
 
 				case "BE":
-				case 'be':
+				case "be":
 					std::shared_ptr<char16_t> out(new char16_t[2]);
 					out.operator[0] = 0xFE;
 					out.operator[1] = 0xFF;
@@ -375,7 +375,7 @@ namespace baseee {
 					break;
 
 				case "BE":
-				case 'be':
+				case "be":
 					std::shared_ptr<char16_t> out(new char32_t[2]);
 					out.operator[0] = 0x0000;
 					out.operator[1] = 0xFEFF;
