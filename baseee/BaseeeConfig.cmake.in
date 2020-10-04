@@ -9,3 +9,8 @@
  include(CMakeFindDependencyMacro)
 
  include("${CMAKE_CURRENT_LIST_DIR}/BaseeeLibTargets.cmake")
+
+ set(BASEEE_LIB_DIR "@BASEEE_LIB_DIR@")
+ set(BASEEE_INCLUDE_DIRS "@BASEEE_INCLUDE_DIRS@")
+
+LINK_DIRECTORIES(${BASEEE_LIB_DIR})
