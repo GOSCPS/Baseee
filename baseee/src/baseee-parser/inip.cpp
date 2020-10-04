@@ -66,8 +66,8 @@ int baseee::parser::IniParser::Parser(std::string_view Ini) {
 	if (std::string(Ini).empty()) return 0;
 
 	std::string Identifier("[a-zA-Z0-9_-]+");
-	std::string Number("[0-9]+");
-	std::string Point("[0-9]+\\.[0-9]+");
+	std::string Number("[+-]{0,1}[0-9]+");
+	std::string Point("[+-]{0,1}[0-9]+\\.[0-9]+");
 	std::string Str("\".+\"");
 	std::string SimpleStr(".+");
 
@@ -174,6 +174,8 @@ int baseee::parser::IniParser::Parser(std::string_view Ini) {
 			}
 			else return line;
 
+			//Delete double quotation marks in head and end
+			BufferedVulan = BufferedVulan.substr(1, BufferedVulan.size() - 2);
 			this->StringPool[NowSection].insert(std::make_pair(BufferedName, 
 				BufferedVulan));
 

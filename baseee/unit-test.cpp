@@ -124,7 +124,7 @@ void IniParserTest() {
 	cout << "Test Parser Ini" << endl;
 
 	baseee::parser::IniParser Parser;
-	cout << Parser.Parser("[Test1]\nTestInt=114514\nTestDouble=114.514\nTestStr=\"Hello World\"\nTestSStr=Right!") << endl;
+	cout << Parser.Parser("[Test1]\nTestInt=-114514\nTestDouble=-114.514\nTestStr=\"Hello World\"\nTestSStr=Right!") << endl;
 
 	if (Parser.GetInt("Test1", "TestInt").has_value()) {
 		cout << "Int:" << Parser.GetInt("Test1", "TestInt").value() << endl;
