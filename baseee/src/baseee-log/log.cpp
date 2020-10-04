@@ -19,19 +19,24 @@
 #include "log.hpp"
 
 
-void baseee::log::logger::PrintLog(std::string& log) {
-	PrintLog(this->DefaultOutLevel, log);
+void baseee::log::logger::PrintLog(std::string_view&& log) {
+	PrintLog(this->DefaultOutLevel, std::forward<std::string_view&&>(log));
 	return;
 }
 
-void baseee::log::logger::PrintLog(LogLevel level, std::string& log) {
+void baseee::log::logger::PrintLog(LogLevel level,std::string_view&& log) {
 
 	{
 		auto Lowest = static_cast<std::underlying_type<LogLevel>::type>(this->LowestLevelOutStream);
 		auto Origin = static_cast<std::underlying_type<LogLevel>::type>(level);
 
 		if (Origin >= Lowest && this->OutStream.good()) {
-			std::string OutLog = this->GetFormat(baseee::log::ToString(level), this->LogFormat) + log;
+			std::string OutLog;
+
+				OutLog = std::string(this->GetFormat(baseee::log::ToString(level), this->LogFormat));
+				OutLog += log;
+				OutLog += '\n';
+
 			this->OutStream.write(OutLog.c_str(), OutLog.size());
 			this->OutStream.flush();
 		}
@@ -42,7 +47,12 @@ void baseee::log::logger::PrintLog(LogLevel level, std::string& log) {
 		auto Origin = static_cast<std::underlying_type<LogLevel>::type>(level);
 
 		if (Origin >= Lowest && this->OutFile.is_open()) {
-			std::string OutLog = this->GetFormat(baseee::log::ToString(level), this->LogFormat) + log;
+			std::string OutLog;
+
+			OutLog = std::string(this->GetFormat(baseee::log::ToString(level), this->LogFormat));
+			OutLog += log;
+			OutLog += '\n';
+
 			this->OutFile.write(OutLog.c_str(), OutLog.size());
 			this->OutFile.flush();
 		}
@@ -52,11 +62,13 @@ void baseee::log::logger::PrintLog(LogLevel level, std::string& log) {
 }
 
 
-std::string baseee::log::logger::GetFormat(std::string level,std::string format) noexcept {
+std::string baseee::log::logger::GetFormat(
+	const std::string_view &level,
+	const std::string_view &format) noexcept {
 	auto t = std::time(0);
 	std::tm* tm = std::gmtime(&t);
 
-	std::string Out = format;
+	std::string Out(format);
 
 	while (true) {
 
@@ -115,11 +127,11 @@ std::string baseee::log::logger::GetFormat(std::string level,std::string format)
 	return Out;
 }
 
-void baseee::log::logger::OpenFile(std::string f) {
+void baseee::log::logger::OpenFile(std::string_view &&f) {
 	if (f == "") 
 		return;
 
-	auto s = GetFormat("",f);
+	std::string s(GetFormat("",f));
 
 	this->OutFile.open(s, std::ios::out);
 

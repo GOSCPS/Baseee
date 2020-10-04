@@ -334,53 +334,6 @@ namespace baseee {
 
 		const ::std::array<char, 3> BomUtf8 = { '\xEF' ,'\xBB' ,'\xBF' };
 
-
-		/*enum UnicodeBom : uint8_t
-		{
-			UTF16_LE,//0xFF 0xFE
-			UTF16_BE,//0xFE 0xFF
-			UTF32_LE,//0xFFFE 0x0000
-			UTF32_BE,//0x0000 0xFFFE
-			UTF8//0xEF 0xBB 0xBF
-		};
-		
-		void *GetBom(UnicodeBom BomType) noexcept {
-			char16_t *U16Ptr = nullptr;
-			char32_t *U32Ptr = nullptr;
-			char *U8Ptr = nullptr;
-			switch (BomType)
-			{
-			case baseee::coder::UTF16_LE:
-				U16Ptr = new char16_t[2];
-				U16Ptr[0] = u'\xFF';
-				U16Ptr[1] = u'\xFE';
-				return static_cast<void*>(U16Ptr);
-			case baseee::coder::UTF16_BE:
-				U16Ptr = new char16_t[2];
-				U16Ptr[0] = u'\xFE';
-				U16Ptr[1] = u'\xFF';
-				return static_cast<void*>(U16Ptr);
-			case baseee::coder::UTF32_LE:
-				U32Ptr = new char32_t[2];
-				U32Ptr[0] = U'\xFFFE';
-				U32Ptr[1] = U'\x0000';
-				return static_cast<void*>(U32Ptr);
-			case baseee::coder::UTF32_BE:
-				U32Ptr = new char32_t[2];
-				U32Ptr[0] = U'\x0000';
-				U32Ptr[1] = U'\xFFFE';
-				return static_cast<void*>(U32Ptr);
-			case baseee::coder::UTF8:
-				U8Ptr = new char[3];
-				U8Ptr[0] = '\xEF';
-				U8Ptr[1] = '\xBB';
-				U8Ptr[2] = '\xBF';
-				return static_cast<void*>(U8Ptr);
-			default:
-				return nullptr;
-			}
-		}*/
-
 	}
 
 }

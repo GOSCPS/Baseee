@@ -29,7 +29,7 @@ namespace baseee {
 			Level_Fatal
 		};
 
-		inline const std::string ToString(LogLevel v)
+		inline const std::string ToString(const LogLevel &v)
 		{
 			switch (v)
 			{
@@ -49,9 +49,9 @@ namespace baseee {
 			logger& operator=(const logger&) = delete;
 			logger() = delete;
 
-			logger(std::string LogFormat, std::string OutFile, std::ostream &os) : OutStream(os){
+			logger(std::string_view &&LogFormat, std::string_view &&OutFile, std::ostream &os) : OutStream(os){
 				this->LogFormat = LogFormat;
-				OpenFile(OutFile);
+				OpenFile(std::forward<std::string_view&&>(OutFile));
 				return;
 			}
 
@@ -70,11 +70,11 @@ namespace baseee {
 				return;
 			}
 
-			void PrintLog(std::string& log);
-			void PrintLog(LogLevel level, std::string& log);
+			void PrintLog(std::string_view&& log);
+			void PrintLog(LogLevel level, std::string_view&& log);
 
-			logger *operator<<(std::string& log) {
-				PrintLog(log);
+			logger *operator<<(std::string_view &&log) {
+				PrintLog(std::forward<std::string_view&&>(log));
 				return this;
 			}
 
@@ -85,6 +85,7 @@ namespace baseee {
 				PrintLog(s.str());
 				return this;
 			}
+
 
 		private:
 			//等于高于这个等级则输出到OutStream
@@ -99,10 +100,13 @@ namespace baseee {
 			LogLevel DefaultOutLevel = LogLevel::Level_Info;
 			
 			//日志格式
-			std::string LogFormat;
+			std::string_view LogFormat;
 
-			std::string GetFormat(std::string level, std::string format) noexcept;
-			void OpenFile(std::string f);
+			std::string GetFormat(
+				const std::string_view& level,
+				const std::string_view& format) noexcept;
+
+			void OpenFile(std::string_view&& f);
 		};
 
 	}

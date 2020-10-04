@@ -28,14 +28,12 @@ const auto U32Size = TESTLISTU32.size();
 
 void StringCoderTest1();
 void StringCoderTest2();
-//void StringCoderTest3();
 void LogTest();
 
 int main(int argc,char *argv[])
 {
 	StringCoderTest1();
 	StringCoderTest2();
-	//StringCoderTest3();
 	LogTest();
 	return 0;
 }
@@ -105,25 +103,13 @@ void StringCoderTest2() {
 }
 
 
-/*void StringCoderTest3() {
-	cout << "Test:Get Unicode Bom" << endl;
-	delete coder::GetBom(coder::UnicodeBom::UTF16_BE);
-	delete coder::GetBom(coder::UnicodeBom::UTF16_LE);
-	delete coder::GetBom(coder::UnicodeBom::UTF32_BE);
-	delete coder::GetBom(coder::UnicodeBom::UTF32_LE);
-	delete coder::GetBom(coder::UnicodeBom::UTF8);
-	cout << "Right!" << endl;
-	return;
-}*/
-
-
 void LogTest() {
-	baseee::log::logger logger(std::string("{year}-{month}-{day} at {hour}:{min}:{sec} {level}:"),std::string(""),std::cout);
+	baseee::log::logger logger("{year}-{month}-{day} at {hour}:{min}:{sec} {level}:","",std::cout);
 	logger.SetLowestLevelOutConsole(baseee::log::LogLevel::Level_Debug);
 
 	logger.SetDefaultOutLevel(baseee::log::LogLevel::Level_Debug);
-	logger.PrintLog(std::string("Test:Log Print!\n"));
-	logger << "Hello World\n";
+	logger.PrintLog("Test:Log Print!");
+	logger << "Hello World";
 
-	logger.PrintLog(baseee::log::LogLevel::Level_Fatal, std::string("Right\n"));
+	logger.PrintLog(baseee::log::LogLevel::Level_Fatal, "Right!");
 }
