@@ -3,13 +3,19 @@
 ![GitHub](https://img.shields.io/github/license/chhdao/Baseee)
 ![GitHub repo size](https://img.shields.io/github/repo-size/chhdao/Baseee)
 ![c++ Version](https://img.shields.io/badge/C%2B%2B-17-blue)
-<hr>
+<hr>   
+
+[English](https://github.com/chhdao/Baseee/blob/master/docs/README.md)
+ 
+<hr>   
 
 Baseee是一个跨平台c++程序库   
 旨在扩展c++   
 本项目分为以下模块：   
-log 日志   
-string  字符串处理   
+ + log 日志   
+ + string  字符串处理   
+ + parser 各种解析器   
+ + components 各种工具
 欢迎捐款or贡献代码  
 
 ## Build
@@ -34,4 +40,5 @@ $ vcpkg install baseee
 find_package(Baseee CONFIG REQUIRED)
 target_link_libraries(main PRIVATE baseee::baseee)
 ```
+[文档](https://github.com/chhdao/Baseee/blob/master/docs/zh-cn/index.md)   
 Enjoy!  

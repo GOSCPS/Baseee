@@ -174,7 +174,7 @@ int baseee::parser::IniParser::Parser(std::string_view Ini) {
 			}
 			else return line;
 
-			//Delete double quotation marks in head and end
+			//É¾³ýÍ·Î²Ë«ÒýºÅ
 			BufferedVulan = BufferedVulan.substr(1, BufferedVulan.size() - 2);
 			this->StringPool[NowSection].insert(std::make_pair(BufferedName, 
 				BufferedVulan));
