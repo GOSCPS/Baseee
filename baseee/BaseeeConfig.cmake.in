@@ -8,7 +8,7 @@
 
  include(CMakeFindDependencyMacro)
 
- include("@PROJECT_BINARY_DIR@/BaseeeLibTargets.cmake")
+ include("@PROJECT_BINARY_DIR@/share/baseee/BaseeeLibTargets.cmake")
 
  set(BASEEE_LIB_DIR "@BASEEE_LIB_DIR@")
  set(BASEEE_INCLUDE_DIRS "@BASEEE_INCLUDE_DIRS@")
