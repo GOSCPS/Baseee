@@ -43,6 +43,8 @@ set(BaseeeParser ${PROJECT_SOURCE_DIR}/src/baseee-parser)
 
 set(BaseeeComponents ${PROJECT_SOURCE_DIR}/src/baseee-components)
 
+set(BaseeeModule ${BaseeeString} ${BaseeeLog} ${BaseeeParser} ${BaseeeComponents})
+
 add_library(baseee STATIC ${BaseeeParser}/inip.cpp ${BaseeeLog}/log.cpp ${BaseeeString}/string.cpp)
 
 #构建单元测试
@@ -51,7 +53,7 @@ add_executable(unit-test
 ${ALL_SOURCE_FILE}
 )
 
-target_include_directories(unit-test PRIVATE ${BaseeeLog} ${BaseeeString} ${BaseeeParser})
+target_include_directories(unit-test PRIVATE ${BaseeeModule})
 
 target_link_libraries(unit-test baseee)
 
@@ -71,7 +73,7 @@ ${BaseeeLog}/log.hpp
 ${BaseeeString}/string.hpp
 ${BaseeeParser}/inip.hpp
 ${BaseeeComponents}/global.hpp
-DESTINATION include
+DESTINATION include/baseee
 )
 
 #安装cmake包
