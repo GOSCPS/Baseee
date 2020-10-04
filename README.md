@@ -32,6 +32,6 @@ $ vcpkg install baseee
 最后，将下面的内容加入你的CMakeLists.txt
 ```
 find_package(Baseee CONFIG REQUIRED)
-target_link_libraries(main PRIVATE baseee::baseee-log baseee::baseee-string)
+target_link_libraries(main PRIVATE baseee::baseee)
 ```
 Enjoy!  
