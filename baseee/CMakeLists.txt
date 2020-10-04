@@ -43,7 +43,7 @@ set(BaseeeParser ${PROJECT_SOURCE_DIR}/src/baseee-parser)
 
 set(BaseeeComponents ${PROJECT_SOURCE_DIR}/src/baseee-components)
 
-add_library(baseee ${BaseeeParser}/inip.cpp ${BaseeeLog}/log.cpp ${BaseeeString}/string.cpp)
+add_library(baseee STATIC ${BaseeeParser}/inip.cpp ${BaseeeLog}/log.cpp ${BaseeeString}/string.cpp)
 
 #构建单元测试
 aux_source_directory(. ALL_SOURCE_FILE)
