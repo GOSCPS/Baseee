@@ -41,20 +41,26 @@ add_library(baseee-string STATIC ${BaseeeString}/string.cpp)
 set(BaseeeLog ${PROJECT_SOURCE_DIR}/src/baseee-log)
 add_library(baseee-log STATIC ${BaseeeLog}/log.cpp)
 
+set(BaseeeParser ${PROJECT_SOURCE_DIR}/src/baseee-parser)
+add_library(baseee-parser STATIC ${BaseeeParser}/inip.cpp)
+
+set(BaseeeComponents ${PROJECT_SOURCE_DIR}/src/baseee-components)
+
 #构建单元测试
 aux_source_directory(. ALL_SOURCE_FILE)
 add_executable(unit-test 
 ${ALL_SOURCE_FILE}
 )
 
-target_include_directories(unit-test PRIVATE ${BaseeeLog} ${BaseeeString})
+target_include_directories(unit-test PRIVATE ${BaseeeLog} ${BaseeeString} ${BaseeeParser})
 
-target_link_libraries(unit-test baseee-log baseee-string)
+target_link_libraries(unit-test baseee-log baseee-string baseee-parser)
 
 #安装
 install(TARGETS 
 baseee-string
 baseee-log 
+baseee-parser
 EXPORT BaseeeLib
 LIBRARY DESTINATION lib  # 动态库安装路径
 ARCHIVE DESTINATION lib  # 静态库安装路径
@@ -66,6 +72,8 @@ PUBLIC_HEADER DESTINATION include  # 头文件安装路径
 install(FILES 
 ${BaseeeLog}/log.hpp
 ${BaseeeString}/string.hpp
+${BaseeeParser}/inip.hpp
+${BaseeeComponents}/global.hpp
 DESTINATION include
 )
 

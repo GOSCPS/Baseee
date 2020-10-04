@@ -15,11 +15,11 @@ namespace baseee {
 		static class Global {
 		public:
 
-			void Set(T t) {
+			void Set(T t) noexcept {
 				this->t = t;
 			}
 
-			T Get() {
+			T Get() noexcept {
 				return T;
 			}
 
