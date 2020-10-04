@@ -1,5 +1,6 @@
 # Baseee Official Document
 Welcome to use Baseee！  
++ [安装](https://github.com/chhdao/Baseee/blob/master/docs/en-us/install.md)
 + Module  
 +  +   [log](https://github.com/chhdao/Baseee/blob/master/docs/en-us/logger/log_index.md)  
 +  +   [string](https://github.com/chhdao/Baseee/blob/master/docs/en-us/string/string_index.md)  

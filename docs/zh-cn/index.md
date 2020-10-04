@@ -1,5 +1,6 @@
 # Baseee官方文档
 欢迎使用Baseee！  
++ [安装](https://github.com/chhdao/Baseee/blob/master/docs/zh-cn/install.md)  
 + 模块  
 +  +   [log](https://github.com/chhdao/Baseee/blob/master/docs/zh-cn/logger/log_index.md)  
 +  +   [string](https://github.com/chhdao/Baseee/blob/master/docs/zh-cn/string/string_index.md)  

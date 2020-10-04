@@ -16,6 +16,7 @@
 #include <sstream>
 #include <ctime>
 #include <exception>
+#include <string_view>
 #include "log.hpp"
 
 
