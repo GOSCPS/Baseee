@@ -83,8 +83,8 @@ install(
 
 include(CMakePackageConfigHelpers)
 
-set(BASEEE_INCLUDE_DIRS DESTINATION  ${PROJECT_BINARY_DIR}/lib)
-set(BASEEE_LIB_DIR DESTINATION  ${PROJECT_BINARY_DIR}/include)
+set(BASEEE_INCLUDE_DIRS DESTINATION  ${CMAKE_INSTALL_PREFIX}/lib)
+set(BASEEE_LIB_DIR DESTINATION  ${CMAKE_INSTALL_PREFIX}/include)
 
 configure_package_config_file(
   BaseeeConfig.cmake.in
