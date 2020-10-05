@@ -36,6 +36,10 @@ std::cerr << "Expect is:" << expect \
 #define BASEEE_assert(expression) if(!(expression)) \
 std::cerr << "\033[31massert fall down at file:" << __FILE__\
 << " line:" << __LINE__ << "\033[0m" << std::endl;
+#define BASEEE_assert_not(expression) BASEEE_assert((!(expression)));
 #else
-#define BASEE_assert(expression) (expression);
+#define BASEEE_assert(expression) (expression);
+#define BASEEE_assert(expression) (expression);
 #endif
+
+

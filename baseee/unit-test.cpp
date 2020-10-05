@@ -15,6 +15,7 @@
 #include <utility>
 #include <thread>
 #include <array>
+#include <optional>
 #include <bitset>
 #include <ctime>
 #include <cstdio>
@@ -39,11 +40,11 @@ void JsonParserTest();
 
 int main(int argc,char *argv[])
 {
-	StringCoderTest1();
-	StringCoderTest2();
-	LogTest();
-	IniParserTest();
-	StringMakeTest();
+	//StringCoderTest1();
+	//StringCoderTest2();
+	//LogTest();
+	//IniParserTest();
+	//StringMakeTest();
 	JsonParserTest();
 	return 0;
 }
@@ -162,27 +163,31 @@ void StringMakeTest() {
 
 void JsonParserTest() {
 	baseee::parser::JsonParser JsonParser;
-	
-	BASEEE_assert(JsonParser.Parser("null") == baseee::parser::JsonErrCode::Parse_OK);
-	BASEEE_assert(JsonParser.Parser(" \t true") == baseee::parser::JsonErrCode::Parse_OK);
-	BASEEE_assert(JsonParser.Parser(" \n false") == baseee::parser::JsonErrCode::Parse_OK);
-	BASEEE_assert(JsonParser.Parser(" 3.14") == baseee::parser::JsonErrCode::Parse_OK);
-	BASEEE_assert(JsonParser.Parser("\" \\\\ \\\" \\n \\t \\f \\r \\b Hello World\"")
-		== baseee::parser::JsonErrCode::Parse_OK);
-	BASEEE_assert(JsonParser.Parser("[\"Hello\",[123,true,false]]") == baseee::parser::JsonErrCode::Parse_OK);
-	BASEEE_assert(JsonParser.Parser("{ \"Hello\" : \"World\" }") == baseee::parser::JsonErrCode::Parse_OK);
 
-	switch (JsonParser.Parser("{ \"Hello\" : \"World\" }"))
-	{
-	case baseee::parser::JsonErrCode::Parse_MissToken:
-		cout << "Parse_MissToken" << endl;
-		break;
-	case baseee::parser::JsonErrCode::Parse_VulanError:
-		cout << "Parse_VulanError" << endl;
-		break;
-	default:
-		cout << "Unknow" << endl;
-		break;
-	}
+/*
+{ 
+"people":[ 
+{
+"firstName": "Brett",            
+"lastName":"McLaughlin"        
+},      
+{        
+"firstName":"Jason",
+"lastName":"Hunter"
+}
+]
+}
+*/
+	std::string JsonTest = "{ \"people\":[ { \"firstName\": \"Brett\", \"lastName\":\"McLaughlin\"},{\"firstName\":\"Jason\",\"lastName\" : \"Hunter\"}]}";
+
+
+	BASEEE_assert(JsonParser.Parser(JsonTest) == baseee::parser::JsonErrCode::Parse_OK);
+
+	BASEEE_assert(JsonParser.FindChildren("people").has_value());
+	auto t = JsonParser.GetJsonTree().JsonObjectList;
+
+	baseee::parser::JsonBuilder JsonBuilder;
+	JsonBuilder.SetBeautiful(false);
+	cout << JsonBuilder.Build(JsonParser.GetJsonTree()) << endl;
 
 }

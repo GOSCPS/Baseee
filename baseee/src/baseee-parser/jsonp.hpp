@@ -54,6 +54,7 @@ namespace baseee {
 		//Json树
 		class JsonTree {
 		public:
+			JsonTree() {}
 			JsonTree(std::vector<JsonData> jt)
 			{
 				JsonObjectList = jt;
@@ -77,7 +78,69 @@ namespace baseee {
 
 			std::string BuildArray(JsonData JsonArray);
 			std::string BuildObject(JsonData JsonObject);
-			std::string BuildKeyVulanPair(JsonData JsonVulan);
+			std::string BuildKeyVulanPair(std::pair<std::string, JsonData> Data);
+		};
+
+		//定位一个JsonTree元素的路径
+		using JsonTreePath = JsonData*;
+
+		//给用户使用的Json生成器
+		//生成Tree供JsonBuilder生成文本
+		class JsonTreeBuilder {
+		public:
+			//可以从0或者现有的JsonTree开始工作
+			JsonTreeBuilder() { }
+			JsonTreeBuilder(JsonTree jt) { JT = jt; }
+
+			//获取根
+			JsonTreePath GetRoot();
+
+			/*以下操作均为在根下/子根进行*/
+			//添加对象
+			JsonTreePath AddNumber(JsonTreePath p,std::string_view name,double number);
+			JsonTreePath AddBoolean(JsonTreePath p,std::string_view name,bool boolean);
+			JsonTreePath AddString(JsonTreePath p,std::string_view name,std::string_view String);
+			JsonTreePath AddNull(JsonTreePath p,std::string_view name);
+
+			//添加Object
+			JsonTreePath AddObject(JsonTreePath p, std::string_view name);
+
+			//添加Array
+			JsonTreePath AddNumberArray(
+				JsonTreePath p, 
+				std::string_view name, 
+				double number[],
+				size_t length);
+
+			JsonTreePath AddBooleanArray(
+				JsonTreePath p,
+				std::string_view name,
+				bool boolean[], 
+				size_t length);
+
+			JsonTreePath AddStringArray(
+				JsonTreePath p,
+				std::string_view name, 
+				std::string_view String[],
+				size_t length);
+
+			JsonTreePath AddNullArray(
+				JsonTreePath p,
+				std::string_view name,
+				size_t length);
+
+			JsonTreePath AddJsonData(
+				JsonTreePath p,
+				std::string_view name,
+				JsonData d);
+
+			/*一些其他操作*/
+			void DeleteJson(JsonTreePath p,std::string_view name);
+			std::vector<JsonTreePath> GetChildrenList(JsonTreePath p);
+			JsonTreePath GoChuild(JsonTreePath p,std::string_view name);
+		private:
+			JsonTree JT;
+			JsonTreePath AddTo(JsonTreePath p, JsonData d, std::string_view name);
 		};
 
 		//Json解析器
@@ -95,6 +158,10 @@ namespace baseee {
 			JsonTree GetJsonTree() {
 				return JsonTree(JsonPool);
 			}
+
+			//查找Object
+			std::optional<baseee::parser::JsonData> 
+				FindChildren(std::string_view Name);
 
 		private:
 			JsonErrCode LastError = JsonErrCode::Parse_OK;

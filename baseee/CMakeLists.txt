@@ -50,6 +50,7 @@ set(BaseeeModule ${BaseeeString} ${BaseeeLog} ${BaseeeParser} ${BaseeeComponents
 add_library(baseee STATIC 
 ${BaseeeParser}/inip.cpp 
 ${BaseeeParser}/jsonp.cpp 
+${BaseeeParser}/jsonb.cpp
 ${BaseeeLog}/log.cpp 
 ${BaseeeString}/string.cpp 
 )

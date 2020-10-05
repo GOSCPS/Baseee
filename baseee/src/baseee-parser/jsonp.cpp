@@ -383,8 +383,8 @@ baseee::parser::JsonParser::ParseVulanObject() {
 		if (ErrCode != JsonErrCode::Parse_OK)
 			return ErrCode;
 
-	
-		JsonKeyVulanPair.second.Data = JsonObject.Data;
+		JsonKeyVulanPair.second.JsonType = JsonNext.JsonType;
+		JsonKeyVulanPair.second.Data = JsonNext.Data;
 
 		std::get<std::multimap<std::string, JsonData>>(JsonObject.Data)
 			.insert(JsonKeyVulanPair);
@@ -392,20 +392,19 @@ baseee::parser::JsonParser::ParseVulanObject() {
 		AfterSpace();
 	}
 
+	this->JsonNext = JsonObject;
 	return JsonErrCode::Parse_OK;
 }
 
-std::string baseee::parser::JsonBuilder::Build(JsonTree jt) {
-}
-
-
-std::string baseee::parser::JsonBuilder::BuildArray(baseee::parser::JsonData JsonArray) {
-	BASEEE_assert(JsonArray.JsonType == JsonType::JsonType_Array);
-}
-std::string baseee::parser::JsonBuilder::BuildObject(baseee::parser::JsonData JsonObject) {
-	BASEEE_assert(JsonObject.JsonType == JsonType::JsonType_Object);
-}
-std::string baseee::parser::JsonBuilder::BuildKeyVulanPair(baseee::parser::JsonData JsonVulan) {
-	double Number = 0.0;
-	std::string String;
+std::optional<baseee::parser::JsonData> 
+baseee::parser::JsonParser::FindChildren(std::string_view Name) {
+	for (auto& json : this->JsonPool) {
+		if (json.JsonType == JsonType::JsonType_Object) {
+			auto s = std::get<std::multimap<std::string, JsonData>>(json.Data);
+			auto it = s.find(Name.data());
+			if (it == s.cend()) return std::nullopt;
+			else return it->second;
+		}
+	}
+	return std::nullopt;
 }
