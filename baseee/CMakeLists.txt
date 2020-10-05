@@ -43,9 +43,16 @@ set(BaseeeParser ${PROJECT_SOURCE_DIR}/src/baseee-parser)
 
 set(BaseeeComponents ${PROJECT_SOURCE_DIR}/src/baseee-components)
 
-set(BaseeeModule ${BaseeeString} ${BaseeeLog} ${BaseeeParser} ${BaseeeComponents})
+set(BaseeeTest ${PROJECT_SOURCE_DIR}/src/baseee-test)
 
-add_library(baseee STATIC ${BaseeeParser}/inip.cpp ${BaseeeLog}/log.cpp ${BaseeeString}/string.cpp)
+set(BaseeeModule ${BaseeeString} ${BaseeeLog} ${BaseeeParser} ${BaseeeComponents} ${BaseeeTest})
+
+add_library(baseee STATIC 
+${BaseeeParser}/inip.cpp 
+${BaseeeParser}/jsonp.cpp 
+${BaseeeLog}/log.cpp 
+${BaseeeString}/string.cpp 
+)
 
 #构建单元测试
 aux_source_directory(. ALL_SOURCE_FILE)
@@ -72,6 +79,7 @@ install(FILES
 ${BaseeeLog}/log.hpp
 ${BaseeeString}/string.hpp
 ${BaseeeParser}/inip.hpp
+${BaseeeParser}/jsonp.hpp
 ${BaseeeComponents}/global.hpp
 DESTINATION include/baseee
 )

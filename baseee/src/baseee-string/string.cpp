@@ -17,44 +17,24 @@
 
 namespace baseee {
 	namespace string {
-		std::string trim(const std::string& s) noexcept {
-			std::string out(s);
-			if (out.empty()) return "";
-			out.erase(0, out.find_first_not_of(" "));
-			out.erase(out.find_last_not_of(" ") + 1);
-			return out;
-		}
-
-		std::string HeadTrim(const std::string& s) noexcept {
-			std::string out(s);
-			if (out.empty()) return "";
-			out.erase(0, out.find_first_not_of(" "));
-			return out;
-		}
-
-		std::string EndTrim(const std::string& s) noexcept {
-			std::string out(s);
-			if (out.empty()) return "";
-			out.erase(out.find_last_not_of(" ") + 1);
-			return out;
-		}
+		
 
 
-		std::vector<std::string> split(const std::string& s, const std::regex& r){
+		std::vector<std::string> Split(const std::string& s, const std::regex& r) {
 			std::vector<std::string> out(std::sregex_token_iterator(s.begin(), s.end(), r, -1), std::sregex_token_iterator());
 			return out;
 		}
 
 
-		std::vector<std::string> split(const std::string& s, const std::string& r){
+		std::vector<std::string> Split(const std::string& s, const std::string& r) {
 			std::regex re(r);
-			return baseee::string::split(s, re);
+			return baseee::string::Split(s, re);
 		}
 
 		std::string ExpandsTabs(const std::string& s, const int TabSizes = 8) noexcept {
 			std::string out(s);
 			while (out.find('\t') != out.npos) {
-				out.replace(out.find('\t'), 1, std::string(TabSizes,' '));
+				out.replace(out.find('\t'), 1, std::string(TabSizes, ' '));
 			}
 			return out;
 		}
@@ -63,26 +43,26 @@ namespace baseee {
 			return s.find(start) == 0 ? true : false;
 		}
 		bool EndWith(const std::string& s, const std::string& end) noexcept {
-			return s.find(end) == (s.size()-end.size()) ? true : false;
+			return s.find(end) == (s.size() - end.size()) ? true : false;
 		}
 
-		std::string center(const std::string& s, const bool SurplusSpaceLeft = true) noexcept {
-			std::string out = trim(s);
+		std::string Center(const std::string& s, const bool SurplusSpaceLeft = true) noexcept {
+			std::string out = Trim<std::string, char>(s);
 			if (out.size() == s.size()) return out;
 			auto length = (s.size() - out.size()) / 2;
 			while (length != 0) {
 				out = ' ' + out + ' ';
 				length--;
 			}
-			if ((s.size() - out.size()) % 2 != 0) 
-				SurplusSpaceLeft ?  out.insert(out.begin(), ' ') : out.insert(out.end(), ' ');
+			if ((s.size() - out.size()) % 2 != 0)
+				SurplusSpaceLeft ? out.insert(out.begin(), ' ') : out.insert(out.end(), ' ');
 			return out;
 		}
-		
+
 
 		std::string SwapCase(const std::string& s) noexcept {
 			std::string out(s);
-			for (char &c : out) {
+			for (char& c : out) {
 				if (std::islower(c)) {
 					c = std::toupper(c);
 					continue;
@@ -97,7 +77,7 @@ namespace baseee {
 		}
 
 
-		std::string format(const char* fmt, ...) noexcept {
+		std::string Format(const char* fmt, ...) noexcept {
 			int len = 0;
 			std::string str;
 			va_list args;
@@ -114,10 +94,10 @@ namespace baseee {
 					len = std::vsnprintf(buffer, bufferLength, fmt, args);
 				}
 			}
-		str=std::string(buffer);
-		delete[] buffer;
-		va_end(args);
-		return str;
+			str = std::string(buffer);
+			delete[] buffer;
+			va_end(args);
+			return str;
 		}
 
 	}

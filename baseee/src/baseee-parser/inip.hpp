@@ -5,6 +5,7 @@
  * Content:  ini parser head file
  * Copyright (c) 2020 Chhdao All rights reserved.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#pragma once
 
 #include <string>
 #include <map>

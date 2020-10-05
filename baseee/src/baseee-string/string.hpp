@@ -24,16 +24,51 @@
 namespace baseee {
 	namespace string {
 		
-		//trim:去除头尾空格,不包括\n\t等空白控制字符
-		//返回string
-		std::string trim(const std::string& s)noexcept;
-		std::string HeadTrim(const std::string& s)noexcept;
-		std::string EndTrim(const std::string& s)noexcept;
+		
+		//Trim:去除头尾空白字符
+		template<typename T>
+		std::basic_string<T> HeadTrim(std::basic_string<T> s) noexcept {
+			std::basic_string<T> out(s);
+
+			size_t a = 0;
+			//删除头空格
+			for (auto it = out.cbegin(); it != out.cend();it++) {
+				if (!std::isspace(*it)) break;
+				a++;
+			}
+			out = out.substr(a);
+
+			return out;
+		}
+
+		template<typename T>
+		std::basic_string<T> EndTrim(std::basic_string<T> s) noexcept {
+			std::basic_string<T> out(s);
+
+			size_t a = 0;
+
+			//删除尾空白
+			for (auto b = out.crbegin(); b != out.crend(); b++) {
+				if (!std::isspace(*b)) break;
+				a++;
+			}
+			out = out.substr(0,out.size() - a);
+
+			return out;
+		}
+
+		template<typename T,typename OUT>
+		std::basic_string<OUT> Trim(T s) noexcept {
+			std::basic_string<OUT> out(s);
+			out = HeadTrim<OUT>(out);
+			out = EndTrim<OUT>(out);
+			return out;
+		}
 
 		//split，根据正则表达式分割字符串，返回结果集
 		//s字符串，r正则表达式
-		std::vector<std::string> split(const std::string& s, const std::string& r);
-		std::vector<std::string> split(const std::string& s, const std::regex& r);
+		std::vector<std::string> Split(const std::string& s, const std::string& r);
+		std::vector<std::string> Split(const std::string& s, const std::regex& r);
 
 		//ExpandsTabs 将tab转化为空格
 		//默认一个tab为8空格
@@ -43,16 +78,16 @@ namespace baseee {
 		bool StartsWith(const std::string& s, const std::string &start)noexcept;
 		bool EndWith(const std::string& s, const std::string& end)noexcept;
 
-		//center 将字符串居中
+		//Center 将字符串居中
 		//SurplusSpaceLeft控制是否将多余的空格分配在左侧(begin)，否则分配在右侧(end)(默认true)
-		std::string center(const std::string& s,const bool SurplusSpaceLeft)noexcept;
+		std::string Center(const std::string& s,const bool SurplusSpaceLeft)noexcept;
 
 		//大写转小写，小写转大写
 		std::string SwapCase(const std::string& s)noexcept;
 
 		//格式化字符串
 		//返回string的vsnprintf
-		std::string format(const char * fmt, ...)noexcept;
+		std::string Format(const char * fmt, ...)noexcept;
 	}
 
 	namespace coder {

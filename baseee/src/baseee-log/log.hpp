@@ -14,6 +14,7 @@
 #include <mutex>
 #include <string>
 #include <sstream>
+#include <string_view>
 
 namespace baseee {
 	namespace log {

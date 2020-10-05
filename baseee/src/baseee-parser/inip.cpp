@@ -91,13 +91,13 @@ int baseee::parser::IniParser::Parser(std::string_view Ini) {
 
 	std::string BufferedName = "";
 	std::string BufferedVulan = "";
-	auto Tokens = baseee::string::split(std::string(Ini), "[\\n\\r]");
+	auto Tokens = baseee::string::Split(std::string(Ini), "[\\n\\r]");
 
 	int line = 0;
 
 	for (auto Token : Tokens) {
 		line++;
-		Token = baseee::string::trim(Token);
+		Token = baseee::string::Trim<std::string,char>(Token);
 		if (Token.size() >= 1 && Token[0] == ';') {
 			continue;
 		}
@@ -207,5 +207,5 @@ int baseee::parser::IniParser::Parser(std::string_view Ini) {
 		else return line;
 	}
 
-	return line;
+	return 0;
 }

@@ -10,6 +10,8 @@
 #include "string.hpp"
 #include "log.hpp"
 #include "inip.hpp"
+#include "jsonp.hpp"
+#include "test.hpp"
 #include <utility>
 #include <thread>
 #include <array>
@@ -32,6 +34,8 @@ void StringCoderTest1();
 void StringCoderTest2();
 void LogTest();
 void IniParserTest();
+void StringMakeTest();
+void JsonParserTest();
 
 int main(int argc,char *argv[])
 {
@@ -39,6 +43,8 @@ int main(int argc,char *argv[])
 	StringCoderTest2();
 	LogTest();
 	IniParserTest();
+	StringMakeTest();
+	JsonParserTest();
 	return 0;
 }
 
@@ -142,4 +148,41 @@ void IniParserTest() {
 	}
 
 	return;
+}
+
+void StringMakeTest() {
+
+	std::string t("  \tHello World  \n ");
+	cout << ">" << baseee::string::Trim<std::string,char>(t) << "<" << endl;
+	cout << ">" << baseee::string::EndTrim<char>(t) << "<" << endl;
+	cout << ">" << baseee::string::HeadTrim<char>(t) << "<" << endl;
+
+	return;
+}
+
+void JsonParserTest() {
+	baseee::parser::JsonParser JsonParser;
+	
+	BASEEE_assert(JsonParser.Parser("null") == baseee::parser::JsonErrCode::Parse_OK);
+	BASEEE_assert(JsonParser.Parser(" \t true") == baseee::parser::JsonErrCode::Parse_OK);
+	BASEEE_assert(JsonParser.Parser(" \n false") == baseee::parser::JsonErrCode::Parse_OK);
+	BASEEE_assert(JsonParser.Parser(" 3.14") == baseee::parser::JsonErrCode::Parse_OK);
+	BASEEE_assert(JsonParser.Parser("\" \\\\ \\\" \\n \\t \\f \\r \\b Hello World\"")
+		== baseee::parser::JsonErrCode::Parse_OK);
+	BASEEE_assert(JsonParser.Parser("[\"Hello\",[123,true,false]]") == baseee::parser::JsonErrCode::Parse_OK);
+	BASEEE_assert(JsonParser.Parser("{ \"Hello\" : \"World\" }") == baseee::parser::JsonErrCode::Parse_OK);
+
+	switch (JsonParser.Parser("{ \"Hello\" : \"World\" }"))
+	{
+	case baseee::parser::JsonErrCode::Parse_MissToken:
+		cout << "Parse_MissToken" << endl;
+		break;
+	case baseee::parser::JsonErrCode::Parse_VulanError:
+		cout << "Parse_VulanError" << endl;
+		break;
+	default:
+		cout << "Unknow" << endl;
+		break;
+	}
+
 }
