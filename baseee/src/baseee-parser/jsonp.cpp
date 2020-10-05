@@ -392,7 +392,6 @@ baseee::parser::JsonParser::ParseVulanObject() {
 		AfterSpace();
 	}
 
-	this->JsonNext = JsonObject;
 	return JsonErrCode::Parse_OK;
 }
 
