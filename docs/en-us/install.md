@@ -1,6 +1,6 @@
 # Install The Baseee Lib
-No third party reliance
-Baseee使用了C++17   
+No third party reliance   
+Baseee used the c++17   
 
 Install From Source Code
 ```
