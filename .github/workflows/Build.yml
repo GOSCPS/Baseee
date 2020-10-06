@@ -106,6 +106,7 @@ jobs:
   runs-on: windows-latest
   steps:
       - uses: actions/checkout@v2
+      - uses: ilammy/msvc-dev-cmd@v1
         with:
          fetch-depth: 1
       - name: Checkout
@@ -122,8 +123,8 @@ jobs:
 
       - name: CmakeRun
         env:
-         CC: C:\msys64\mingw64\bin\gcc
-         CXX: C:\msys64\mingw64\bin\g++
+         CC: cl
+         CXX: cl
         run:
           cmake --build ./baseee/build/ -j 2
 
