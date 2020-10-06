@@ -116,7 +116,7 @@ jobs:
           cd baseee;
           mkdir build;
           cd build;
-          pacman -Syuu;
+          C:\msys64\bin\pacman -Syuu;
           C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake;
           cmake ..
 
@@ -148,7 +148,6 @@ jobs:
           echo " And Write Tag" &&
           git config user.name $GitName &&
           git config user.email $GitEmail &&
-          cd baseee &&
           echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials &&
           git config credential.helper store && 
 
