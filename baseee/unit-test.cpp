@@ -180,14 +180,21 @@ void JsonParserTest() {
 */
 	std::string JsonTest = "{ \"people\":[ { \"firstName\": \"Brett\", \"lastName\":\"McLaughlin\"},{\"firstName\":\"Jason\",\"lastName\" : \"Hunter\"}]}";
 
-
 	BASEEE_assert(JsonParser.Parser(JsonTest) == baseee::parser::JsonErrCode::Parse_OK);
 
-	BASEEE_assert(JsonParser.FindChildren("people").has_value());
-	auto t = JsonParser.GetJsonTree().JsonObjectList;
+	baseee::parser::JsonDataBuilder Builder;
+	auto& root = Builder.GetJsonData();
+
+	baseee::parser::JsonData data;
+	data.Data = "Hello Json Builder";
+	data.JsonType = baseee::parser::JsonType::JsonType_String;
+
+	BASEEE_assert(Builder.AddJsonData(root, "Test", data).has_value());
+	root = Builder.AddJsonData(root, "Test", data).value();
 
 	baseee::parser::JsonBuilder JsonBuilder;
-	JsonBuilder.SetBeautiful(false);
-	cout << JsonBuilder.Build(JsonParser.GetJsonTree()) << endl;
+	JsonBuilder.SetBeautiful(true);
+
+	cout << JsonBuilder.Build(root) << endl;
 
 }

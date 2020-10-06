@@ -41,7 +41,8 @@ baseee::parser::JsonParser::Parser(std::string_view JsonStr) {
 		AfterSpace();
 		if (Next != Json.cend()) return JsonErrCode::Parse_VulanError;
 	}
-	JsonPool.push_back(JsonNext);
+
+	JsonPool = JsonNext;
 	return Result;
 }
 
@@ -398,13 +399,11 @@ baseee::parser::JsonParser::ParseVulanObject() {
 
 std::optional<baseee::parser::JsonData> 
 baseee::parser::JsonParser::FindChildren(std::string_view Name) {
-	for (auto& json : this->JsonPool) {
-		if (json.JsonType == JsonType::JsonType_Object) {
-			auto s = std::get<std::multimap<std::string, JsonData>>(json.Data);
-			auto it = s.find(Name.data());
-			if (it == s.cend()) return std::nullopt;
-			else return it->second;
-		}
+	if (JsonPool.JsonType == JsonType::JsonType_Object) {
+		auto s = std::get<std::multimap<std::string, JsonData>>(JsonPool.Data);
+		auto it = s.find(Name.data());
+		if (it == s.cend()) return std::nullopt;
+		else return it->second;
 	}
 	return std::nullopt;
 }

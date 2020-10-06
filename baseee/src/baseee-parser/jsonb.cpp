@@ -23,14 +23,11 @@
 
 
 
-std::string baseee::parser::JsonBuilder::Build(JsonTree jt) {
+std::string baseee::parser::JsonBuilder::Build(JsonData jt) {
 	std::string out;
 
-	for (auto& json : jt.JsonObjectList) {
-		if (json.JsonType == JsonType::JsonType_Object) {
-			out += BuildObject(json) + (this->BeautlfulFormat ? "\n" : "");
-		}
-	}
+	if (jt.JsonType == JsonType::JsonType_Object)
+		out += BuildObject(jt) + (this->BeautlfulFormat ? "\n" : "");
 
 	return out;
 }
@@ -131,215 +128,15 @@ std::string baseee::parser::JsonBuilder::BuildKeyVulanPair(
 }
 
 
-baseee::parser::JsonTreePath 
-baseee::parser::JsonTreeBuilder::GetRoot() {
-	int RootPath = 0;
-
-	if (this->JT.JsonObjectList.size() == 1 &&
-		this->JT.JsonObjectList[0].JsonType == JsonType::JsonType_Object) {
-		return &this->JT.JsonObjectList[0];
-	}
-
-	else for (auto p : JT.JsonObjectList) {
-		if (p.JsonType == JsonType::JsonType_Object)
-			return &this->JT.JsonObjectList[RootPath];
-		else RootPath++;
-	}
-	return nullptr;
-}
-
-baseee::parser::JsonTreePath  
-baseee::parser::JsonTreeBuilder::AddNumber(JsonTreePath p, std::string_view name, double number) {
-	JsonData TmpData;
-	TmpData.JsonType = JsonType::JsonType_Number;
-	TmpData.Data = number;
-
-	return AddTo(p, TmpData, name);
-}
-
-
-baseee::parser::JsonTreePath  
-baseee::parser::JsonTreeBuilder::AddBoolean(JsonTreePath p, std::string_view name, bool boolean) {
-	JsonData TmpData;
-
-	if (boolean)
-		TmpData.JsonType = JsonType::JsonType_True;
-	else
-		TmpData.JsonType = JsonType::JsonType_False;
-
-	return AddTo(p, TmpData, name);
-}
-
-
-baseee::parser::JsonTreePath  
-baseee::parser::JsonTreeBuilder::AddString(JsonTreePath p, std::string_view name, std::string_view String) {
-	JsonData TmpData;
-	TmpData.JsonType = JsonType::JsonType_String;
-	TmpData.Data = std::string(String);
-
-	return AddTo(p, TmpData, name);
-}
-
-
-baseee::parser::JsonTreePath  
-baseee::parser::JsonTreeBuilder::AddNull(JsonTreePath p, std::string_view name) {
-	JsonData TmpData;
-	TmpData.JsonType = JsonType::JsonType_Null;
-
-	return AddTo(p, TmpData, name);
-}
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddTo(JsonTreePath p, JsonData d,std::string_view name) {
-	if (p->JsonType == JsonType::JsonType_Object) {
-		auto it = std::get<std::multimap<std::string, JsonData>>(p->Data);
-		JsonData TmpData;
-
-		TmpData.JsonType = d.JsonType;
-		TmpData.Data = d.Data;
-
-		return &(*(it.insert(std::make_pair<>(name, TmpData)))).second;
-	}
-	else return nullptr;
-}
-
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddObject(
-	JsonTreePath p, 
-	std::string_view name) {
-
-	JsonData TmpData;
-	TmpData.JsonType = JsonType::JsonType_Object;
-	TmpData.Data = std::multimap<std::string, JsonData>();
-
-	return AddTo(p, TmpData, name);
-}
-
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddJsonData(
-	JsonTreePath p,
+std::optional<baseee::parser::JsonData> baseee::parser::JsonDataBuilder::AddJsonData(
+	JsonData p,
 	std::string_view name,
-	JsonData d) {
-	return AddTo(p,d,name);
-}
+	const JsonData d) {
 
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddNumberArray(
-	JsonTreePath p,
-	std::string_view name,
-	double number[],
-	size_t length) {
-
-	JsonData TmpData;
-
-	TmpData.JsonType = JsonType::JsonType_Array;
-	TmpData.Data = std::vector<JsonData>();
-	
-	for (int a = 0; a < length; a++) {
-		JsonData j;
-		j.JsonType = JsonType::JsonType_Number;
-		j.Data = number[a];
-		std::get<std::vector<JsonData>>(TmpData.Data)
-			.push_back(j);
+	if (p.JsonType == JsonType::JsonType_Object) {
+		std::get<std::multimap<std::string, JsonData>>(p.Data)
+			.insert(std::make_pair(name, d));
+		return p;
 	}
-	return AddTo(p, TmpData,name);
-}
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddBooleanArray(
-	JsonTreePath p,
-	std::string_view name,
-	bool boolean[],
-	size_t length) {
-
-	JsonData TmpData;
-
-	TmpData.JsonType = JsonType::JsonType_Array;
-	TmpData.Data = std::vector<JsonData>();
-
-	for (int a = 0; a < length; a++) {
-		JsonData j;
-		j.JsonType = (boolean[a] ? JsonType::JsonType_True : JsonType::JsonType_False);
-		std::get<std::vector<JsonData>>(TmpData.Data)
-			.push_back(j);
-	}
-	return AddTo(p, TmpData, name);
-}
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddStringArray(
-	JsonTreePath p,
-	std::string_view name,
-	std::string_view String[],
-	size_t length) {
-	JsonData TmpData;
-
-	TmpData.JsonType = JsonType::JsonType_Array;
-	TmpData.Data = std::vector<JsonData>();
-
-	for (int a = 0; a < length; a++) {
-		JsonData j;
-		j.JsonType = JsonType::JsonType_String;
-		j.Data = std::string(String[a]);
-		std::get<std::vector<JsonData>>(TmpData.Data)
-			.push_back(j);
-	}
-	return AddTo(p, TmpData, name);
-}
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::AddNullArray(
-	JsonTreePath p,
-	std::string_view name,
-	size_t length) {
-	JsonData TmpData;
-
-	TmpData.JsonType = JsonType::JsonType_Array;
-	TmpData.Data = std::vector<JsonData>();
-
-	for (int a = 0; a < length; a++) {
-		JsonData j;
-		j.JsonType = JsonType::JsonType_Null;
-		std::get<std::vector<JsonData>>(TmpData.Data)
-			.push_back(j);
-	}
-	return AddTo(p, TmpData, name);
-}
-
-void
-baseee::parser::JsonTreeBuilder::DeleteJson(JsonTreePath p, std::string_view name) {
-	if (p->JsonType != JsonType::JsonType_Object) return;
-	else {
-		auto it = std::get<std::multimap<std::string, JsonData>>(p->Data);
-		auto fit = it.find(std::string(name));
-		if (fit != it.cend()) it.erase(fit);
-		else return;
-	}
-}
-
-std::vector<baseee::parser::JsonTreePath>
-baseee::parser::JsonTreeBuilder::GetChildrenList(JsonTreePath p) {
-	if (p->JsonType != JsonType::JsonType_Object) return;
-	else {
-		auto it = std::get<std::multimap<std::string, JsonData>>(p->Data);
-		std::vector<baseee::parser::JsonTreePath> out;
-
-		for (auto& s : it) {
-			out.push_back(&s.second);
-		}
-		return out;
-	}
-}
-
-baseee::parser::JsonTreePath
-baseee::parser::JsonTreeBuilder::GoChuild(JsonTreePath p, std::string_view name) {
-	if (p->JsonType != JsonType::JsonType_Object) return;
-	else {
-		auto it = std::get<std::multimap<std::string, JsonData>>(p->Data);
-		auto fit = it.find(std::string(name));
-		if (fit != it.cend()) return &(*fit).second;
-		else return;
-	}
+	return std::nullopt;
 }
