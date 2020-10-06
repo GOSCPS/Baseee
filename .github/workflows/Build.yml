@@ -26,7 +26,7 @@ jobs:
          CC: clang
          CXX: clang++
         run: |
-          cmake --build ./baseee/baseee/build/ -j 2
+          cmake --build ./baseee/build/ -j 2
 
  mac-clang:
   name: Cross Platform Build in Mac For Clang
@@ -50,7 +50,7 @@ jobs:
          CC: clang
          CXX: clang++
         run: |
-          cmake --build ./baseee/baseee/build/ -j 2
+          cmake --build ./baseee/build/ -j 2
 
  linux-gcc:
   name: Cross Platform Build in Linux For Gcc
@@ -74,7 +74,7 @@ jobs:
          CC: gcc
          CXX: g++
         run: |
-          cmake --build ./baseee/baseee/build/ -j 2
+          cmake --build ./baseee/build/ -j 2
 
  mac-gcc:
   name: Cross Platform Build in Mac For Gcc
@@ -98,7 +98,7 @@ jobs:
          CC: gcc-9
          CXX: g++-9
         run: |
-          cmake --build ./baseee/baseee/build/ -j 2
+          cmake --build ./baseee/build/ -j 2
 
 
  windows-msvc:
@@ -125,7 +125,7 @@ jobs:
          CC: C:\msys64\mingw64\bin\gcc
          CXX: C:\msys64\mingw64\bin\g++
         run:
-          cmake --build ./baseee/baseee/build/ -j 2
+          cmake --build ./baseee/build/ -j 2
 
  End:
   name: Cross Platform Build End
@@ -154,7 +154,6 @@ jobs:
 
       - name: EndBuild
         run:
-          cd baseee && 
           git tag -a v$TagVersion$TagPatchVersion -m "Build Success v$TagVersion$TagPatchVersion" &&
           git push origin --tags &&
           rm .git-credentials &&
