@@ -20,7 +20,7 @@
 #include "log.hpp"
 
 
-void baseee::log::logger::PrintLog(std::string_view&& log) noexcept(_PrintLog) {
+void baseee::log::logger::PrintLog(std::string_view&& log) noexcept {
 	_PrintLog(this->DefaultOutLevel, std::forward<std::string_view&&>(log));
 	return;
 }

@@ -72,16 +72,16 @@ namespace baseee {
 				return;
 			}
 
-			void PrintLog(std::string_view&& log) noexcept(_PrintLog);
+			void PrintLog(std::string_view&& log) noexcept;
 			void _PrintLog(LogLevel level, std::string_view&& log) noexcept;
 
-			logger &operator<<(std::string_view &&log) noexcept(PrintLog){
+			logger &operator<<(std::string_view &&log) noexcept{
 				PrintLog(std::forward<std::string_view&&>(log));
 				return *this;
 			}
 
 			template<typename T>
-			logger &operator<<(T log) noexcept(PrintLog) {
+			logger &operator<<(T log) noexcept {
 				std::ostringstream s;
 				s << log;
 				PrintLog(s.str());
