@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         run: |
           git clone https://github.com/chhdao/baseee
-          cd Baseee
+          cd baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         run: |
           git clone https://github.com/chhdao/baseee
-          cd Baseee
+          cd baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -53,7 +53,7 @@ jobs:
       - name: Checkout
         run: |
           git clone https://github.com/chhdao/baseee
-          cd Baseee
+          cd baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -74,7 +74,7 @@ jobs:
       - name: Checkout
         run: |
           git clone https://github.com/chhdao/baseee
-          cd Baseee
+          cd baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -96,7 +96,7 @@ jobs:
       - name: Checkout
         run: |
           git clone https://github.com/chhdao/baseee
-          cd Baseee
+          cd baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -131,7 +131,7 @@ jobs:
           git clone https://github.com/chhdao/baseee
           git config user.name $GitName
           git config user.email $GitEmail
-          cd Baseee
+          cd baseee
           echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials
           git config credential.helper store
 
