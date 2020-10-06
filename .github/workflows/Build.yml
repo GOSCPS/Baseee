@@ -1,0 +1,86 @@
+name: CrossPlatformBuildtest
+
+on: [push,pull_request]
+
+jobs:
+ BuildInLinuxForClang:
+  name: Cross Platform Build in Linux For Clang
+  runs-on: ubuntu-latest
+  steps:
+      - name: CmakeRun
+        env:
+         CC: clang
+         CXX: clang++
+        run: |
+          cd ./baseee
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+
+ BuildInMacForClang:
+  name: Cross Platform Build in Mac For Clang
+  runs-on: macos-latest
+  steps:
+      - name: CmakeRun
+        env:
+         CC: clang
+         CXX: clang++
+        run: |
+          cd ./baseee
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+
+ BuildInLinuxForGcc:
+  name: Cross Platform Build in Linux For Gcc
+  runs-on: ubuntu-latest
+  steps:
+      - name: CmakeRun
+        env:
+         CC: gcc
+         CXX: g++
+        run: |
+          cd ./baseee
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+
+ BuildInMacForGcc:
+  name: Cross Platform Build in Mac For Gcc
+  runs-on: macos-latest
+  steps:
+      - name: CmakeRun
+        env:
+         CC: gcc-9
+         CXX: g++-9
+        run: |
+          cd ./baseee
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+
+
+ BuildInWindows:
+  name: Cross Platform Build in Windows
+  runs-on: windows-latest
+  steps:
+      - name: CmakeRun
+        run:
+          cd ./baseee
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+
+ BuildOK:
+  name: Cross Platform Build End
+  runs-on: ubuntu-latest
+  needs: [BuildInWindows,BuildInMacForGcc,BuildInLinuxForGcc,BuildInMacForClang,BuildInLinuxForClang]
+  steps:
+      - name: EndBuild
+        run:
+          echo "Cross-Platform Build Test PASS"
