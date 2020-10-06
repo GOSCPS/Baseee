@@ -8,9 +8,11 @@ jobs:
   name: Cross Platform Build in Linux For Clang
   runs-on: ubuntu-latest
   steps:
+      - uses: action/checkout@v2
+        with:
+         fetch-depth: 1
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
@@ -30,9 +32,11 @@ jobs:
   name: Cross Platform Build in Mac For Clang
   runs-on: macos-latest
   steps:
+      - uses: action/checkout@v2
+        with:
+         fetch-depth: 1
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
@@ -52,9 +56,11 @@ jobs:
   name: Cross Platform Build in Linux For Gcc
   runs-on: ubuntu-latest
   steps:
+      - uses: action/checkout@v2
+        with:
+         fetch-depth: 1
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
@@ -74,9 +80,11 @@ jobs:
   name: Cross Platform Build in Mac For Gcc
   runs-on: macos-latest
   steps:
+      - uses: action/checkout@v2
+        with:
+         fetch-depth: 1
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
@@ -97,9 +105,11 @@ jobs:
   name: Cross Platform Build in Windows
   runs-on: windows-latest
   steps:
+      - uses: action/checkout@v2
+        with:
+         fetch-depth: 1
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
@@ -123,6 +133,9 @@ jobs:
   needs: [windows-msvc,mac-clang,mac-gcc,linux-clang,linux-gcc]
   timeout-minutes: 10
   steps:
+      - uses: action/checkout@v2
+        with:
+         fetch-depth: 1
       - name: Prepare
         env:
             GitName: ${{ github.repository_owner }}
@@ -133,12 +146,11 @@ jobs:
         run:
           echo "Cross-Platform Build Test PASS" &&
           echo " And Write Tag" &&
-          git clone https://github.com/chhdao/baseee &&
           git config user.name $GitName &&
           git config user.email $GitEmail &&
           cd baseee &&
           echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials &&
-          git config credential.helper store &&
+          git config credential.helper store && 
 
       - name: EndBuild
         run:
