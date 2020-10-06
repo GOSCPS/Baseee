@@ -72,7 +72,7 @@ namespace baseee {
 
 		//ExpandsTabs 将tab转化为空格
 		//默认一个tab为8空格
-		std::string ExpandsTabs(const std::string& s, const int TabSizes)noexcept;
+		std::string ExpandsTabs(const std::string& s, const int TabSizes = 8)noexcept;
 
 		//With判断字符串是否以end/start结尾/开头
 		bool StartsWith(const std::string& s, const std::string &start)noexcept;
@@ -80,7 +80,7 @@ namespace baseee {
 
 		//Center 将字符串居中
 		//SurplusSpaceLeft控制是否将多余的空格分配在左侧(begin)，否则分配在右侧(end)(默认true)
-		std::string Center(const std::string& s,const bool SurplusSpaceLeft)noexcept;
+		std::string Center(const std::string& s,const bool SurplusSpaceLeft = true)noexcept;
 
 		//大写转小写，小写转大写
 		std::string SwapCase(const std::string& s)noexcept;
