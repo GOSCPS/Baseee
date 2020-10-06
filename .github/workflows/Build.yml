@@ -137,7 +137,7 @@ jobs:
 
       - name: EndBuild
         run:
-          git tag -a v$TagVersion$TagPatchVersion -m "Build Success v$TagVersion$TagPatchVersion" &&
+          git tag -a v${TagVersion}${TagPatchVersion} -m "Build Success v${TagVersion}${TagPatchVersion}" &&
           git push origin --tags &&
           rm .git-credentials &&
           rm -rf .git &&
