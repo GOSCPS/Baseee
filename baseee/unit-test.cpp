@@ -183,7 +183,7 @@ void JsonParserTest() {
 	BASEEE_assert(JsonParser.Parser(JsonTest) == baseee::parser::JsonErrCode::Parse_OK);
 
 	baseee::parser::JsonDataBuilder Builder;
-	auto& root = Builder.GetJsonData();
+	auto root = Builder.GetJsonData();
 
 	baseee::parser::JsonData data;
 	data.Data = "Hello Json Builder";
