@@ -8,61 +8,68 @@ jobs:
   name: Cross Platform Build in Linux For Clang
   runs-on: ubuntu-latest
   steps:
+      - name: Prepare
+        run: cd baseee
+          mkdir build
+          cd build
+          cmake ..
+
       - name: CmakeRun
         env:
          CC: clang
          CXX: clang++
         run: |
-          ls
-          cd ./baseee
-          mkdir build
-          cd build
-          cmake ..
           cmake --build .
 
  mac-clang:
   name: Cross Platform Build in Mac For Clang
   runs-on: macos-latest
   steps:
+      - name: Prepare
+        run: cd baseee
+          mkdir build
+          cd build
+          cmake ..
+        
       - name: CmakeRun
         env:
          CC: clang
          CXX: clang++
         run: |
-          cd ./baseee
-          mkdir build
-          cd build
-          cmake ..
           cmake --build .
 
  linux-gcc:
   name: Cross Platform Build in Linux For Gcc
   runs-on: ubuntu-latest
   steps:
+      - name: Prepare
+        run: cd baseee
+          mkdir build
+          cd build
+          cmake ..
+
       - name: CmakeRun
         env:
          CC: gcc
          CXX: g++
         run: |
-          cd ./baseee
-          mkdir build
-          cd build
-          cmake ..
           cmake --build .
 
  mac-gcc:
   name: Cross Platform Build in Mac For Gcc
   runs-on: macos-latest
   steps:
+      - name: Prepare
+        run: cd baseee
+          mkdir build
+          cd build
+          cmake ..
+
       - name: CmakeRun
         env:
          CC: gcc-9
          CXX: g++-9
         run: |
-          cd ./baseee
-          mkdir build
-          cd build
-          cmake ..
           cmake --build .
 
 
@@ -70,12 +77,14 @@ jobs:
   name: Cross Platform Build in Windows
   runs-on: windows-latest
   steps:
-      - name: CmakeRun
-        run:
-          cd ./baseee
+      - name: Prepare
+        run: cd baseee
           mkdir build
           cd build
           cmake ..
+
+      - name: CmakeRun
+        run:
           cmake --build .
 
  End:
