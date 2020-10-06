@@ -135,7 +135,7 @@ jobs:
 
       - name: EndBuild
         run:
-          TagVersion = 1.0. &&
+          TagVersion=1.0. &&
           git tag -a v${TagVersion}${GITHUB_RUN_ID} -m "Build Success v${TagVersion}${GITHUB_RUN_ID}" &&
           git push origin --tags &&
           rm .git-credentials &&
