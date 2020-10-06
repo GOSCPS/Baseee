@@ -125,8 +125,6 @@ jobs:
             GitName: ${{ github.repository_owner }}
             GitEmail: ${{ secrets.GitEmail }}
             GitPassWord: ${{ secrets.GitPassWord }}
-            TagPatchVersion: ${{ github.run_id }}
-            TagVersion: 1.0.
         run:
           echo "Cross-Platform Build Test PASS" &&
           echo " And Write Tag" &&
@@ -137,7 +135,8 @@ jobs:
 
       - name: EndBuild
         run:
-          git tag -a v${TagVersion}${TagPatchVersion} -m "Build Success v${TagVersion}${TagPatchVersion}" &&
+          TagVersion = 1.0. &&
+          git tag -a v${TagVersion}${GITHUB_RUN_ID} -m "Build Success v${TagVersion}${GITHUB_RUN_ID}" &&
           git push origin --tags &&
           rm .git-credentials &&
           rm -rf .git &&
