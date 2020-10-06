@@ -11,9 +11,10 @@ jobs:
       - name: Checkout
         run: |
           git clone https://github.com/chhdao/baseee &&
-          cd baseee
+          cd baseee && ls && pwd
       - name: Prepare
         run: |
+          pwd && ls &&
           cd baseee &&
           mkdir build &&
           cd build &&
@@ -24,6 +25,7 @@ jobs:
          CC: clang
          CXX: clang++
         run: |
+          pwd && ls &&
           cmake --build . -j 2
 
  mac-clang:
@@ -106,9 +108,9 @@ jobs:
           cd baseee &&
           mkdir build &&
           cd build &&
+          C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake &&
           cmake .. &&
-          pacman -Syuu &&
-          C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake
+          pacman -Syuu 
 
       - name: CmakeRun
         env:
