@@ -8,6 +8,10 @@ jobs:
   name: Cross Platform Build in Linux For Clang
   runs-on: ubuntu-latest
   steps:
+      - name: Checkout
+        run: |
+          git clone https://github.com/chhdao/baseee
+          cd Baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -19,12 +23,16 @@ jobs:
          CC: clang
          CXX: clang++
         run: |
-          cmake --build .
+          cmake --build . -j 2
 
  mac-clang:
   name: Cross Platform Build in Mac For Clang
   runs-on: macos-latest
   steps:
+      - name: Checkout
+        run: |
+          git clone https://github.com/chhdao/baseee
+          cd Baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -36,12 +44,16 @@ jobs:
          CC: clang
          CXX: clang++
         run: |
-          cmake --build .
+          cmake --build . -j 2
 
  linux-gcc:
   name: Cross Platform Build in Linux For Gcc
   runs-on: ubuntu-latest
   steps:
+      - name: Checkout
+        run: |
+          git clone https://github.com/chhdao/baseee
+          cd Baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -53,12 +65,16 @@ jobs:
          CC: gcc
          CXX: g++
         run: |
-          cmake --build .
+          cmake --build . -j 2
 
  mac-gcc:
   name: Cross Platform Build in Mac For Gcc
   runs-on: macos-latest
   steps:
+      - name: Checkout
+        run: |
+          git clone https://github.com/chhdao/baseee
+          cd Baseee
       - name: Prepare
         run: cd baseee
           mkdir build
@@ -70,28 +86,59 @@ jobs:
          CC: gcc-9
          CXX: g++-9
         run: |
-          cmake --build .
+          cmake --build . -j 2
 
 
  windows-msvc:
   name: Cross Platform Build in Windows
   runs-on: windows-latest
   steps:
+      - name: Checkout
+        run: |
+          git clone https://github.com/chhdao/baseee
+          cd Baseee
       - name: Prepare
         run: cd baseee
           mkdir build
           cd build
           cmake ..
+          pacman -Syuu
+          C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake
 
       - name: CmakeRun
+        env:
+         CC: C:\msys64\mingw64\bin\gcc
+         CXX: C:\msys64\mingw64\bin\g++
         run:
-          cmake --build .
+          cmake --build . -j 2
 
  End:
   name: Cross Platform Build End
   runs-on: ubuntu-latest
   needs: [windows-msvc,mac-clang,mac-gcc,linux-clang,linux-gcc]
+  timeout-minutes: 10
   steps:
-      - name: EndBuild
+      - name: Prepare
+        env:
+            GitName: ${{ github.repository_owner }}
+            GitEmail: ${{ secrets.GitEmail }}
+            GitPassWord: ${{ secrets.GitPassWord }}
+            TagPatchVersion: ${{ github.run_id }}
+            TagVersion: 1.0.
         run:
           echo "Cross-Platform Build Test PASS"
+          echo " And Write Tag"
+          git clone https://github.com/chhdao/baseee
+          git config user.name $GitName
+          git config user.email $GitEmail
+          cd Baseee
+          echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials
+          git config credential.helper store
+
+      - name: EndBuild
+        run:
+          git tag -a v$TagVersion$TagPatchVersion -m "Build Success v$TagVersion$TagPatchVersion"
+          git push origin --tags
+          rm .git-credentials
+          rm -rf .git
+          echo "Git Tag Pass"
