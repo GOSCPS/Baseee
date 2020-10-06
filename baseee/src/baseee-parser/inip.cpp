@@ -62,7 +62,7 @@ std::optional<std::string> baseee::parser::IniParser::GetString(std::string_view
 
 
 
-int baseee::parser::IniParser::Parser(std::string_view Ini) {
+int baseee::parser::IniParser::Parser(std::string_view Ini) noexcept {
 	if (std::string(Ini).empty()) return 0;
 
 	std::string Identifier("[a-zA-Z0-9_-]+");

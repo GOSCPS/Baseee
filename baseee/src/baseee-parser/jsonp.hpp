@@ -60,27 +60,26 @@ namespace baseee {
 
 			void SetBeautiful(bool b) { BeautlfulFormat = b; }
 
-			std::string Build(JsonData jt);
+			std::string Build(JsonData jt) noexcept;
 
 		private:
 			bool BeautlfulFormat = false;
 
-			std::string BuildArray(JsonData JsonArray);
-			std::string BuildObject(JsonData JsonObject);
-			std::string BuildKeyVulanPair(std::pair<std::string, JsonData> Data);
+			std::string BuildArray(JsonData JsonArray) noexcept;
+			std::string BuildObject(JsonData JsonObject) noexcept;
+			std::string BuildKeyVulanPair(std::pair<std::string, JsonData> Data) noexcept;
 		};
 
-		//using JsonDataPath = JsonData*;
 
 		//给用户使用的Json生成器
 		//生成Tree供JsonBuilder生成文本
 		class JsonDataBuilder {
 		public:
-			JsonDataBuilder() {
+			JsonDataBuilder() noexcept{
 				RootData.JsonT = JsonType::JsonType_Object;
 				RootData.Data = std::multimap<std::string, JsonData>();
 			}
-			JsonDataBuilder(JsonData &data) {
+			JsonDataBuilder(JsonData &data) noexcept{
 				RootData.Data = data.Data;
 				RootData.JsonT = data.JsonT;
 			}
@@ -90,10 +89,10 @@ namespace baseee {
 				AddJsonData(
 				JsonData p,
 				std::string_view name,
-				const JsonData d);
+				const JsonData d) noexcept;
 
 			//返回Json Tree Root的引用
-			JsonData GetJsonData() { return RootData; }
+			JsonData GetJsonData() noexcept { return RootData; }
 
 		private:
 			JsonData RootData;
@@ -104,19 +103,20 @@ namespace baseee {
 		class JsonParser {
 		public:
 			JsonParser(const JsonParser&) = delete;
+			JsonParser& operator=(const JsonParser&) = delete;
 
 			JsonParser() { JsonNext.JsonT = JsonType::JsonType_Null; }
 			~JsonParser() = default;
 
-			JsonErrCode Parser(std::string_view JsonStr);
+			JsonErrCode Parser(std::string_view JsonStr) noexcept;
 
-			JsonData GetJsonData() {
+			JsonData GetJsonData() noexcept {
 				return JsonData(JsonPool);
 			}
 
 			//查找Object
 			std::optional<baseee::parser::JsonData> 
-				FindChildren(std::string_view Name);
+				FindChildren(std::string_view Name) noexcept;
 
 		private:
 
@@ -128,22 +128,22 @@ namespace baseee {
 			//当前构建的Json
 			JsonData JsonNext;
 
-			void AfterSpace();
-			JsonErrCode ParseVulan();
+			void AfterSpace() noexcept;
+			JsonErrCode ParseVulan() noexcept;
 
-			JsonErrCode ParseVulanNull();
-			JsonErrCode ParseVulanBool();
-			JsonErrCode ParseVulanTrue();
-			JsonErrCode ParseVulanFalse();
-			JsonErrCode ParseVulanNumber();
-			JsonErrCode ParseVulanString();
-			std::optional<std::string> ParseVulanUnicode();
-			JsonErrCode ParseVulanArray();
-			JsonErrCode ParseVulanObject();
+			JsonErrCode ParseVulanNull() noexcept;
+			JsonErrCode ParseVulanBool() noexcept;
+			JsonErrCode ParseVulanTrue() noexcept;
+			JsonErrCode ParseVulanFalse() noexcept;
+			JsonErrCode ParseVulanNumber() noexcept;
+			JsonErrCode ParseVulanString() noexcept;
+			std::optional<std::string> ParseVulanUnicode() noexcept;
+			JsonErrCode ParseVulanArray() noexcept;
+			JsonErrCode ParseVulanObject() noexcept;
 
-			inline bool MatchCharRange(char a, char b);
+			inline bool MatchCharRange(char a, char b) noexcept;
 
-			bool IteratorMatch(std::string_view str);
+			bool IteratorMatch(std::string_view str) noexcept;
 		};
 
 	}

@@ -23,7 +23,7 @@
 
 
 
-std::string baseee::parser::JsonBuilder::Build(JsonData jt) {
+std::string baseee::parser::JsonBuilder::Build(JsonData jt) noexcept {
 	std::string out;
 
 	if (jt.JsonT == JsonType::JsonType_Object)
@@ -33,7 +33,7 @@ std::string baseee::parser::JsonBuilder::Build(JsonData jt) {
 }
 
 
-std::string baseee::parser::JsonBuilder::BuildArray(baseee::parser::JsonData JsonArray) {
+std::string baseee::parser::JsonBuilder::BuildArray(baseee::parser::JsonData JsonArray) noexcept {
 	BASEEE_assert(JsonArray.JsonT == JsonType::JsonType_Array);
 	std::string out = "[";
 
@@ -73,7 +73,7 @@ std::string baseee::parser::JsonBuilder::BuildArray(baseee::parser::JsonData Jso
 }
 
 
-std::string baseee::parser::JsonBuilder::BuildObject(baseee::parser::JsonData JsonObject) {
+std::string baseee::parser::JsonBuilder::BuildObject(baseee::parser::JsonData JsonObject) noexcept {
 	BASEEE_assert(JsonObject.JsonT == JsonType::JsonType_Object);
 
 	std::string out = (this->BeautlfulFormat ? "{\n" : "{");
@@ -90,7 +90,7 @@ std::string baseee::parser::JsonBuilder::BuildObject(baseee::parser::JsonData Js
 
 
 std::string baseee::parser::JsonBuilder::BuildKeyVulanPair(
-	std::pair<std::string, JsonData> Data) {
+	std::pair<std::string, JsonData> Data) noexcept {
 	double Number = 0.0;
 	std::string out;
 
@@ -128,10 +128,11 @@ std::string baseee::parser::JsonBuilder::BuildKeyVulanPair(
 }
 
 
-std::optional<baseee::parser::JsonData> baseee::parser::JsonDataBuilder::AddJsonData(
+std::optional<baseee::parser::JsonData> 
+baseee::parser::JsonDataBuilder::AddJsonData(
 	JsonData p,
 	std::string_view name,
-	const JsonData d) {
+	const JsonData d) noexcept {
 
 	if (p.JsonT == JsonType::JsonType_Object) {
 		std::get<std::multimap<std::string, JsonData>>(p.Data)

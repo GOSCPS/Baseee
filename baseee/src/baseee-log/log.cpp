@@ -20,12 +20,12 @@
 #include "log.hpp"
 
 
-void baseee::log::logger::PrintLog(std::string_view&& log) {
-	PrintLog(this->DefaultOutLevel, std::forward<std::string_view&&>(log));
+void baseee::log::logger::PrintLog(std::string_view&& log) noexcept(_PrintLog) {
+	_PrintLog(this->DefaultOutLevel, std::forward<std::string_view&&>(log));
 	return;
 }
 
-void baseee::log::logger::PrintLog(LogLevel level,std::string_view&& log) {
+void baseee::log::logger::_PrintLog(LogLevel level,std::string_view&& log) noexcept {
 
 	{
 		auto Lowest = static_cast<std::underlying_type<LogLevel>::type>(this->LowestLevelOutStream);

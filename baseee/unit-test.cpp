@@ -42,10 +42,10 @@ int main(int argc,char *argv[])
 {
 	//StringCoderTest1();
 	//StringCoderTest2();
-	//LogTest();
+	LogTest();
 	//IniParserTest();
 	//StringMakeTest();
-	JsonParserTest();
+	//JsonParserTest();
 	return 0;
 }
 
@@ -122,7 +122,7 @@ void LogTest() {
 	logger.PrintLog("Test:Log Print!");
 	logger << "Hello World";
 
-	logger.PrintLog(baseee::log::LogLevel::Level_Fatal, "Right!");
+	logger._PrintLog(baseee::log::LogLevel::Level_Fatal, "Right!");
 }
 
 
@@ -179,8 +179,7 @@ void JsonParserTest() {
 }
 */
 	std::string JsonTest = "{ \"people\":[ { \"firstName\": \"Brett\", \"lastName\":\"McLaughlin\"},{\"firstName\":\"Jason\",\"lastName\" : \"Hunter\"}]}";
-
-	BASEEE_assert(JsonParser.Parser(JsonTest) == baseee::parser::JsonErrCode::Parse_OK);
+	JsonParser.Parser(JsonTest);
 
 	baseee::parser::JsonDataBuilder Builder;
 	auto root = Builder.GetJsonData();
@@ -196,5 +195,7 @@ void JsonParserTest() {
 	JsonBuilder.SetBeautiful(true);
 
 	cout << JsonBuilder.Build(root) << endl;
+	cout << "----------------------" << endl;
+	cout << JsonBuilder.Build(JsonParser.GetJsonData()) << endl;
 
 }

@@ -18,16 +18,17 @@ namespace baseee {
 		class IniParser {
 		public:
 			IniParser(const IniParser&) = delete;
+			IniParser& operator=(const IniParser&) = delete;
 			IniParser() noexcept {}
 
-			int Parser(std::string_view Ini);
+			int Parser(std::string_view Ini) noexcept;
 
 			std::optional<int64_t> GetInt(std::string_view section, std::string_view name) noexcept;
 			std::optional<double> GetDouble(std::string_view section, std::string_view name) noexcept;
 			std::optional<std::string> GetString(std::string_view section, std::string_view name) noexcept;
 
 			std::set<std::string> GetSection() noexcept;
-			
+
 		private:
 			bool IsGood = true;
 			std::set<std::string> SectionList;

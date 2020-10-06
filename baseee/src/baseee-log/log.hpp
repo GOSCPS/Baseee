@@ -48,6 +48,7 @@ namespace baseee {
 		class logger {
 		public:
 			logger& operator=(const logger&) = delete;
+			logger(const logger&) = delete;
 			logger() = delete;
 
 			logger(std::string_view &&LogFormat, std::string_view &&OutFile, std::ostream &os) : OutStream(os){
@@ -71,20 +72,20 @@ namespace baseee {
 				return;
 			}
 
-			void PrintLog(std::string_view&& log);
-			void PrintLog(LogLevel level, std::string_view&& log);
+			void PrintLog(std::string_view&& log) noexcept(_PrintLog);
+			void _PrintLog(LogLevel level, std::string_view&& log) noexcept;
 
-			logger *operator<<(std::string_view &&log) {
+			logger &operator<<(std::string_view &&log) noexcept(PrintLog){
 				PrintLog(std::forward<std::string_view&&>(log));
-				return this;
+				return *this;
 			}
 
 			template<typename T>
-			logger* operator<<(T log) {
+			logger &operator<<(T log) noexcept(PrintLog) {
 				std::ostringstream s;
 				s << log;
 				PrintLog(s.str());
-				return this;
+				return *this;
 			}
 
 

@@ -22,13 +22,13 @@
 
 //判断字符是否处于a-b范围内
 //b >= a
-inline bool baseee::parser::JsonParser::MatchCharRange(char a, char b) {
+inline bool baseee::parser::JsonParser::MatchCharRange(char a, char b) noexcept {
 	if ((*Next) >= a && (*Next) <= b) return true;
 	else return false;
 }
 
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::Parser(std::string_view JsonStr) {
+baseee::parser::JsonParser::Parser(std::string_view JsonStr) noexcept {
 	if (std::string(JsonStr).empty()) return JsonErrCode::Parse_OK;
 
 	this->Json = std::string(JsonStr);
@@ -47,7 +47,7 @@ baseee::parser::JsonParser::Parser(std::string_view JsonStr) {
 }
 
 //跳过空格
-void baseee::parser::JsonParser::AfterSpace() {
+void baseee::parser::JsonParser::AfterSpace() noexcept {
 	if (Next == Json.cend()) return;
 	while (std::isspace(*Next)) Next++;
 	return;
@@ -55,7 +55,7 @@ void baseee::parser::JsonParser::AfterSpace() {
 
 //解析值
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulan() {
+baseee::parser::JsonParser::ParseVulan() noexcept {
 	switch (*Next) {
 	case 'n': return ParseVulanNull();//'n'ull
 	case '\0': return JsonErrCode::Parse_MissVulan;
@@ -73,7 +73,7 @@ baseee::parser::JsonParser::ParseVulan() {
 
 //解析null
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanNull() {
+baseee::parser::JsonParser::ParseVulanNull() noexcept {
 
 	BASEEE_assert(*Next == 'n')
 
@@ -89,7 +89,7 @@ baseee::parser::JsonParser::ParseVulanNull() {
 
 //解析true
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanTrue() {
+baseee::parser::JsonParser::ParseVulanTrue() noexcept {
 
 	BASEEE_assert(*Next == 't');
 
@@ -105,7 +105,7 @@ baseee::parser::JsonParser::ParseVulanTrue() {
 
 //解析false
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanFalse() {
+baseee::parser::JsonParser::ParseVulanFalse() noexcept {
 
 	BASEEE_assert(*Next == 'f');
 
@@ -121,7 +121,7 @@ baseee::parser::JsonParser::ParseVulanFalse() {
 
 //解析Bool
 baseee::parser::JsonErrCode
-baseee::parser::JsonParser::ParseVulanBool() {
+baseee::parser::JsonParser::ParseVulanBool() noexcept {
 
 	if ((*Next) == 't') {
 		return this->ParseVulanTrue();
@@ -133,7 +133,7 @@ baseee::parser::JsonParser::ParseVulanBool() {
 }
 
 //字符匹配
-bool baseee::parser::JsonParser::IteratorMatch(std::string_view str) {
+bool baseee::parser::JsonParser::IteratorMatch(std::string_view str) noexcept {
 	std::string sstr(str);
 
 	if (sstr[sstr.size() - 1] == '\0') sstr.erase(sstr[sstr.size() - 1]);
@@ -149,7 +149,7 @@ bool baseee::parser::JsonParser::IteratorMatch(std::string_view str) {
 
 //解析数字
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanNumber() {
+baseee::parser::JsonParser::ParseVulanNumber() noexcept {
 
 	std::string Int("([-]?[1-9]?[0-9]+)|([-]?[0]{1})");
 	std::string Frac("\\.[0-9]+");
@@ -185,7 +185,7 @@ baseee::parser::JsonParser::ParseVulanNumber() {
 }
 
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanString() {
+baseee::parser::JsonParser::ParseVulanString() noexcept {
 	BASEEE_assert(*Next == '\"');
 	std::string String = "";
 	Next++;
@@ -251,7 +251,7 @@ baseee::parser::JsonParser::ParseVulanString() {
 //解析\\uXXXX
 //以及\\uXXXX\\uYYYY(代理)
 std::optional<std::string> 
-baseee::parser::JsonParser::ParseVulanUnicode() {
+baseee::parser::JsonParser::ParseVulanUnicode() noexcept {
 	BASEEE_assert(*Next == 'u');
 	Next++;//跳过\\u中的u
 
@@ -309,7 +309,7 @@ baseee::parser::JsonParser::ParseVulanUnicode() {
 
 //解析数组
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanArray() {
+baseee::parser::JsonParser::ParseVulanArray() noexcept {
 	BASEEE_assert(*Next == '[');
 	Next++;
 	bool skip = true;
@@ -343,7 +343,7 @@ baseee::parser::JsonParser::ParseVulanArray() {
 }
 
 baseee::parser::JsonErrCode
-baseee::parser::JsonParser::ParseVulanObject() {
+baseee::parser::JsonParser::ParseVulanObject() noexcept {
 	BASEEE_assert(*Next == '{');
 	Next++;
 	bool skip = true;
@@ -398,7 +398,7 @@ baseee::parser::JsonParser::ParseVulanObject() {
 }
 
 std::optional<baseee::parser::JsonData> 
-baseee::parser::JsonParser::FindChildren(std::string_view Name) {
+baseee::parser::JsonParser::FindChildren(std::string_view Name) noexcept {
 	if (JsonPool.JsonT == JsonType::JsonType_Object) {
 		auto s = std::get<std::multimap<std::string, JsonData>>(JsonPool.Data);
 		auto it = s.find(Name.data());
