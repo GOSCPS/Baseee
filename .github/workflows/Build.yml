@@ -10,13 +10,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee
+          git clone https://github.com/chhdao/baseee &&
           cd baseee
       - name: Prepare
         run: |
-          cd baseee
-          mkdir build
-          cd build
+          cd baseee &&
+          mkdir build &&
+          cd build &&
           cmake ..
 
       - name: CmakeRun
@@ -32,13 +32,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee
+          git clone https://github.com/chhdao/baseee &&
           cd baseee
       - name: Prepare
         run: |
-          cd baseee
-          mkdir build
-          cd build
+          cd baseee &&
+          mkdir build &&
+          cd build &&
           cmake ..
         
       - name: CmakeRun
@@ -54,13 +54,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee
+          git clone https://github.com/chhdao/baseee &&
           cd baseee
       - name: Prepare
         run: |
-          cd baseee
-          mkdir build
-          cd build
+          cd baseee &&
+          mkdir build &&
+          cd build &&
           cmake ..
 
       - name: CmakeRun
@@ -76,13 +76,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee
+          git clone https://github.com/chhdao/baseee &&
           cd baseee
       - name: Prepare
         run: |
-          cd baseee
-          mkdir build
-          cd build
+          cd baseee &&
+          mkdir build &&
+          cd build &&
           cmake ..
 
       - name: CmakeRun
@@ -99,15 +99,15 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee
+          git clone https://github.com/chhdao/baseee &&
           cd baseee
       - name: Prepare
         run: |
-          cd baseee
-          mkdir build
-          cd build
-          cmake ..
-          pacman -Syuu
+          cd baseee &&
+          mkdir build &&
+          cd build &&
+          cmake .. &&
+          pacman -Syuu &&
           C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake
 
       - name: CmakeRun
@@ -131,19 +131,19 @@ jobs:
             TagPatchVersion: ${{ github.run_id }}
             TagVersion: 1.0.
         run:
-          echo "Cross-Platform Build Test PASS"
-          echo " And Write Tag"
-          git clone https://github.com/chhdao/baseee
-          git config user.name $GitName
-          git config user.email $GitEmail
-          cd baseee
-          echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials
-          git config credential.helper store
+          echo "Cross-Platform Build Test PASS" &&
+          echo " And Write Tag" &&
+          git clone https://github.com/chhdao/baseee &&
+          git config user.name $GitName &&
+          git config user.email $GitEmail &&
+          cd baseee &&
+          echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials &&
+          git config credential.helper store &&
 
       - name: EndBuild
         run:
-          git tag -a v$TagVersion$TagPatchVersion -m "Build Success v$TagVersion$TagPatchVersion"
-          git push origin --tags
-          rm .git-credentials
-          rm -rf .git
+          git tag -a v$TagVersion$TagPatchVersion -m "Build Success v$TagVersion$TagPatchVersion" &&
+          git push origin --tags &&
+          rm .git-credentials &&
+          rm -rf .git &&
           echo "Git Tag Pass"
