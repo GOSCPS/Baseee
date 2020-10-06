@@ -2,7 +2,11 @@
 ![Line](https://img.shields.io/tokei/lines/github/chhdao/Baseee)
 ![GitHub](https://img.shields.io/github/license/chhdao/Baseee)
 ![GitHub repo size](https://img.shields.io/github/repo-size/chhdao/Baseee)
-![c++ Version](https://img.shields.io/badge/C%2B%2B-17-blue)
+![C++ Version](https://img.shields.io/badge/C%2B%2B-17-blue)
+![Github Actions](https://img.shields.io/github/workflow/status/chhdao/baseee/BuildTest)
+![Tag Version](https://img.shields.io/github/v/tag/chhdao/baseee)
+![PreRelease Version](https://img.shields.io/github/v/release/chhdao/baseee?include_prereleases)
+![Release Version](https://img.shields.io/github/v/release/chhdao/baseee)
 <hr>   
 
 [English](https://github.com/chhdao/Baseee/blob/master/docs/README.md)
