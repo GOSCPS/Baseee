@@ -82,7 +82,7 @@ baseee::parser::JsonParser::ParseVulanNull() {
 	}
 	Next += 4;
 
-	JsonNext.JsonType = JsonType::JsonType_Null;
+	JsonNext.JsonT = JsonType::JsonType_Null;
 	JsonNext.Data = 0.0;
 	return JsonErrCode::Parse_OK;
 }
@@ -98,7 +98,7 @@ baseee::parser::JsonParser::ParseVulanTrue() {
 	}
 	Next += 4;
 
-	JsonNext.JsonType = JsonType::JsonType_True;
+	JsonNext.JsonT = JsonType::JsonType_True;
 	JsonNext.Data = 0.0;
 	return JsonErrCode::Parse_OK;
 }
@@ -114,7 +114,7 @@ baseee::parser::JsonParser::ParseVulanFalse() {
 	}
 	Next += 5;
 
-	JsonNext.JsonType = JsonType::JsonType_False;
+	JsonNext.JsonT = JsonType::JsonType_False;
 	JsonNext.Data = 0.0;
 	return JsonErrCode::Parse_OK;
 }
@@ -178,7 +178,7 @@ baseee::parser::JsonParser::ParseVulanNumber() {
 		return JsonErrCode::Parse_VulanError;
 	}
 
-	this->JsonNext.JsonType = JsonType::JsonType_Number;
+	this->JsonNext.JsonT = JsonType::JsonType_Number;
 	this->JsonNext.Data = std::stod(NumberBuf);
 
 	return JsonErrCode::Parse_OK;
@@ -242,7 +242,7 @@ baseee::parser::JsonParser::ParseVulanString() {
 		Next++;
 	}
 
-	this->JsonNext.JsonType = JsonType::JsonType_String;
+	this->JsonNext.JsonT = JsonType::JsonType_String;
 	this->JsonNext.Data = String;
 
 	return JsonErrCode::Parse_OK;
@@ -315,7 +315,7 @@ baseee::parser::JsonParser::ParseVulanArray() {
 	bool skip = true;
 
 	JsonData JsonArray;
-	JsonArray.JsonType = JsonType::JsonType_Array;
+	JsonArray.JsonT = JsonType::JsonType_Array;
 	JsonArray.Data = std::vector<JsonData>();
 
 	auto ErrCode = JsonErrCode::Parse_OK;
@@ -349,7 +349,7 @@ baseee::parser::JsonParser::ParseVulanObject() {
 	bool skip = true;
 
 	JsonData JsonObject;
-	JsonObject.JsonType = JsonType::JsonType_Object;
+	JsonObject.JsonT = JsonType::JsonType_Object;
 	JsonObject.Data = std::multimap<std::string,JsonData>();
 
 	auto ErrCode = JsonErrCode::Parse_OK;
@@ -370,7 +370,7 @@ baseee::parser::JsonParser::ParseVulanObject() {
 		if (ErrCode != JsonErrCode::Parse_OK) 
 			return ErrCode;
 
-		if (JsonNext.JsonType != JsonType::JsonType_String)
+		if (JsonNext.JsonT != JsonType::JsonType_String)
 			return JsonErrCode::Parse_UnknowError;
 
 		JsonKeyVulanPair.first = std::get<std::string>(JsonNext.Data);
@@ -384,7 +384,7 @@ baseee::parser::JsonParser::ParseVulanObject() {
 		if (ErrCode != JsonErrCode::Parse_OK)
 			return ErrCode;
 
-		JsonKeyVulanPair.second.JsonType = JsonNext.JsonType;
+		JsonKeyVulanPair.second.JsonT = JsonNext.JsonT;
 		JsonKeyVulanPair.second.Data = JsonNext.Data;
 
 		std::get<std::multimap<std::string, JsonData>>(JsonObject.Data)
@@ -399,7 +399,7 @@ baseee::parser::JsonParser::ParseVulanObject() {
 
 std::optional<baseee::parser::JsonData> 
 baseee::parser::JsonParser::FindChildren(std::string_view Name) {
-	if (JsonPool.JsonType == JsonType::JsonType_Object) {
+	if (JsonPool.JsonT == JsonType::JsonType_Object) {
 		auto s = std::get<std::multimap<std::string, JsonData>>(JsonPool.Data);
 		auto it = s.find(Name.data());
 		if (it == s.cend()) return std::nullopt;

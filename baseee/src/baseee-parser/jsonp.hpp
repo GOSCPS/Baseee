@@ -38,7 +38,7 @@ namespace baseee {
 				std::vector<JsonData>,
 				std::multimap<std::string, JsonData>>
 				Data = 0.0;
-			JsonType JsonType = JsonType::JsonType_Null;
+			JsonType JsonT = JsonType::JsonType_Null;
 		};
 
 		//解析器错误代码
@@ -77,12 +77,12 @@ namespace baseee {
 		class JsonDataBuilder {
 		public:
 			JsonDataBuilder() {
-				RootData.JsonType = JsonType::JsonType_Object;
+				RootData.JsonT = JsonType::JsonType_Object;
 				RootData.Data = std::multimap<std::string, JsonData>();
 			}
 			JsonDataBuilder(JsonData &data) {
 				RootData.Data = data.Data;
-				RootData.JsonType = data.JsonType;
+				RootData.JsonT = data.JsonT;
 			}
 
 			//在p处添加一个JsonData
@@ -105,7 +105,7 @@ namespace baseee {
 		public:
 			JsonParser(const JsonParser&) = delete;
 
-			JsonParser() { JsonNext.JsonType = JsonType::JsonType_Null; }
+			JsonParser() { JsonNext.JsonT = JsonType::JsonType_Null; }
 			~JsonParser() = default;
 
 			JsonErrCode Parser(std::string_view JsonStr);

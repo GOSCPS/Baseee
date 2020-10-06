@@ -26,7 +26,7 @@
 std::string baseee::parser::JsonBuilder::Build(JsonData jt) {
 	std::string out;
 
-	if (jt.JsonType == JsonType::JsonType_Object)
+	if (jt.JsonT == JsonType::JsonType_Object)
 		out += BuildObject(jt) + (this->BeautlfulFormat ? "\n" : "");
 
 	return out;
@@ -34,11 +34,11 @@ std::string baseee::parser::JsonBuilder::Build(JsonData jt) {
 
 
 std::string baseee::parser::JsonBuilder::BuildArray(baseee::parser::JsonData JsonArray) {
-	BASEEE_assert(JsonArray.JsonType == JsonType::JsonType_Array);
+	BASEEE_assert(JsonArray.JsonT == JsonType::JsonType_Array);
 	std::string out = "[";
 
 	for (auto s : std::get<std::vector<JsonData>>(JsonArray.Data)) {
-		switch (s.JsonType)
+		switch (s.JsonT)
 		{
 		case JsonType::JsonType_False:
 			out += "false";
@@ -74,7 +74,7 @@ std::string baseee::parser::JsonBuilder::BuildArray(baseee::parser::JsonData Jso
 
 
 std::string baseee::parser::JsonBuilder::BuildObject(baseee::parser::JsonData JsonObject) {
-	BASEEE_assert(JsonObject.JsonType == JsonType::JsonType_Object);
+	BASEEE_assert(JsonObject.JsonT == JsonType::JsonType_Object);
 
 	std::string out = (this->BeautlfulFormat ? "{\n" : "{");
 	std::multimap<std::string, JsonData> obj = std::get<std::multimap<std::string, JsonData>>(JsonObject.Data);
@@ -94,9 +94,9 @@ std::string baseee::parser::JsonBuilder::BuildKeyVulanPair(
 	double Number = 0.0;
 	std::string out;
 
-	if (Data.second.JsonType == JsonType::JsonType_Array)
+	if (Data.second.JsonT == JsonType::JsonType_Array)
 		return "\"" + Data.first + "\":" + BuildArray(Data.second);
-	else switch (Data.second.JsonType)
+	else switch (Data.second.JsonT)
 	{
 	case JsonType::JsonType_False:
 		out = "\"" + Data.first + "\":" + "false";
@@ -133,7 +133,7 @@ std::optional<baseee::parser::JsonData> baseee::parser::JsonDataBuilder::AddJson
 	std::string_view name,
 	const JsonData d) {
 
-	if (p.JsonType == JsonType::JsonType_Object) {
+	if (p.JsonT == JsonType::JsonType_Object) {
 		std::get<std::multimap<std::string, JsonData>>(p.Data)
 			.insert(std::make_pair(name, d));
 		return p;

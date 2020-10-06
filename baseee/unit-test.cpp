@@ -187,7 +187,7 @@ void JsonParserTest() {
 
 	baseee::parser::JsonData data;
 	data.Data = "Hello Json Builder";
-	data.JsonType = baseee::parser::JsonType::JsonType_String;
+	data.JsonT = baseee::parser::JsonType::JsonType_String;
 
 	BASEEE_assert(Builder.AddJsonData(root, "Test", data).has_value());
 	root = Builder.AddJsonData(root, "Test", data).value();
