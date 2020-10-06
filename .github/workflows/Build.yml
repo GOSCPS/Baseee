@@ -11,9 +11,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
          fetch-depth: 1
-      - name: Checkout
-        run: |
-          cd baseee
       - name: Prepare
         run: |
           cd baseee;
@@ -35,9 +32,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
          fetch-depth: 1
-      - name: Checkout
-        run: |
-          cd baseee
       - name: Prepare
         run: |
           cd baseee;
@@ -59,9 +53,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
          fetch-depth: 1
-      - name: Checkout
-        run: |
-          cd baseee
       - name: Prepare
         run: |
           cd baseee;
@@ -83,9 +74,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
          fetch-depth: 1
-      - name: Checkout
-        run: |
-          cd baseee
       - name: Prepare
         run: |
           cd baseee;
@@ -109,9 +97,6 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         with:
          fetch-depth: 1
-      - name: Checkout
-        run: |
-          cd baseee
       - name: Prepare
         run: |
           cd baseee;
@@ -147,8 +132,8 @@ jobs:
           echo " And Write Tag" &&
           git config user.name $GitName &&
           git config user.email $GitEmail &&
-          echo "https://$GitName:$GitPassWord@github.com" >> .git-credentials &&
-          git config credential.helper store && 
+          echo "https://$GitName:$GitPassWord@github.com" >> ./.git-credentials &&
+          git config credential.helper store
 
       - name: EndBuild
         run:
