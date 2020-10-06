@@ -10,14 +10,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee &&
-          cd baseee && ls && pwd
+          git clone https://github.com/chhdao/baseee;
+          cd baseee
       - name: Prepare
         run: |
-          pwd && ls &&
-          cd baseee &&
-          mkdir build &&
-          cd build &&
+          cd baseee;
+          mkdir build;
+          cd build;
           cmake ..
 
       - name: CmakeRun
@@ -25,7 +24,6 @@ jobs:
          CC: clang
          CXX: clang++
         run: |
-          pwd && ls &&
           cmake --build . -j 2
 
  mac-clang:
@@ -34,13 +32,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee &&
+          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
-          cd baseee &&
-          mkdir build &&
-          cd build &&
+          cd baseee;
+          mkdir build;
+          cd build;
           cmake ..
         
       - name: CmakeRun
@@ -56,13 +54,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee &&
+          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
-          cd baseee &&
-          mkdir build &&
-          cd build &&
+          cd baseee;
+          mkdir build;
+          cd build;
           cmake ..
 
       - name: CmakeRun
@@ -78,13 +76,13 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee &&
+          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
-          cd baseee &&
-          mkdir build &&
-          cd build &&
+          cd baseee;
+          mkdir build;
+          cd build;
           cmake ..
 
       - name: CmakeRun
@@ -101,16 +99,16 @@ jobs:
   steps:
       - name: Checkout
         run: |
-          git clone https://github.com/chhdao/baseee &&
+          git clone https://github.com/chhdao/baseee;
           cd baseee
       - name: Prepare
         run: |
-          cd baseee &&
-          mkdir build &&
-          cd build &&
-          C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake &&
-          cmake .. &&
-          pacman -Syuu 
+          cd baseee;
+          mkdir build;
+          cd build;
+          pacman -Syuu;
+          C:\msys64\bin\pacman -S --needed base-devel mingw-w64-x86_64-toolchain git mingw-w64-x86_64-cmake;
+          cmake ..
 
       - name: CmakeRun
         env:
