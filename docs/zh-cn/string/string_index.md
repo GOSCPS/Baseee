@@ -1,5 +1,5 @@
-# baseee::string文档
-baseee::string中提供了
+# baseee::string
+baseee::string中提供了一些字符串操作，以及Unicode支持   
 
 
 
