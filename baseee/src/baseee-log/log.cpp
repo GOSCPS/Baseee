@@ -26,7 +26,7 @@ void baseee::log::logger::PrintLog(std::string_view&& log) noexcept {
 }
 
 void baseee::log::logger::_PrintLog(LogLevel level,std::string_view&& log) noexcept {
-
+	this->Mutex.lock();
 	{
 		auto Lowest = static_cast<std::underlying_type<LogLevel>::type>(this->LowestLevelOutStream);
 		auto Origin = static_cast<std::underlying_type<LogLevel>::type>(level);
@@ -58,7 +58,7 @@ void baseee::log::logger::_PrintLog(LogLevel level,std::string_view&& log) noexc
 			this->OutFile.flush();
 		}
 	}
-
+	this->Mutex.unlock();
 	return;
 }
 

@@ -95,6 +95,9 @@ namespace baseee {
 
 
 		private:
+			//锁
+			std::mutex Mutex;
+
 			//等于高于这个等级则输出到OutStream
 			LogLevel LowestLevelOutStream;
 			std::ostream& OutStream;
