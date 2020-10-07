@@ -22,9 +22,10 @@ $ vcpkg install baseee
 find_package(Baseee CONFIG REQUIRED)
 target_link_libraries(main PRIVATE baseee::baseee)
 ```
-还需要显示声明使用c++17：
+还需要显示声明使用c++17以及引用头文件：
 ```
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+target_include_directories(main PRIVATE ${BASEEE_INCLUDE_DIRS})
 ```
 最后：恭喜你安装成功
