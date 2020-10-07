@@ -42,8 +42,8 @@ int main(int argc,char *argv[])
 {
 	//StringCoderTest1();
 	//StringCoderTest2();
-	LogTest();
-	//IniParserTest();
+	//LogTest();
+	IniParserTest();
 	//StringMakeTest();
 	//JsonParserTest();
 	return 0;
@@ -127,25 +127,17 @@ void LogTest() {
 
 
 void IniParserTest() {
+	std::string IniText("[display]\n\nWide=8\n\nHigh=12");
 
-	cout << "Test Parser Ini" << endl;
 
 	baseee::parser::IniParser Parser;
-	cout << Parser.Parser("[Test1]\nTestInt=-114514\nTestDouble=-114.514\nTestStr=\"Hello World\"\nTestSStr=Right!") << endl;
+	cout << Parser.Parser(IniText) << endl;
 
-	if (Parser.GetInt("Test1", "TestInt").has_value()) {
-		cout << "Int:" << Parser.GetInt("Test1", "TestInt").value() << endl;
+	if (Parser.GetInt("display", "Wide").has_value()) {
+		cout << "Int:" << Parser.GetInt("display", "Wide").value() << endl;
 	}
-	if (Parser.GetDouble("Test1", "TestDouble").has_value()) {
-		cout << "Double:" << Parser.GetDouble("Test1", "TestDouble").value() << endl;
-	}
-
-	if (Parser.GetString("Test1", "TestStr").has_value()) {
-		cout << "Str:" << Parser.GetString("Test1", "TestStr").value() << endl;
-	}
-
-	if (Parser.GetString("Test1", "TestSStr").has_value()) {
-		cout << Parser.GetString("Test1", "TestSStr").value() << endl;
+	if (Parser.GetInt("display", "High").has_value()) {
+		cout << "Int:" << Parser.GetInt("display", "High").value() << endl;
 	}
 
 	return;

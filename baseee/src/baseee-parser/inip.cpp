@@ -27,7 +27,7 @@ std::optional<int64_t> baseee::parser::IniParser::GetInt(std::string_view sectio
 	if (it != IntPool.cend()) {
 		auto its = (*it).second.find(std::string(name));
 		if (its != (*it).second.cend()) {
-			return (*its).second;
+			return std::optional<int64_t>((*its).second);
 		}
 	}
 
@@ -40,7 +40,7 @@ std::optional<double> baseee::parser::IniParser::GetDouble(std::string_view sect
 	if (it != DoublePool.cend()) {
 		auto its = (*it).second.find(std::string(name));
 		if (its != (*it).second.cend()) {
-			return (*its).second;
+			return std::optional<double>((*its).second);
 		}
 	}
 
@@ -53,7 +53,7 @@ std::optional<std::string> baseee::parser::IniParser::GetString(std::string_view
 	if (it != StringPool.cend()) {
 		auto its = (*it).second.find(std::string(name));
 		if (its != (*it).second.cend()) {
-			return (*its).second;
+			return std::optional<std::string>((*its).second);
 		}
 	}
 
@@ -101,6 +101,7 @@ int baseee::parser::IniParser::Parser(std::string_view Ini) noexcept {
 		if (Token.size() >= 1 && Token[0] == ';') {
 			continue;
 		}
+		else if (Token.size() == 0)continue;
 		
 		//∆•≈‰∂Œ
 		if (std::regex_match(Token, matchResult, Section)) {

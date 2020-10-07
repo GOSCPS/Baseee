@@ -1,4 +1,4 @@
-name: BuildTest
+name: Build
 
 
 on: [push,pull_request]
@@ -121,6 +121,7 @@ jobs:
         with:
          fetch-depth: 1
       - name: Prepare
+        if: github.event_name == 'push'
         env:
             GitName: ${{ github.repository_owner }}
             GitEmail: ${{ secrets.GitEmail }}
@@ -135,7 +136,7 @@ jobs:
 
       - name: EndBuild
         run:
-          TagVersion=1.0. &&
+          TagVersion=1.1. &&
           git tag -a v${TagVersion}${GITHUB_RUN_ID} -m "Build Success v${TagVersion}${GITHUB_RUN_ID}" &&
           git push origin --tags &&
           rm .git-credentials &&

@@ -57,6 +57,11 @@ namespace baseee {
 				return;
 			}
 
+			~logger() {
+				if (this->OutFile.is_open()) this->OutFile.close();
+				return;
+			}
+
 			void SetLowestLevelOutConsole(LogLevel level) noexcept {
 				LowestLevelOutStream = level;
 				return;
