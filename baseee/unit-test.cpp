@@ -43,9 +43,9 @@ int main(int argc,char *argv[])
 	//StringCoderTest1();
 	//StringCoderTest2();
 	//LogTest();
-	IniParserTest();
+	//IniParserTest();
 	//StringMakeTest();
-	//JsonParserTest();
+	JsonParserTest();
 	return 0;
 }
 
@@ -154,40 +154,25 @@ void StringMakeTest() {
 }
 
 void JsonParserTest() {
-	baseee::parser::JsonParser JsonParser;
+	baseee::parser::JsonDataBuilder JsonParser
+		(baseee::parser::CreateNewJsonTree());
 
-/*
-{ 
-"people":[ 
-{
-"firstName": "Brett",            
-"lastName":"McLaughlin"        
-},      
-{        
-"firstName":"Jason",
-"lastName":"Hunter"
-}
-]
-}
-*/
-	std::string JsonTest = "{ \"people\":[ { \"firstName\": \"Brett\", \"lastName\":\"McLaughlin\"},{\"firstName\":\"Jason\",\"lastName\" : \"Hunter\"}]}";
-	JsonParser.Parser(JsonTest);
+	JsonParser["Test Int"] = 0;
+	JsonParser["Test String"] = "Hello Json";
+	JsonParser["Test Json Objects"]["Second"] = "Hello Baseee";
+	JsonParser["Boolean True"].SetBoolean(true);
+	JsonParser["Boolean False"].SetBoolean(false);
 
-	baseee::parser::JsonDataBuilder Builder;
-	auto root = Builder.GetJsonData();
-
-	baseee::parser::JsonData data;
-	data.Data = "Hello Json Builder";
-	data.JsonT = baseee::parser::JsonType::JsonType_String;
-
-	BASEEE_assert(Builder.AddJsonData(root, "Test", data).has_value());
-	root = Builder.AddJsonData(root, "Test", data).value();
-
-	baseee::parser::JsonBuilder JsonBuilder;
+	baseee::parser::JsonStringBuilder JsonBuilder;
 	JsonBuilder.SetBeautiful(true);
+	
 
-	cout << JsonBuilder.Build(root) << endl;
-	cout << "----------------------" << endl;
-	cout << JsonBuilder.Build(JsonParser.GetJsonData()) << endl;
+	cout << JsonBuilder.Build(*JsonParser.GetJsonTree()) << endl;
+	cout << JsonParser["Boolean False"].GetBoolean().value() << endl;
+	cout << JsonParser["Boolean True"].GetBoolean().value() << endl;
+	cout << JsonParser["Test Int"].GetNumber().value() << endl;
+	cout << JsonParser["Test String"].GetString().value() << endl;
+	cout << JsonParser["Test Json Objects"]["Second"].GetString().value() << endl;
 
+	return;
 }

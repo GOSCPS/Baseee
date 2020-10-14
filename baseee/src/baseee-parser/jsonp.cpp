@@ -396,14 +396,3 @@ baseee::parser::JsonParser::ParseVulanObject() noexcept {
 	this->JsonNext = JsonObject;
 	return JsonErrCode::Parse_OK;
 }
-
-std::optional<baseee::parser::JsonData> 
-baseee::parser::JsonParser::FindChildren(std::string_view Name) noexcept {
-	if (JsonPool.JsonT == JsonType::JsonType_Object) {
-		auto s = std::get<std::multimap<std::string, JsonData>>(JsonPool.Data);
-		auto it = s.find(Name.data());
-		if (it == s.cend()) return std::nullopt;
-		else return it->second;
-	}
-	return std::nullopt;
-}

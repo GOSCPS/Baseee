@@ -52,11 +52,18 @@ namespace baseee {
 
 		using JsonErrCode = JsonParserErrorCode;
 
+		static JsonData* CreateNewJsonTree() {
+			JsonData* JsonPtr;
+			JsonPtr = new JsonData;
+			JsonPtr->Data = std::multimap<std::string, JsonData>();
+			JsonPtr->JsonT = JsonType::JsonType_Object;
+			return JsonPtr;
+		}
 
-		//Json生成器
-		class JsonBuilder {
+		//Json字符串生成器
+		class JsonStringBuilder {
 		public:
-			JsonBuilder() = default;
+			JsonStringBuilder() = default;
 
 			void SetBeautiful(bool b) { BeautlfulFormat = b; }
 
@@ -71,31 +78,92 @@ namespace baseee {
 		};
 
 
-		//给用户使用的Json生成器
-		//生成Tree供JsonBuilder生成文本
+		//JsonData操作器
 		class JsonDataBuilder {
 		public:
-			JsonDataBuilder() noexcept{
-				RootData.JsonT = JsonType::JsonType_Object;
-				RootData.Data = std::multimap<std::string, JsonData>();
-			}
-			JsonDataBuilder(JsonData &data) noexcept{
-				RootData.Data = data.Data;
-				RootData.JsonT = data.JsonT;
+			JsonDataBuilder& operator=(const JsonDataBuilder&) = delete;
+			JsonDataBuilder(const JsonDataBuilder&) = delete;
+			JsonDataBuilder(JsonData* J) {
+				if (J != nullptr)
+					Ptr = J;
+				else throw std::runtime_error("Json Data is Null");
 			}
 
-			//在p处添加一个JsonData
-			static std::optional<baseee::parser::JsonData>
-				AddJsonData(
-				JsonData p,
-				std::string_view name,
-				const JsonData d) noexcept;
+			JsonDataBuilder operator[](std::string_view index) {
+				if (Ptr->JsonT == JsonType::JsonType_Object) {
 
-			//返回Json Tree Root的引用
-			JsonData GetJsonData() noexcept { return RootData; }
+					auto map = &std::get<std::multimap<std::string, JsonData>>(Ptr->Data);
+					auto it = map->find(std::string(index));
+
+					if (it != map->cend()) {
+						return JsonDataBuilder(&(it->second));
+					}
+					else {
+						JsonData data;
+						data.Data = std::multimap<std::string, JsonData>();
+						data.JsonT = JsonType::JsonType_Object;
+						return 
+							JsonDataBuilder(
+								&map->
+								insert(std::make_pair(index, data))
+								->second);
+					}
+
+				}
+				else throw 
+					std::runtime_error(
+						"JsonType of JsonRootPtr is not JsonType::JsonType_Object");
+				return JsonDataBuilder(nullptr);
+			}
+
+			void operator=(std::string_view vulan) {
+				std::string String(vulan);
+				Ptr->JsonT = JsonType::JsonType_String;
+				Ptr->Data = String;
+
+				return;
+			}
+
+			void operator=(double vulan) {
+				Ptr->JsonT = JsonType::JsonType_Number;
+				Ptr->Data = vulan;
+
+				return;
+			}
+
+			void SetBoolean(bool vulan) {
+				if (vulan)
+					Ptr->JsonT = JsonType::JsonType_True;
+				else Ptr->JsonT = JsonType::JsonType_False;
+
+				return;
+			}
+
+			std::optional<std::string> GetString() {
+				if (Ptr->JsonT == JsonType::JsonType_String)
+					return std::get<std::string>(Ptr->Data);
+				else return std::nullopt;
+			}
+
+			std::optional<double> GetNumber() {
+				if (Ptr->JsonT == JsonType::JsonType_Number)
+					return std::get<double>(Ptr->Data);
+				else return std::nullopt;
+			}
+
+			std::optional<bool> GetBoolean() {
+				if (Ptr->JsonT == JsonType::JsonType_False)
+					return false;
+				else if (Ptr->JsonT == JsonType::JsonType_True)
+					return true;
+				else return std::nullopt;
+			}
+
+
+			JsonData* GetJsonTree() { return Ptr; }
 
 		private:
-			JsonData RootData;
+			JsonData* Ptr;
 		};
 
 
@@ -113,10 +181,6 @@ namespace baseee {
 			JsonData GetJsonData() noexcept {
 				return JsonData(JsonPool);
 			}
-
-			//查找Object
-			std::optional<baseee::parser::JsonData> 
-				FindChildren(std::string_view Name) noexcept;
 
 		private:
 
