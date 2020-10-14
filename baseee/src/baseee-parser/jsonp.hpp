@@ -39,6 +39,44 @@ namespace baseee {
 				std::multimap<std::string, JsonData>>
 				Data = 0.0;
 			JsonType JsonT = JsonType::JsonType_Null;
+
+			JsonData() {}
+
+
+			JsonData(std::string_view Vulan) {
+				Data = std::string(Vulan);
+				JsonT = JsonType::JsonType_String;
+
+				return;
+			}
+
+			JsonData(double Vulan) {
+				Data = Vulan;
+				JsonT = JsonType::JsonType_Number;
+
+				return;
+			}
+
+			JsonData(bool Vulan) {
+				if (Vulan)
+					JsonT = JsonType::JsonType_True;
+				else
+					JsonT = JsonType::JsonType_False;
+
+				return;
+			}
+
+			JsonData(std::initializer_list<JsonData> Array) {
+				Data = std::vector<JsonData>();
+				JsonT = JsonType::JsonType_Array;
+				for (auto s : Array) {
+					std::get<std::vector<JsonData>>(Data).push_back(s);
+				}
+
+				return;
+			}
+
+
 		};
 
 		//解析器错误代码
@@ -75,6 +113,7 @@ namespace baseee {
 			std::string BuildArray(JsonData JsonArray) noexcept;
 			std::string BuildObject(JsonData JsonObject) noexcept;
 			std::string BuildKeyVulanPair(std::pair<std::string, JsonData> Data) noexcept;
+			std::string BuildString(std::string String);
 		};
 
 
@@ -88,7 +127,10 @@ namespace baseee {
 					Ptr = J;
 				else throw std::runtime_error("Json Data is Null");
 			}
+			~JsonDataBuilder() {}
 
+			//索引节点
+			//如果无则创建一个空JsonType_Object节点
 			JsonDataBuilder operator[](std::string_view index) {
 				if (Ptr->JsonT == JsonType::JsonType_Object) {
 
@@ -116,29 +158,15 @@ namespace baseee {
 				return JsonDataBuilder(nullptr);
 			}
 
-			void operator=(std::string_view vulan) {
-				std::string String(vulan);
-				Ptr->JsonT = JsonType::JsonType_String;
-				Ptr->Data = String;
+
+			void operator=(JsonData J) {
+				Ptr->Data = J.Data;
+				Ptr->JsonT = J.JsonT;
 
 				return;
 			}
 
-			void operator=(double vulan) {
-				Ptr->JsonT = JsonType::JsonType_Number;
-				Ptr->Data = vulan;
-
-				return;
-			}
-
-			void SetBoolean(bool vulan) {
-				if (vulan)
-					Ptr->JsonT = JsonType::JsonType_True;
-				else Ptr->JsonT = JsonType::JsonType_False;
-
-				return;
-			}
-
+			/*获取Vulan的方法*/
 			std::optional<std::string> GetString() {
 				if (Ptr->JsonT == JsonType::JsonType_String)
 					return std::get<std::string>(Ptr->Data);
@@ -159,8 +187,59 @@ namespace baseee {
 				else return std::nullopt;
 			}
 
+			//获取构造函数参数的指针
+			JsonData* GetJsonTree()noexcept { return Ptr; }
 
-			JsonData* GetJsonTree() { return Ptr; }
+			//释放构造函数指向的内存并执行析构函数
+			void Release() {
+				if (Ptr != nullptr)
+					delete Ptr;
+				this->~JsonDataBuilder();
+				return;
+			}
+
+			//删除子节点
+			void Delete(std::string_view String) {
+				if (Ptr->JsonT == JsonType::JsonType_Object) {
+
+					auto map = &std::get<std::multimap<std::string, JsonData>>(Ptr->Data);
+					auto it = map->find(std::string(String));
+
+					if (it != map->cend()) {
+						map->erase(it);
+						return;
+					}
+					else return;
+				}
+				else throw
+					std::runtime_error(
+						"JsonType of JsonRootPtr is not JsonType::JsonType_Object");
+				return;
+			}
+
+			//查找节点
+			std::optional<JsonDataBuilder> FindChild(std::string_view Name) {
+				if (Ptr->JsonT == JsonType::JsonType_Object) {
+
+					auto map = &std::get<std::multimap<std::string, JsonData>>(Ptr->Data);
+					auto it = map->find(std::string(Name));
+
+					if (it != map->cend()) {
+						return 
+							std::optional<JsonDataBuilder>((&(it->second)));
+					}
+					else return std::nullopt;
+				}
+				else throw
+					std::runtime_error(
+						"JsonType of JsonRootPtr is not JsonType::JsonType_Object");
+				return std::nullopt;
+			}
+
+			//获取节点类型
+			JsonType GetJsonType() noexcept{
+				return Ptr->JsonT;
+			}
 
 		private:
 			JsonData* Ptr;

@@ -82,9 +82,11 @@ std::string baseee::parser::JsonStringBuilder::BuildObject(baseee::parser::JsonD
 		out += BuildKeyVulanPair(a) + (this->BeautlfulFormat ? ",\n" : ",");
 	}
 
+	if(obj.size() != 0)
 	out = out.substr(0, 
 		(this->BeautlfulFormat ? out.size() - 2 : out.size() - 1));
-	out += "}";
+
+	BeautlfulFormat ? out += "\n}" : out+="}";
 	return out;
 }
 
@@ -117,7 +119,8 @@ std::string baseee::parser::JsonStringBuilder::BuildKeyVulanPair(
 		break;
 	case JsonType::JsonType_String:
 		out = "\"" + Data.first + "\":\"" + 
-			std::get<std::string>(Data.second.Data)
+			BuildString(
+				std::get<std::string>(Data.second.Data))
 			+ "\"";
 		break;
 	default:
@@ -127,3 +130,36 @@ std::string baseee::parser::JsonStringBuilder::BuildKeyVulanPair(
 	return out;
 }
 
+std::string baseee::parser::JsonStringBuilder::BuildString(std::string String) {
+	std::string Out;
+	for (auto s : String) {
+		switch (s)
+		{
+		case '\n':
+			Out.append("\\n");
+			break;
+		case '\"':
+			Out.append("\\\"");
+			break;
+		case '\\':
+			Out.append("\\\\");
+			break;
+		case '\b':
+			Out.append("\\b");
+			break;
+		case '\f':
+			Out.append("\\f");
+			break;
+		case '\r':
+			Out.append("\\r");
+			break;
+		case '\t':
+			Out.append("\\t");
+			break;
+		default:
+			Out.append({ s });
+			break;
+		}
+	}
+	return Out;
+}

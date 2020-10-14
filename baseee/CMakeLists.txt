@@ -16,9 +16,6 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-#构建发布
-#SET(CMAKE_BUILD_TYPE "Release")
-
 project ("baseee" VERSION 0.1.0 LANGUAGES CXX)
 
 #设置版本号

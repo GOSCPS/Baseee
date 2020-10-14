@@ -85,9 +85,6 @@ namespace baseee {
 		//大写转小写，小写转大写
 		std::string SwapCase(const std::string& s)noexcept;
 
-		//格式化字符串
-		//返回string的vsnprintf
-		std::string Format(const char * fmt, ...)noexcept;
 	}
 
 	namespace coder {

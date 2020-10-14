@@ -154,25 +154,23 @@ void StringMakeTest() {
 }
 
 void JsonParserTest() {
-	baseee::parser::JsonDataBuilder JsonParser
-		(baseee::parser::CreateNewJsonTree());
-
-	JsonParser["Test Int"] = 0;
-	JsonParser["Test String"] = "Hello Json";
-	JsonParser["Test Json Objects"]["Second"] = "Hello Baseee";
-	JsonParser["Boolean True"].SetBoolean(true);
-	JsonParser["Boolean False"].SetBoolean(false);
+	baseee::parser::JsonDataBuilder Builder(baseee::parser::CreateNewJsonTree());
 
 	baseee::parser::JsonStringBuilder JsonBuilder;
 	JsonBuilder.SetBeautiful(true);
 	
+	Builder["String Test"] = "Hello World"sv;
+	Builder["Number Test"] = 114.514;
+	Builder["Boolean Test"] = true;
 
-	cout << JsonBuilder.Build(*JsonParser.GetJsonTree()) << endl;
-	cout << JsonParser["Boolean False"].GetBoolean().value() << endl;
-	cout << JsonParser["Boolean True"].GetBoolean().value() << endl;
-	cout << JsonParser["Test Int"].GetNumber().value() << endl;
-	cout << JsonParser["Test String"].GetString().value() << endl;
-	cout << JsonParser["Test Json Objects"]["Second"].GetString().value() << endl;
+	Builder["Fisrst"]["Second"] = "Third"sv;
+	Builder["Arrat Test"] = { {"One"sv},2.0,true };
+	Builder["Fuck Array"] = { {{{{{{{{{{{ "Fucking Array"sv }}}}}}}}}}} };
+
+	cout << "-------" << endl;
+	cout << JsonBuilder.Build(*Builder.GetJsonTree());
+	Builder.Release();
+	cout << "-------" << endl;
 
 	return;
 }

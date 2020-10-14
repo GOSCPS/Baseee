@@ -18,13 +18,10 @@
 namespace baseee {
 	namespace string {
 		
-
-
 		std::vector<std::string> Split(const std::string& s, const std::regex& r) {
 			std::vector<std::string> out(std::sregex_token_iterator(s.begin(), s.end(), r, -1), std::sregex_token_iterator());
 			return out;
 		}
-
 
 		std::vector<std::string> Split(const std::string& s, const std::string& r) {
 			std::regex re(r);
@@ -74,30 +71,6 @@ namespace baseee {
 				else continue;
 			}
 			return out;
-		}
-
-
-		std::string Format(const char* fmt, ...) noexcept {
-			int len = 0;
-			std::string str;
-			va_list args;
-			char* buffer = new char[4096]{};
-			int bufferLength = 4096;
-
-			va_start(args, fmt);
-
-			if ((len = std::vsnprintf(buffer, bufferLength, fmt, args)) < 0) {
-				while (len < 0) {
-					delete[] buffer;
-					bufferLength *= 2;
-					buffer = new char[bufferLength];
-					len = std::vsnprintf(buffer, bufferLength, fmt, args);
-				}
-			}
-			str = std::string(buffer);
-			delete[] buffer;
-			va_end(args);
-			return str;
 		}
 
 	}
