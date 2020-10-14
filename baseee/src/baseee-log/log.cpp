@@ -67,7 +67,7 @@ std::string baseee::log::logger::GetFormat(
 	const std::string_view &level,
 	const std::string_view &format) noexcept {
 	auto t = std::time(0);
-	std::tm* tm = std::gmtime(&t);
+	std::tm* tm = std::localtime(&t);
 
 	std::string Out(format);
 
