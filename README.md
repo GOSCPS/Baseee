@@ -1,12 +1,12 @@
 # Baseee
-![Line](https://img.shields.io/tokei/lines/github/chhdao/Baseee)
-![GitHub](https://img.shields.io/github/license/chhdao/Baseee)
-![GitHub repo size](https://img.shields.io/github/repo-size/chhdao/Baseee)
+![Line](https://img.shields.io/tokei/lines/github/GOSCPS/Baseee)
+![GitHub](https://img.shields.io/github/license/GOSCPS/Baseee)
+![GitHub repo size](https://img.shields.io/github/repo-size/GOSCPS/Baseee)
 ![C++ Version](https://img.shields.io/badge/C%2B%2B-17-blue)
-![Github Actions](https://img.shields.io/github/workflow/status/chhdao/baseee/BuildTest)
-![Tag Version](https://img.shields.io/github/v/tag/chhdao/baseee)
-![PreRelease Version](https://img.shields.io/github/v/release/chhdao/baseee?include_prereleases)
-![Release Version](https://img.shields.io/github/v/release/chhdao/baseee)
+![Github Actions](https://img.shields.io/github/workflow/status/GOSCPS/baseee/BuildTest)
+![Tag Version](https://img.shields.io/github/v/tag/GOSCPS/baseee)
+![PreRelease Version](https://img.shields.io/github/v/release/GOSCPS/baseee?include_prereleases)
+![Release Version](https://img.shields.io/github/v/release/GOSCPS/baseee)
 <hr>   
 
 [English](https://github.com/chhdao/Baseee/blob/master/docs/README.md)
