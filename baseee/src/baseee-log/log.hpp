@@ -105,7 +105,7 @@ namespace baseee {
 			logger &operator<<(T log) noexcept {
 				std::ostringstream s;
 				s << log;
-				return operator<<(s.str);
+				return operator<<(s.str());
 			}
 
 
