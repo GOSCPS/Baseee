@@ -164,7 +164,7 @@ void JsonParserTest() {
 	Builder["Boolean Test"] = true;
 
 	Builder["Fisrst"]["Second"] = "Third"sv;
-	Builder["Arrat Test"] = { {"One"sv},2.0,true };
+	Builder["Array Test"] = { {"One"sv},2.0,true };
 	Builder["Fuck Array"] = { {{{{{{{{{{{ "Fucking Array"sv }}}}}}}}}}} };
 
 	cout << "-------" << endl;

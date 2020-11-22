@@ -11,6 +11,7 @@
 #include <string>
 #include <fstream>
 #include <utility>
+#include <map>
 #include <mutex>
 #include <string>
 #include <sstream>
@@ -18,6 +19,10 @@
 
 namespace baseee {
 	namespace log {
+
+		class Flush {};
+		
+		static Flush LogFlush;
 
 		enum class LogLevel : uint8_t
 		{
@@ -81,7 +86,18 @@ namespace baseee {
 			void _PrintLog(LogLevel level, std::string_view&& log) noexcept;
 
 			logger &operator<<(std::string_view &&log) noexcept{
-				PrintLog(std::forward<std::string_view&&>(log));
+				(*BufferMutex.find(GetThreadId())).second.lock();
+				(*LogBuffer.find(GetThreadId())).second.append(log);
+				(*BufferMutex.find(GetThreadId())).second.unlock();
+				return *this;
+			}
+
+			//刷新流
+			logger& operator<<(const Flush& flush) {
+				(*BufferMutex.find(GetThreadId())).second.lock();
+				this->PrintLog((*LogBuffer.find(GetThreadId())).second);
+				(*LogBuffer.find(GetThreadId())).second.clear();
+				(*BufferMutex.find(GetThreadId())).second.unlock();
 				return *this;
 			}
 
@@ -89,13 +105,18 @@ namespace baseee {
 			logger &operator<<(T log) noexcept {
 				std::ostringstream s;
 				s << log;
-				PrintLog(s.str());
-				return *this;
+				return operator<<(s.str);
 			}
 
 
 		private:
-			//锁
+			//缓冲区
+			std::map<unsigned long long,std::string> LogBuffer;
+
+			//缓冲区锁
+			std::map<unsigned long long, std::mutex> BufferMutex;
+
+			//输出锁
 			std::mutex Mutex;
 
 			//等于高于这个等级则输出到OutStream
@@ -117,6 +138,17 @@ namespace baseee {
 				const std::string_view& format) noexcept;
 
 			void OpenFile(std::string_view&& f);
+
+			/// <summary>
+			/// 获取线程id
+			/// </summary>
+			/// <returns>uint64_t</returns>
+			unsigned long long GetThreadId() {
+				std::thread::id this_id = std::this_thread::get_id();
+				unsigned long long t = *(unsigned long long*)&this_id;
+				unsigned long long threadid = t;
+				return threadid;
+			}
 		};
 
 	}

@@ -16,12 +16,12 @@ cmake_minimum_required (VERSION 3.8)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project ("baseee" VERSION 0.1.0 LANGUAGES CXX)
+project ("baseee" VERSION 0.1.1 LANGUAGES CXX)
 
 #设置版本号
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
-set(VERSION_PATCH 0)
+set(VERSION_PATCH 1)
 
 
 # 让Windows安全函数爬

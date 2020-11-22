@@ -23,7 +23,7 @@ GetSection用于获取Ini中的段的集合，没有段则为空。
   
 注意： **这个解析器不支持把注释嵌入到语句**  
 即
-```
+```ini
 合法：
 ;set ip
 ip=127.0.0.1 
@@ -116,93 +116,76 @@ JsonData储存Json树，结构如下：
 			JsonType JsonT = JsonType::JsonType_Null;//类型
 		};
 ```
-要根据Json树获取Json对象，可以使用
-```c++
-//查找Object
-std::optional<baseee::parser::JsonData> 
-JsonParser::FindChildren(std::string_view Name) noexcept;
-```
-如果找不到名称对应对象则返回std::nullopt，否则返回找到的JsonData   
 
-## JsonBuilder
-除了解析器，jsonp.hpp还提供了一些辅助操作JsonData的类   
-baseee::parser::JsonBuilder 可以用JsonData生成字符串  
-它仅仅有两个成员函数
-```c++
-std::string Build(JsonData jt) noexcept;
-void SetBeautiful(bool b) noexcept;
-```
-你只需要把Json树放进Build的jt参数即可使用    
-如果把SetBeautiful设置为true，那么它会输出一些换行来让json更加可读，默认为false。
-
-## JsonDataBuilder
-baseee::parser::JsonDataBuilder提供了一组操作JsonData的方法：
-```c++
-//返回Json Tree Root的引用
-JsonData GetJsonData() noexcept;
-//在p处添加一个JsonData
-static std::optional<baseee::parser::JsonData>
-AddJsonData(
-JsonData p,
-std::string_view name,
-const JsonData d) noexcept;
-```
-其中GetJsonData()用于获取Json树根。   
-AddJsonData是一个静态函数，它要做的就是把参数d放到根p内，参数name即为d的key   
-返回操作后的参数p
-
-以下是Json解析器的例子（来自unit-test.cpp）：
+## Json操作
+Baseee提供了方便访问Json的各种操作：  
 ```c++
 void JsonParserTest() {
-	baseee::parser::JsonParser JsonParser;
+	//获取新的空Json树
+	baseee::parser::JsonDataBuilder Builder(baseee::parser::CreateNewJsonTree());
 
-/*
-{ 
-"people":[ 
-{
-"firstName": "Brett",            
-"lastName":"McLaughlin"        
-},      
-{        
-"firstName":"Jason",
-"lastName":"Hunter"
-}
-]
-}
-*/
-	std::string JsonTest = "{ \"people\":[ { \"firstName\": \"Brett\", \"lastName\":\"McLaughlin\"},{\"firstName\":\"Jason\",\"lastName\" : \"Hunter\"}]}";
-	JsonParser.Parser(JsonTest);
-
-	baseee::parser::JsonDataBuilder Builder;
-	auto root = Builder.GetJsonData();
-
-	baseee::parser::JsonData data;
-	data.Data = "Hello Json Builder";
-	data.JsonT = baseee::parser::JsonType::JsonType_String;
-
-    //BASEEE_assert为断言
-	BASEEE_assert(Builder.AddJsonData(root, "Test", data).has_value());
-	root = Builder.AddJsonData(root, "Test", data).value();
-
-	baseee::parser::JsonBuilder JsonBuilder;
+	//获取Json树字符串构造器
+	baseee::parser::JsonStringBuilder JsonBuilder;
+	//.SetBeautiful(true)可以让Json树字符串构造器输出更可读带空白的Json
 	JsonBuilder.SetBeautiful(true);
+	
+	//通过[key] = value进行赋值
+	Builder["String Test"] = "Hello World"sv;
+	Builder["Number Test"] = 114.514;
+	Builder["Boolean Test"] = true;
 
-	cout << JsonBuilder.Build(root) << endl;
-	cout << "----------------------" << endl;
-	cout << JsonBuilder.Build(JsonParser.GetJsonData()) << endl;
+	//支持多重key
+	Builder["Fisrst"]["Second"] = "Third"sv;
 
+	//支持数组
+	Builder["Arrat Test"] = { {"One"sv},2.0,true };
+
+	//支持嵌套数组
+	Builder["Fuck Array"] = { {{{{{{{{{{{ "Fucking Array"sv }}}}}}}}}}} };
+
+	cout << "-------" << endl;
+	//把Json树构建到字符串
+	cout << JsonBuilder.Build(*Builder.GetJsonTree());
+	//释放Json树
+	Builder.Release();
+	cout << "-------" << endl;
+
+	return;
 }
+```   
+以上代码输出:
+```console
+-------
+{
+"Arrat Test":[["One"],2.000000,true],
+"Boolean Test":true,
+"Fisrst":{
+"Second":"Third"
+},
+"Fuck Array":[[[[[[[[[[[["Fucking Array"]]]]]]]]]]]],
+"Number Test":114.514000,
+"String Test":"Hello World"
+}
+-------
 ```
-它应该输出：
-```json
-{
-"Test":"Hello Json Builder"}
 
-----------------------
-{
-"people":[{
-"firstName":"Brett",
-"lastName":"McLaughlin"},{
-"firstName":"Jason",
-"lastName":"Hunter"}]}
+此外，还有一些操作:   
+```c++
+//删除子节点
+void JsonDataBuilder::Delete(std::string_view String);
+
+//查找节点
+std::optional<JsonDataBuilder> JsonDataBuilder::FindChild(std::string_view Name);
+
+//获取节点类型
+JsonType GetJsonType() noexcept;
+
+/*伪代码示例*/
+
+baseee::parser::JsonDataBuilder Builder(baseee::parser::CreateNewJsonTree());
+
+Builder["Test"]["Number"] = 1;
+Builder.FindChild("Test"sv).value.Delete("Number");
+
+//现在Builder应该为空
 ```
