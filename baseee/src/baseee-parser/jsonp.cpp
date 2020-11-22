@@ -75,8 +75,6 @@ baseee::parser::JsonParser::ParseVulan() noexcept {
 baseee::parser::JsonErrCode 
 baseee::parser::JsonParser::ParseVulanNull() noexcept {
 
-	BASEEE_assert(*Next == 'n')
-
 	if (!IteratorMatch("null")) {
 		return JsonErrCode::Parse_VulanError;
 	}
@@ -91,8 +89,6 @@ baseee::parser::JsonParser::ParseVulanNull() noexcept {
 baseee::parser::JsonErrCode 
 baseee::parser::JsonParser::ParseVulanTrue() noexcept {
 
-	BASEEE_assert(*Next == 't');
-
 	if (!IteratorMatch("true")) {
 		return JsonErrCode::Parse_VulanError;
 	}
@@ -106,8 +102,6 @@ baseee::parser::JsonParser::ParseVulanTrue() noexcept {
 //解析false
 baseee::parser::JsonErrCode 
 baseee::parser::JsonParser::ParseVulanFalse() noexcept {
-
-	BASEEE_assert(*Next == 'f');
 
 	if (!IteratorMatch("false")) {
 		return JsonErrCode::Parse_VulanError;
@@ -186,7 +180,6 @@ baseee::parser::JsonParser::ParseVulanNumber() noexcept {
 
 baseee::parser::JsonErrCode 
 baseee::parser::JsonParser::ParseVulanString() noexcept {
-	BASEEE_assert(*Next == '\"');
 	std::string String = "";
 	Next++;
 
@@ -252,7 +245,6 @@ baseee::parser::JsonParser::ParseVulanString() noexcept {
 //以及\\uXXXX\\uYYYY(代理)
 std::optional<std::string> 
 baseee::parser::JsonParser::ParseVulanUnicode() noexcept {
-	BASEEE_assert(*Next == 'u');
 	Next++;//跳过\\u中的u
 
 	uint32_t Out;
@@ -310,7 +302,6 @@ baseee::parser::JsonParser::ParseVulanUnicode() noexcept {
 //解析数组
 baseee::parser::JsonErrCode 
 baseee::parser::JsonParser::ParseVulanArray() noexcept {
-	BASEEE_assert(*Next == '[');
 	Next++;
 	bool skip = true;
 
@@ -344,7 +335,6 @@ baseee::parser::JsonParser::ParseVulanArray() noexcept {
 
 baseee::parser::JsonErrCode
 baseee::parser::JsonParser::ParseVulanObject() noexcept {
-	BASEEE_assert(*Next == '{');
 	Next++;
 	bool skip = true;
 

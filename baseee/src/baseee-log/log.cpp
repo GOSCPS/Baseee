@@ -67,7 +67,17 @@ std::string baseee::log::logger::GetFormat(
 	const std::string_view &level,
 	const std::string_view &format) noexcept {
 	auto t = std::time(0);
-	std::tm* tm = std::localtime(&t);
+
+#if WIN32
+	//For Windows
+	std::tm tm;
+	localtime_s(&tm,&t);
+#else
+	//For Linux
+	std::tm tm;
+	localtime_r(&t, &tm);
+#endif
+
 
 	std::string Out(format);
 
@@ -137,7 +147,7 @@ void baseee::log::logger::OpenFile(std::string_view &&f) {
 	this->OutFile.open(s, std::ios::out);
 
 	if (!this->OutFile) {
-		throw new std::runtime_error("Open File Error" + s);
+		throw std::runtime_error("Open File Error" + s);
 	}
 
 	return;

@@ -34,7 +34,6 @@ std::string baseee::parser::JsonStringBuilder::Build(JsonData jt) noexcept {
 
 
 std::string baseee::parser::JsonStringBuilder::BuildArray(baseee::parser::JsonData JsonArray) noexcept {
-	BASEEE_assert(JsonArray.JsonT == JsonType::JsonType_Array);
 	std::string out = "[";
 
 	for (auto s : std::get<std::vector<JsonData>>(JsonArray.Data)) {
@@ -74,7 +73,6 @@ std::string baseee::parser::JsonStringBuilder::BuildArray(baseee::parser::JsonDa
 
 
 std::string baseee::parser::JsonStringBuilder::BuildObject(baseee::parser::JsonData JsonObject) noexcept {
-	BASEEE_assert(JsonObject.JsonT == JsonType::JsonType_Object);
 
 	std::string out = (this->BeautlfulFormat ? "{\n" : "{");
 	std::multimap<std::string, JsonData> obj = std::get<std::multimap<std::string, JsonData>>(JsonObject.Data);
