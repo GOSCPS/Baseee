@@ -144,10 +144,10 @@ namespace baseee {
 			/// 获取线程id
 			/// </summary>
 			/// <returns>uint64_t</returns>
-			unsigned int GetThreadId() {
-				std::thread::id tid = std::this_thread::get_id();
-				_Thrd_t t = *(_Thrd_t*)(char*)&tid;
-				return t._Id;
+			unsigned long long GetThreadId() {
+				std::stringstream s;
+				s << std::this_thread::get_id();
+				return std::stoull(s.str());
 			}
 		};
 
