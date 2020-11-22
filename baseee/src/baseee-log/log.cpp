@@ -70,14 +70,14 @@ std::string baseee::log::logger::GetFormat(
 
 #if WIN32
 	//For Windows
-	std::tm tm;
-	localtime_s(&tm,&t);
+	std::tm tms;
+	localtime_s(&tms,&t);
 #else
 	//For Linux
 	std::tm tm;
-	localtime_r(&t, &tm);
+	localtime_r(&t, &tms);
 #endif
-
+	std::tm* tm = &tms;
 
 	std::string Out(format);
 
