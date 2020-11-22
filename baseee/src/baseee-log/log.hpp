@@ -12,6 +12,7 @@
 #include <fstream>
 #include <utility>
 #include <map>
+#include <thread>
 #include <mutex>
 #include <string>
 #include <sstream>
@@ -143,11 +144,10 @@ namespace baseee {
 			/// 获取线程id
 			/// </summary>
 			/// <returns>uint64_t</returns>
-			unsigned long long GetThreadId() {
-				std::thread::id this_id = std::this_thread::get_id();
-				unsigned long long t = *(unsigned long long*)&this_id;
-				unsigned long long threadid = t;
-				return threadid;
+			unsigned int GetThreadId() {
+				std::thread::id tid = std::this_thread::get_id();
+				_Thrd_t t = *(_Thrd_t*)(char*)&tid;
+				return t._Id;
 			}
 		};
 
