@@ -1,10 +1,10 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
- * IS LICENSED UNDER MIT
- * File:     inip.hpp
- * Content:  ini parser head file
- * Copyright (c) 2020 Chhdao All rights reserved.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 这个文件来自 GOSCPS(https://github.com/GOSCPS)
+ * 使用 GOSCPS 许可证
+ * File:    inip.hpp
+ * Content: ini parser Head File
+ * Copyright (c) 2020 GOSCPS 保留所有权利.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
 
 #include <string>

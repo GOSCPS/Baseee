@@ -1,10 +1,10 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
- * IS LICENSED UNDER MIT
- * File:     test.hpp
- * Content:  baseee unit test head file
- * Copyright (c) 2020 Chhdao All rights reserved.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 这个文件来自 GOSCPS(https://github.com/GOSCPS)
+ * 使用 GOSCPS 许可证
+ * File:    test.hpp
+ * Content: test Source File
+ * Copyright (c) 2020 GOSCPS 保留所有权利.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
 
 #include <iostream>
@@ -41,5 +41,3 @@ std::cerr << "\033[31massert fall down at file:" << __FILE__\
 #define BASEEE_assert(expression) (expression);
 #define BASEEE_assert(expression) (expression);
 #endif
-
-

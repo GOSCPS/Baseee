@@ -1,10 +1,10 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
- * IS LICENSED UNDER MIT
- * File:     log.cpp
- * Content:  baseee log module file
- * Copyright (c) 2020 Chhdao All rights reserved.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 这个文件来自 GOSCPS(https://github.com/GOSCPS)
+ * 使用 GOSCPS 许可证
+ * File:    log.cpp
+ * Content: log Source File
+ * Copyright (c) 2020 GOSCPS 保留所有权利.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <string>
 #include <iostream>
@@ -131,6 +131,12 @@ std::string baseee::log::logger::GetFormat(
 			Out.replace(Out.find("{level}"),
 				sizeof "{level}"-1,
 				level);
+		}
+
+		else if (Out.find("{count}") != Out.npos) {
+			Out.replace(Out.find("{count}"),
+				sizeof "{count}" - 1,
+				std::to_string(Counter));
 		}
 
 		else break;

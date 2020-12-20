@@ -116,13 +116,13 @@ void StringCoderTest2() {
 
 void LogTest() {
 	baseee::log::logger logger("{year}-{month}-{day} at {hour}:{min}:{sec} {level}:","",std::cout);
-	logger.SetLowestLevelOutConsole(baseee::log::LogLevel::Level_Debug);
+	logger.SetLowestLevelOutConsole(baseee::log::LogLevel::Debug);
 
-	logger.SetDefaultOutLevel(baseee::log::LogLevel::Level_Debug);
+	logger.SetDefaultOutLevel(baseee::log::LogLevel::Debug);
 	logger.PrintLog("Test:Log Print!");
 	logger << "Hello World";
 
-	logger._PrintLog(baseee::log::LogLevel::Level_Fatal, "Right!");
+	logger._PrintLog(baseee::log::LogLevel::Fatal, "Right!");
 }
 
 

@@ -79,6 +79,7 @@ ${BaseeeString}/string.hpp
 ${BaseeeParser}/inip.hpp
 ${BaseeeParser}/jsonp.hpp
 ${BaseeeComponents}/global.hpp
+${BaseeeComponents}/unsigned.hpp
 DESTINATION include/baseee
 )
 

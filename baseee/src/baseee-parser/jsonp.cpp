@@ -1,10 +1,10 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
- * IS LICENSED UNDER MIT
- * File:     jsonp.cpp
- * Content:  json parser file
- * Copyright (c) 2020 Chhdao All rights reserved.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 这个文件来自 GOSCPS(https://github.com/GOSCPS)
+ * 使用 GOSCPS 许可证
+ * File:    jsonp.cpp
+ * Content: json parser Source File
+ * Copyright (c) 2020 GOSCPS 保留所有权利.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 #include <string>
@@ -35,11 +35,11 @@ baseee::parser::JsonParser::Parser(std::string_view JsonStr) noexcept {
 	this->Next = Json.cbegin();
 
 	this->AfterSpace();
-	auto Result = this->ParseVulan();
+	auto Result = this->ParseValue();
 
 	if (Result == JsonErrCode::Parse_OK) {
 		AfterSpace();
-		if (Next != Json.cend()) return JsonErrCode::Parse_VulanError;
+		if (Next != Json.cend()) return JsonErrCode::Parse_ValueError;
 	}
 
 	JsonPool = JsonNext;
@@ -55,28 +55,28 @@ void baseee::parser::JsonParser::AfterSpace() noexcept {
 
 //解析值
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulan() noexcept {
+baseee::parser::JsonParser::ParseValue() noexcept {
 	switch (*Next) {
-	case 'n': return ParseVulanNull();//'n'ull
-	case '\0': return JsonErrCode::Parse_MissVulan;
+	case 'n': return ParseValueNull();//'n'ull
+	case '\0': return JsonErrCode::Parse_MissValue;
 
 	case 'f': //'f'alse
 	case 't'://'t'rue
-		return ParseVulanBool();
+		return ParseValueBool();
 
-	case '\"': return ParseVulanString();//'"' String"
-	case '[': return ParseVulanArray();//'['xxx,xxx]
-	case '{': return ParseVulanObject();//'{' "xxx":xxx}
-	default: return ParseVulanNumber();//(-?)|([0-9]?)Number
+	case '\"': return ParseValueString();//'"' String"
+	case '[': return ParseValueArray();//'['xxx,xxx]
+	case '{': return ParseValueObject();//'{' "xxx":xxx}
+	default: return ParseValueNumber();//(-?)|([0-9]?)Number
 	}
 }
 
 //解析null
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanNull() noexcept {
+baseee::parser::JsonParser::ParseValueNull() noexcept {
 
 	if (!IteratorMatch("null")) {
-		return JsonErrCode::Parse_VulanError;
+		return JsonErrCode::Parse_ValueError;
 	}
 	Next += 4;
 
@@ -87,10 +87,10 @@ baseee::parser::JsonParser::ParseVulanNull() noexcept {
 
 //解析true
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanTrue() noexcept {
+baseee::parser::JsonParser::ParseValueTrue() noexcept {
 
 	if (!IteratorMatch("true")) {
-		return JsonErrCode::Parse_VulanError;
+		return JsonErrCode::Parse_ValueError;
 	}
 	Next += 4;
 
@@ -101,10 +101,10 @@ baseee::parser::JsonParser::ParseVulanTrue() noexcept {
 
 //解析false
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanFalse() noexcept {
+baseee::parser::JsonParser::ParseValueFalse() noexcept {
 
 	if (!IteratorMatch("false")) {
-		return JsonErrCode::Parse_VulanError;
+		return JsonErrCode::Parse_ValueError;
 	}
 	Next += 5;
 
@@ -115,15 +115,15 @@ baseee::parser::JsonParser::ParseVulanFalse() noexcept {
 
 //解析Bool
 baseee::parser::JsonErrCode
-baseee::parser::JsonParser::ParseVulanBool() noexcept {
+baseee::parser::JsonParser::ParseValueBool() noexcept {
 
 	if ((*Next) == 't') {
-		return this->ParseVulanTrue();
+		return this->ParseValueTrue();
 	}
 	else if ((*Next) == 'f') {
-		return this->ParseVulanFalse();
+		return this->ParseValueFalse();
 	}
-	else return JsonErrCode::Parse_VulanError;
+	else return JsonErrCode::Parse_ValueError;
 }
 
 //字符匹配
@@ -143,7 +143,7 @@ bool baseee::parser::JsonParser::IteratorMatch(std::string_view str) noexcept {
 
 //解析数字
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanNumber() noexcept {
+baseee::parser::JsonParser::ParseValueNumber() noexcept {
 
 	std::string Int("([-]?[1-9]?[0-9]+)|([-]?[0]{1})");
 	std::string Frac("\\.[0-9]+");
@@ -169,7 +169,7 @@ baseee::parser::JsonParser::ParseVulanNumber() noexcept {
 	}
 
 	if (!std::regex_match(NumberBuf, NumberRegex)) {
-		return JsonErrCode::Parse_VulanError;
+		return JsonErrCode::Parse_ValueError;
 	}
 
 	this->JsonNext.JsonT = JsonType::JsonType_Number;
@@ -179,7 +179,7 @@ baseee::parser::JsonParser::ParseVulanNumber() noexcept {
 }
 
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanString() noexcept {
+baseee::parser::JsonParser::ParseValueString() noexcept {
 	std::string String = "";
 	Next++;
 
@@ -219,12 +219,12 @@ baseee::parser::JsonParser::ParseVulanString() noexcept {
 				String.append("\t");
 				break;
 			case 'u':
-				opt = ParseVulanUnicode();
-				if(opt == std::nullopt || !opt.has_value()) return JsonErrCode::Parse_VulanError;
+				opt = ParseValueUnicode();
+				if(opt == std::nullopt || !opt.has_value()) return JsonErrCode::Parse_ValueError;
 				String.append(opt.value());
 				break;
 			default:
-				return JsonErrCode::Parse_VulanError;
+				return JsonErrCode::Parse_ValueError;
 			}
 		}
 		else {
@@ -244,7 +244,7 @@ baseee::parser::JsonParser::ParseVulanString() noexcept {
 //解析\\uXXXX
 //以及\\uXXXX\\uYYYY(代理)
 std::optional<std::string> 
-baseee::parser::JsonParser::ParseVulanUnicode() noexcept {
+baseee::parser::JsonParser::ParseValueUnicode() noexcept {
 	Next++;//跳过\\u中的u
 
 	uint32_t Out;
@@ -301,7 +301,7 @@ baseee::parser::JsonParser::ParseVulanUnicode() noexcept {
 
 //解析数组
 baseee::parser::JsonErrCode 
-baseee::parser::JsonParser::ParseVulanArray() noexcept {
+baseee::parser::JsonParser::ParseValueArray() noexcept {
 	Next++;
 	bool skip = true;
 
@@ -320,7 +320,7 @@ baseee::parser::JsonParser::ParseVulanArray() noexcept {
 		else return JsonErrCode::Parse_MissToken;
 
 		AfterSpace();
-		ErrCode = ParseVulan();
+		ErrCode = ParseValue();
 		if (ErrCode != JsonErrCode::Parse_OK)return ErrCode;
 
 		std::get<std::vector<JsonData>>(JsonArray.Data)
@@ -334,7 +334,7 @@ baseee::parser::JsonParser::ParseVulanArray() noexcept {
 }
 
 baseee::parser::JsonErrCode
-baseee::parser::JsonParser::ParseVulanObject() noexcept {
+baseee::parser::JsonParser::ParseValueObject() noexcept {
 	Next++;
 	bool skip = true;
 
@@ -355,7 +355,7 @@ baseee::parser::JsonParser::ParseVulanObject() noexcept {
 		
 		//读取键
 		AfterSpace();
-		ErrCode = ParseVulan();
+		ErrCode = ParseValue();
 
 		if (ErrCode != JsonErrCode::Parse_OK) 
 			return ErrCode;
@@ -369,7 +369,7 @@ baseee::parser::JsonParser::ParseVulanObject() noexcept {
 		if (*Next != ':') return JsonErrCode::Parse_MissToken;
 		else Next++;
 		AfterSpace();
-		ErrCode = ParseVulan();
+		ErrCode = ParseValue();
 
 		if (ErrCode != JsonErrCode::Parse_OK)
 			return ErrCode;

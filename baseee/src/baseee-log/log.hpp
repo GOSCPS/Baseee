@@ -1,10 +1,10 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
- * IS LICENSED UNDER MIT
- * File:     log.hpp
- * Content:  baseee log module head file
- * Copyright (c) 2020 Chhdao All rights reserved.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 这个文件来自 GOSCPS(https://github.com/GOSCPS)
+ * 使用 GOSCPS 许可证
+ * File:    log.hpp
+ * Content: log Head File
+ * Copyright (c) 2020 GOSCPS 保留所有权利.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
 
 #include <iostream>
@@ -26,28 +26,24 @@ namespace baseee {
 		static Flush LogFlush;
 
 		enum class LogLevel : uint8_t
-		{
-			Level_Debug = 0,
-			Level_Info = 1,
-			Level_News = 2,
-			Level_Note,
-			Level_Warning,
-			Level_Error,
-			Level_Fatal
+		{	
+			Trace,
+			Debug,
+			Info,
+			Error,
+			Warn,
+			Fatal
 		};
 
 		inline const std::string ToString(const LogLevel &v)
 		{
 			switch (v)
 			{
-			case LogLevel::Level_Debug:   return "Debug";
-			case LogLevel::Level_Info:   return "Info";
-			case LogLevel::Level_News: return "News";
-			case LogLevel::Level_Note: return "Note";
-			case LogLevel::Level_Warning: return "Warning";
-			case LogLevel::Level_Error: return "Error";
-			case LogLevel::Level_Fatal: return "Fatal";
-				default: return "";
+			case LogLevel::Debug:   return "Debug";
+			case LogLevel::Info:   return "Info";
+			case LogLevel::Error: return "Error";
+			case LogLevel::Fatal: return "Fatal";
+			default: return "";
 			}
 		}
 
@@ -57,6 +53,12 @@ namespace baseee {
 			logger(const logger&) = delete;
 			logger() = delete;
 
+			/// <summary>
+			/// 初始化logger
+			/// </summary>
+			/// <param name="LogFormat">日志格式</param>
+			/// <param name="OutFile">输出文件</param>
+			/// <param name="os">输出流</param>
 			logger(std::string_view &&LogFormat, std::string_view &&OutFile, std::ostream &os) : OutStream(os){
 				this->LogFormat = LogFormat;
 				OpenFile(std::forward<std::string_view&&>(OutFile));
@@ -68,24 +70,52 @@ namespace baseee {
 				return;
 			}
 
+			/// <summary>
+			/// 设置最低Console输出等级
+			/// </summary>
+			/// <param name="level"></param>
+			/// <returns></returns>
 			void SetLowestLevelOutConsole(LogLevel level) noexcept {
 				LowestLevelOutStream = level;
 				return;
 			}
 
+			/// <summary>
+			/// 设置最低文件输出等级
+			/// </summary>
+			/// <param name="log"></param>
+			/// <returns></returns>
 			void SetLowestLevelOutFile(LogLevel level) noexcept {
 				LowestLevelOutFile = level;
 				return;
 			}
 
+			/// <summary>
+			/// 设置默认输出等级
+			/// </summary>
+			/// <param name="flush"></param>
+			/// <returns></returns>
 			void SetDefaultOutLevel(LogLevel level) noexcept {
 				this->DefaultOutLevel = level;
 				return;
 			}
 
+			/// <summary>
+			/// 使用默认等级打印日志
+			/// </summary>
+			/// <typeparam name="T"></typeparam>
+			/// <param name="log"></param>
+			/// <returns></returns>
 			void PrintLog(std::string_view&& log) noexcept;
+
+			/// <summary>
+			/// 打印日志
+			/// </summary>
 			void _PrintLog(LogLevel level, std::string_view&& log) noexcept;
 
+			/// <summary>
+			/// 使用默认等级输出日志
+			/// </summary>
 			logger &operator<<(std::string_view &&log) noexcept{
 				(*BufferMutex.find(GetThreadId())).second.lock();
 				(*LogBuffer.find(GetThreadId())).second.append(log);
@@ -93,7 +123,9 @@ namespace baseee {
 				return *this;
 			}
 
-			//刷新流
+			/// <summary>
+			/// 刷新日志流
+			/// </summary>
 			logger& operator<<(const Flush& flush) {
 				(*BufferMutex.find(GetThreadId())).second.lock();
 				this->PrintLog((*LogBuffer.find(GetThreadId())).second);
@@ -102,6 +134,9 @@ namespace baseee {
 				return *this;
 			}
 
+			/// <summary>
+			/// 使用默认等级输出日志
+			/// </summary>
 			template<typename T>
 			logger &operator<<(T log) noexcept {
 				std::ostringstream s;
@@ -111,6 +146,9 @@ namespace baseee {
 
 
 		private:
+			//计数
+			unsigned long long Counter = 1;
+
 			//缓冲区
 			std::map<unsigned long long,std::string> LogBuffer;
 
@@ -129,7 +167,7 @@ namespace baseee {
 			std::fstream OutFile;
 
 			//默认输出等级
-			LogLevel DefaultOutLevel = LogLevel::Level_Info;
+			LogLevel DefaultOutLevel = LogLevel::Info;
 			
 			//日志格式
 			std::string_view LogFormat;

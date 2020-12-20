@@ -1,10 +1,10 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * THIS FILE IS FROM Chhdao(sudo.free@qq.com)
- * IS LICENSED UNDER MIT
- * File:     jsonp.hpp
- * Content:  json parser head file
- * Copyright (c) 2020 Chhdao All rights reserved.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 这个文件来自 GOSCPS(https://github.com/GOSCPS)
+ * 使用 GOSCPS 许可证
+ * File:    jsonp.hpp
+ * Content: json parser Head File
+ * Copyright (c) 2020 GOSCPS 保留所有权利.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #pragma once
 
 #include <string>
@@ -43,22 +43,22 @@ namespace baseee {
 			JsonData() {}
 
 
-			JsonData(std::string_view Vulan) {
-				Data = std::string(Vulan);
+			JsonData(std::string_view Value) {
+				Data = std::string(Value);
 				JsonT = JsonType::JsonType_String;
 
 				return;
 			}
 
-			JsonData(double Vulan) {
-				Data = Vulan;
+			JsonData(double Value) {
+				Data = Value;
 				JsonT = JsonType::JsonType_Number;
 
 				return;
 			}
 
-			JsonData(bool Vulan) {
-				if (Vulan)
+			JsonData(bool Value) {
+				if (Value)
 					JsonT = JsonType::JsonType_True;
 				else
 					JsonT = JsonType::JsonType_False;
@@ -83,9 +83,9 @@ namespace baseee {
 		enum class JsonParserErrorCode : int {
 			Parse_OK = 0,//正常
 			Parse_UnknowError,//未知错误
-			Parse_MissVulan,//无值
-			Parse_VulanError,//值错误
-			Parse_MissToken//找不到对应Token {} [] "" ,
+			Parse_MissValue,//无值
+			Parse_ValueError,//值错误
+			Parse_MissToken//找不到对应Token: {} [] "" ,
 		};
 
 		using JsonErrCode = JsonParserErrorCode;
@@ -166,7 +166,7 @@ namespace baseee {
 				return;
 			}
 
-			/*获取Vulan的方法*/
+			/*获取Value的方法*/
 			std::optional<std::string> GetString() {
 				if (Ptr->JsonT == JsonType::JsonType_String)
 					return std::get<std::string>(Ptr->Data);
@@ -272,17 +272,17 @@ namespace baseee {
 			JsonData JsonNext;
 
 			void AfterSpace() noexcept;
-			JsonErrCode ParseVulan() noexcept;
+			JsonErrCode ParseValue() noexcept;
 
-			JsonErrCode ParseVulanNull() noexcept;
-			JsonErrCode ParseVulanBool() noexcept;
-			JsonErrCode ParseVulanTrue() noexcept;
-			JsonErrCode ParseVulanFalse() noexcept;
-			JsonErrCode ParseVulanNumber() noexcept;
-			JsonErrCode ParseVulanString() noexcept;
-			std::optional<std::string> ParseVulanUnicode() noexcept;
-			JsonErrCode ParseVulanArray() noexcept;
-			JsonErrCode ParseVulanObject() noexcept;
+			JsonErrCode ParseValueNull() noexcept;
+			JsonErrCode ParseValueBool() noexcept;
+			JsonErrCode ParseValueTrue() noexcept;
+			JsonErrCode ParseValueFalse() noexcept;
+			JsonErrCode ParseValueNumber() noexcept;
+			JsonErrCode ParseValueString() noexcept;
+			std::optional<std::string> ParseValueUnicode() noexcept;
+			JsonErrCode ParseValueArray() noexcept;
+			JsonErrCode ParseValueObject() noexcept;
 
 			inline bool MatchCharRange(char a, char b) noexcept;
 
